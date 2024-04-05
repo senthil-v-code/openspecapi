@@ -98,7 +98,7 @@ tags:
       | id                  | long          |  The ID of the organization                         |
       | isPrivate           | boolean       |  Indicates if the organization is private           |
       | deactivatedTime     | TimeStamp     |  The time when the organization was deactivated     | 
-      | isCurrentlyLinkedd  | boolean       |  Indicates if the organization is currently linked  |
+      | isCurrentlyLinked   | boolean       |  Indicates if the organization is currently linked  |
       | isActive            | boolean       |  Indicates if the organization is active            |
 
   - name: Service Organization
