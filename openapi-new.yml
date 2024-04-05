@@ -725,7 +725,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/SingleChannel"
               examples:
-                WHATSAPP:
+                WhatsApp:
                   value:
                     id: "1554000002234371"
                     integrationService:
@@ -843,7 +843,7 @@ paths:
                         kind: "single.channel.configParam"
                     isSandBox: false
                     kind: "single.channel"
-                LINE:
+                Line:
                   value:
                     id: "1554000001964611"
                     integrationService:
@@ -954,7 +954,7 @@ paths:
                         kind: "single.channel.configParam"
                     isSandBox: false
                     kind: "single.channel"
-                TELEGRAM:
+                Telegram:
                   value:
                     id: "1554000002238761"
                     integrationService:
@@ -1035,6 +1035,137 @@ paths:
                         kind: "single.channel.configParam"
                     isSandBox: false
                     kind: "single.channel"
+                Facebook:
+                  value:
+                    id: "3942000000317011"
+                    integrationService:
+                      isParentAccountNeeded: true
+                      channelAlias: FaceBookMessenger
+                      domain: "https://www.facebook.com"
+                      logoURL: "https://static.localzohocdn.com/zohoim/images/messenger.a6fe9d91c6e691ce6b73.png"
+                      configParams:
+                        - name: FACEBOOK_USER
+                          index: "0"
+                          label: Facebook User
+                          isRequired: true
+                          type: STRING
+                          defaultValue: null
+                          isSecured: false
+                          isInternal: false
+                          isDeprecated: false
+                          maxLen: "255"
+                          parentParams: []
+                        - name: CURRENT_STATUS
+                          index: "2"
+                          label: Current Page Status
+                          isRequired: false
+                          type: SYSTEM_DEFINED
+                          defaultValue: PAGE_ADDED
+                          isSecured: false
+                          isInternal: true
+                          isDeprecated: false
+                          maxLen: "255"
+                          parentParams: []
+                        - name: FACEBOOK_PAGE
+                          index: "1"
+                          label: Facebook Page
+                          isRequired: true
+                          type: OPTIONS_COMPUTED
+                          defaultValue: null
+                          isSecured: false
+                          isInternal: false
+                          isDeprecated: false
+                          maxLen: "255"
+                          parentParams: []
+                      onBoardingList:
+                        - label: PAGE_ADDED
+                          value: Facebook Page Added
+                        - label: PAGE_REMOVED
+                          value: Facebook Page Removed
+                        - label: PERMISSION_REVOKED
+                          value: Facebook Page Permission Revoked
+                        - label: ACCESSTOKEN_EXPIRED
+                          value: Facebook Page auth token expired Reauth required
+                        - label: FAILED_ERROR
+                          value: Error Occured, Please try again or Contact Support
+                      pricingParams: []
+                      label: Messenger
+                      provider:
+                        name: Messenger
+                        domain: "https://www.facebook.com"
+                      kind: single.integrationService
+                      id: FACEBOOKMESSENGER
+                    name: Hey Freinds
+                    defaultBotId: null
+                    isActive: true
+                    isDeleted: false
+                    createdTime: "2023-11-07T08:16:11.000Z"
+                    universalLink: "https://m.me/117225458071043"
+                    authenticationURL: null
+                    accountName: Hey Friends
+                    authorizationPending: false
+                    storageEnabled: false
+                    uuid: "faa39bba6314555090bc9f5299bcf9c4"
+                    isSubscribed: true
+                    meta:
+                      - value: "95099000001697053"
+                        name: FACEBOOK_PAGE_NETWORKID
+                    createdBy: "78412824"
+                    logoURL: "https://static.localzohocdn.com/zohoim/images/messenger.a6fe9d91c6e691ce6b73.png"
+                    configParams:
+                      - id: "3942000000317013"
+                        name: FACEBOOK_USER
+                        modifiedTime: "2023-11-07T08:16:11.000Z"
+                        isDeprecated: false
+                        secured: false
+                        isRequired: true
+                        isInternal: false
+                        label: Facebook User
+                        maxLen: "255"
+                        options: []
+                        type: STRING
+                        defaultValue: null
+                        uuid: "12a481c13dd854bba53f12ac8832d4f3"
+                        parentParams: []
+                        value: "Akash Mukherjee[1956518741376943]"
+                        kind: single.channel.configParam
+                      - id: "3942000000317015"
+                        name: CURRENT_STATUS
+                        modifiedTime: "2023-11-07T08:16:11.000Z"
+                        isDeprecated: false
+                        secured: false
+                        isRequired: false
+                        isInternal: true
+                        label: Current Page Status
+                        maxLen: "255"
+                        options: []
+                        type: SYSTEM_DEFINED
+                        defaultValue: PAGE_ADDED
+                        uuid: "12a481c13dd854bba53f12ac8832d4f3"
+                        parentParams: []
+                        value: PAGE_ADDED
+                        kind: single.channel.configParam
+                      - id: "3942000000317017"
+                        name: FACEBOOK_PAGE
+                        modifiedTime: "2023-11-07T08:16:11.000Z"
+                        isDeprecated: false
+                        secured: false
+                        isRequired: true
+                        isInternal: false
+                        label: Facebook Page
+                        maxLen: "255"
+                        options: []
+                        type: OPTIONS_COMPUTED
+                        defaultValue: null
+                        uuid: "12a481c13dd854bba53f12ac8832d4f3"
+                        parentParams: []
+                        value: "Hey Friends[117225458071043]"
+                        kind: single.channel.configParam
+                    conversationCount: "0"
+                    isOwner: true
+                    isSandBox: false
+                    kind: single.channel
+                    
         "500":
           description: Exception encountered while processing request
           content:
