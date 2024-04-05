@@ -1,0 +1,1693 @@
+openapi: 3.0.0
+info:
+  title: Zoho IM APIs
+  description: Zoho IM
+  version: 1.0.0
+servers:
+  - url: https://im.{env}.com/api/v1
+    variables:
+      env:
+        enum:
+          - "localzoho"
+          - "zoho"
+        default: "localzoho"
+
+tags:
+  - name: Introduction
+    description: |
+      ZohoIM abstracts the difficulties in integrating various Instant Messaging Channels by Providing an Unified API.
+      ### Communicate with your customers through any Instant Messaging Channel
+      <img src="https://content.pstmn.io/001c6190-9c45-4b0f-87cb-6c1043f209cd/aW1hZ2UucG5n" /> <br><br><br>
+      **Why Zoho IM?**
+      - Most of the support channels often bring layers of complexities - IM manages all these interactions into a single connected system.
+      - Our focus was on improving agent productivity with an intuitive approach and compatible interface.
+      - Our seamless integration with customers' best-loved platforms such as WhatsApp, Telegram, LINE, WeChat and Facebook Messenger.
+
+      ## Getting Started
+      All Zoho Desk APIs require these two mandatory fields in the header.
+      - Authorization - Authentication request token
+      - orgId -ID of the organization to access. All API endpoints except /organizations mandatorily require the orgId.
+
+
+      ## HTTP Methods
+      Zoho Desk APIs enable data manipulation and retrieval through different HTTP methods.
+
+      | Method   | Purpose |
+      | -------- | ------- |
+      | GET      | Retrieve resources    |
+      | POST     | Create resources and perform resource actions    |
+      | PATCH    | Update resources    |
+      | DELETE   | Delete resources   |
+
+
+      ## Errors
+      Zoho IM uses HTTP status codes to indicate success or failure of API calls. Status codes in the 2xx range indicate success, 4xx range indicate error in the information provided, and 5xx range indicate server side errors. The following table lists some commonly used HTTP status codes.
+
+      | Method   | Purpose |
+      | -------- | ------- |
+      | 200      | OK    |
+      | 204     | No content    |
+      | 400    | Bad Request    |
+      | 401   | Unauthorized   |
+      | 403   | Forbidden (Unauthorised access)   |
+      | 404   | URL not found   |
+      | 422   | Unprocessable Entity   |
+      | 500   | Internal error  |
+
+  - name: Authorization
+    description: |
+      <img src="https://content.pstmn.io/7ba8a04d-b133-46e2-8d4c-633a5bc57378/ZXpnaWYuY29tLXZpZGVvLXRvLWdpZiAoMSkuZ2lm" /> <br><br><br>
+      For detailed flow of Authorization [visit](https://www.zoho.com/accounts/protocol/oauth/self-client/authorization-code-flow.html) <br><br>
+      **Steps (refer the above gif):**
+      - Sign into https://www.accounts.zoho.com
+      - Go to [Zoho Developer Console](https://api-console.zoho.com/) -> Add Client
+      - Choose Self Client
+      - Note down Client ID and Client Secret under Client Secret Tab
+      - Under Generate Code - Provide scopes, time duration and desciption
+      - Choose create which will provide a code.
+
+      **Scopes:**
+      - ZohoIM.organizations.ALL
+      - ZohoIM.channels.ALL
+      - ZohoIM.conversations.ALL
+      - ZohoIM.messages.ALL
+      - ZohoIM.bots.ALL
+      - ZohoIM.users.ALL
+      - ZohoIM.contacts.ALL
+      - ZohoIM.search.READ
+
+      **Note:**
+      - Access token should be prefixed with the prefix "Zoho-oauthtoken" <br>
+        Example token, **Zoho-oauthtoken 1000.dfe95e72e98e1657****
+
+  - name: Organization
+    description: |
+      In Zoho Desk, each business is categorized as an organization. If you have multiple businesses, set each business up as an individual organization by creating a new signup and generating a unique organization ID. All APIs except the ones directly related to organizations must include the organization ID in the header in this format: **orgId:{organization_id}**
+
+      ## Organization Object
+
+      | Attributes          | Type          |   Explanation                                       |
+      |---------------------|---------------|-----------------------------------------------------|
+      | isDefault           | boolean       |  Indicates if the organization is default           |
+      | portalName          | string        |   The portal name of the organization               |
+      | createdByZuId       | long          |  The ZUID of the user who created the organization  |
+      | kind                | string        |  The type of response                               |
+      | name                | string        |  The name of the organization                       |
+      | createdTime         | TimeStamp     |  The creation time of the organization              |
+      | createdByService    | string        |  The service by which organization was created      |
+      | id                  | long          |  The ID of the organization                         |
+      | isPrivate           | boolean       |  Indicates if the organization is private           |
+      | deactivatedTime     | TimeStamp     |  The time when the organization was deactivated     | 
+      | isCurrentlyLinkedd  | boolean       |  Indicates if the organization is currently linked  |
+      | isActive            | boolean       |  Indicates if the organization is active            |
+
+  - name: Service Organization
+    description: Operations related to managing service organizations in Zoho IM
+  - name: EFC
+    description: |
+      These are JavaScript SDK's Provided to Render UI Component of ZohoIM.
+  - name: Channels
+    description: |
+      Channels represent a specific configured enity. <br>
+      *OAuth Scope:* ZohoIM.channels.ALL
+  - name: Sessions
+    description: |
+      A session denotes the communication between an agent and an end-user, during which messages are exchanged. Several sessions can exist within a channel. Multiple messages can be included within a single session. Additionally, each end-user will have an exclusive session linked to a channel.
+      *OAuth Scopes:* ZohoIM.conversations.ALL
+  - name: Messages
+    description: |
+      Message entity is under the parent entity session. Multiple messages can be present within a single session. Messages are the contents shared between agent and end user in session. Agent can share text, location, emoji, attachments, interactive messages, template message to end users.
+      *OAuth Scopes:* ZohoIM.messages.ALL
+  - name: Search
+    description: |
+      Search Messages and Contacts of an Organization.
+      OAuth Scope: ZohoSearch.securesearch.READ, ZohoIM.messages.ALL, ZohoIM.contacts.ALL, ZohoIM.search.ALL
+  - name: Bots
+    description:
+  - name: Predefined Messages
+    description: |
+      Predefined Messages in an Organization. Used by agents for quick, easy and predefined responses.
+      OAuth Scope: ZohoIM.messages.ALL and ZohoIM.organizations.ALL
+  - name: Template Messages
+    description: |
+      Template Messages are supported only in whatsapp. Which can be used after the session time out (24 hours)
+      OAuth Scope: ZohoIM.messages.ALL and ZohoIM.organizations.ALL
+  - name: Broadcasts
+    description: |
+      Send message to multiple recipients simultaneously.
+  - name: Subscription
+    description: |
+      APIs for IM Licensing Details
+  - name: Metrics
+    description:
+  - name: Analytics
+    description: |
+      Analytics APIs are useful to perform systematic analysis of data and provides insights to help in decision making.
+  - name: Integration Custom APIs
+    description: |
+      APIs specific to each integration Service
+  - name: Users
+    description: Users are the executives in your organization. They are the primary users of the software, using which they interact with contacts.
+  - name: Contacts
+    description: Contacts are the end-customers who send an incoming message.
+  - name: Public APIs
+    description:
+
+paths:
+  /organizations:
+    post:
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Organization
+      description: Create a new organization
+      parameters:
+        - $ref: "#/components/parameters/service"
+        - $ref: "#/components/parameters/serviceOrgId"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                  description: The name of the organization
+              example:
+                name: "ImOrgName"
+              required:
+                - name
+      responses:
+        "200":
+          description: Organization created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SingleOrganization"
+              example:
+                isDefault: false
+                portalName: imzylkerorg
+                createdByZuId: "75684005"
+                kind: single.organization
+                name: IM Zylker Org
+                createdTime: "2024-04-03T11:15:43.000Z"
+                createdByService: ZOHO_IM
+                id: "85273209"
+                isPrivate: false
+                deactivatedTime: null
+                isCurrentlyLinked: false
+                isActive: true
+        "500":
+          description: Exception encountered while processing request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+        "422":
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                example-0:
+                  summary: Unprocessable
+                  value:
+                    kind: single.error
+                    message: Unprocessable Query
+                example-1:
+                  summary: Protal Name Invalid
+                  value:
+                    code: PORTAL_NAME_INVALID
+                    kind: single.error
+                    message: Invalid portal name
+                example-2:
+                  summary: Portal Name exists
+                  value:
+                    code: PORTAL_NAME_EXISTS
+                    kind: single.error
+                    message: Portal name already taken
+    get:
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Organization
+      description: Retrieve a list of organizations
+      parameters:
+        - $ref: "#/components/parameters/service"
+        - $ref: "#/components/parameters/serviceOrgId"
+      responses:
+        "200":
+          description: Organizations retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/SingleOrganization"
+                  kind:
+                    type: string
+                    enum: [list.organization]
+                  hasMore:
+                    type: boolean
+                    description: Indicates if there are more items available
+              example:
+                data:
+                  - isDefault: false
+                    portalName: imzylkerorg
+                    createdByZuId: "75684005"
+                    kind: single.organization
+                    name: IM Zylker Org
+                    createdTime: "2024-04-03T11:15:43.000Z"
+                    createdByService: ZOHO_IM
+                    id: "85273209"
+                    isPrivate: false
+                    deactivatedTime: null
+                    isCurrentlyLinked: false
+                    isActive: true
+                kind: "list.organization"
+                hasMore: false
+        "204":
+          description: No Content
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NoContentResponse"
+        "500":
+          description: Exception encountered while processing request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+  /organizations/{id}:
+    get:
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Organization
+      description: Retrieve details of a single organization
+      parameters:
+        - $ref: "#/components/parameters/service"
+        - $ref: "#/components/parameters/serviceOrgId"
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          example: 85273209
+          description: Organization ID
+      responses:
+        "200":
+          description: Organization details retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SingleOrganization"
+              example:
+                isDefault: false
+                portalName: imzylkerorg
+                createdByZuId: "75684005"
+                kind: single.organization
+                name: IM Zylker Org
+                createdTime: "2024-04-03T11:15:43.000Z"
+                createdByService: ZOHO_IM
+                id: "85273209"
+                isPrivate: false
+                deactivatedTime: null
+                isCurrentlyLinked: false
+                isActive: true
+        "204":
+          description: No Content
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NoContentResponse"
+        "500":
+          description: Exception encountered while processing request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+  /organizations/owner:
+    patch:
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Organization
+      description: Change organization owner
+      parameters:
+        - $ref: "#/components/parameters/service"
+        - $ref: "#/components/parameters/serviceOrgId"
+        - $ref: "#/components/parameters/orgId"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                new_owner_id:
+                  type: string
+                  description: The ZUID of the new owner
+              example:
+                new_owner_id: "15568324"
+      responses:
+        "200":
+          description: Owner updated successfully
+          content:
+            application/json:
+              examples:
+                example-0:
+                  summary: Update successful
+                  value:
+                    isUpdated: true
+                example-1:
+                  summary: Update Failure
+                  value:
+                    isUpdated: false
+        "500":
+          description: Exception encountered while processing request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+        "422":
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                code: USER_NOT_IN_SERVICE
+                kind: single.error
+                message: This user is not in the specified service
+
+  /serviceOrganizations:
+    post:
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Service Organization
+      description: Add a service to an existing organization
+      parameters:
+        - $ref: "#/components/parameters/service"
+        - $ref: "#/components/parameters/serviceOrgId"
+        - $ref: "#/components/parameters/orgId"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                serviceOrgId:
+                  type: number
+                  description: The Org ID of the service organization
+                service:
+                  $ref: "#/components/schemas/Services"
+              example:
+                serviceOrgId: 15568324
+                service: "ZOHO_DESK"
+      responses:
+        "200":
+          description: Service added successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  serviceOrgId:
+                    type: number
+                    example: "15568324"
+                  zohoService:
+                    $ref: "#/components/schemas/Services"
+                  kind:
+                    type: string
+                    example: "single.organization.serviceOrg"
+              example:
+                serviceOrgId: 15568324
+                zohoService: "ZOHO_DESK"
+                kind: "single.organization.serviceOrg"
+        "500":
+          description: Exception encountered while processing request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+              examples:
+                example-1:
+                  summary: Service organization exists in another portal
+                  value:
+                    code: SERVICE_ORG_EXISTS_IN_ANOTHER
+                    kind: single.error
+                    message: Only admin can perform this operation
+                example-2:
+                  summary: Service Organization already exists
+                  value:
+                    code: SERVICE_ORG_EXISTS
+                    kind: single.error
+                    message: Only admin can perform this operation
+        "422":
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                kind: single.error
+                message: Unprocessable Query
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Unauthorized"
+
+    get:
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Service Organization
+      description: Retrieve service organizations linked to an IM organization
+      parameters:
+        - $ref: "#/components/parameters/service"
+        - $ref: "#/components/parameters/serviceOrgId"
+        - $ref: "#/components/parameters/orgId"
+      responses:
+        "200":
+          description: Service organizations retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/ServiceOrganization"
+                  kind:
+                    type: string
+                    enum: [list.organization.serviceOrg]
+                  hasMore:
+                    type: boolean
+                    description: Indicates if there are more items available
+              example:
+                data:
+                  - serviceOrgId: "67414337"
+                    zohoService: "ZOHO_DESK"
+                    kind: "single.organization.serviceOrg"
+                kind: "list.organization.serviceOrg"
+                hasMore: false
+        "204":
+          description: No Content
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/NoContentResponse"
+        "500":
+          description: Exception encountered while processing request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+  /serviceOrganizations/{id}:
+    delete:
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Service Organization
+      description: Delete service organizations linked to an IM organization
+      parameters:
+        - $ref: "#/components/parameters/service"
+        - $ref: "#/components/parameters/serviceOrgId"
+        - $ref: "#/components/parameters/orgId"
+        - in: path
+          name: id
+          schema:
+            type: integer
+          required: true
+          example: 63981613
+          description: Service Organization ID
+      responses:
+        "204":
+          description: No Content
+        "422":
+          description: Unprocessable Entity
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                kind: single.error
+                message: Unprocessable Query
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                type: object
+              example:
+                kind: single.error
+                message: User must be an admin to map IM Organization
+
+  /sdk/efc:
+    get:
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - EFC
+      description: Get EFC JS
+      parameters:
+        - $ref: "#/components/parameters/service"
+        - $ref: "#/components/parameters/serviceOrgId"
+        - $ref: "#/components/parameters/orgId"
+        - in: query
+          name: widgetType
+          required: true
+          schema:
+            type: string
+            enum:
+              [
+                whatsAppEmbeddedSignup,
+                imWidget,
+                phoneNumberWidget,
+                paymentsWidget,
+                facebookEmbeddedSignup,
+                whatsAppMigration,
+              ]
+          example: whatsAppEmbeddedSignup
+        - in: query
+          name: version
+          schema:
+            type: string
+          example: v3
+
+      responses:
+        "200":
+          description: EFC details retrieved successfully
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: string
+                  kind:
+                    type: string
+                    enum: ["single.efc"]
+                  hasMore:
+                    type: boolean
+                    example: false
+              examples:
+                WhatsApp Embedded Signup:
+                  value:
+                    data: <script type='text/javascript'>window.ZOHOIM=window.ZOHOIM||function(a,b){ZOHOIM[a]=b;};window.ZOHOIM.whatsappEmbeddedInfo={\"imOrgId\":\"67414076\",\"appId\":\"284335201598168\"};(function(){ var s=document.createElement('script');s.type='text/javascript';s.src='https://static.stratuscdn.com/zohoim/zohoim-whatsAppEmbeddedSignup-sdk-v7.js';document.getElementsByTagName('head')[0].appendChild(s) })();</script>
+                    kind: single.efc
+                    hasMore: false
+                IM Widget:
+                  value:
+                    data: <script type='text/javascript'>window.ZOHOIM=window.ZOHOIM||function(a,b){ZOHOIM[a]=b;};window.ZOHOIM.staticServerPathInfo={\"css\":\"https://static.stratuscdn.com/zohoim/\",\"images\":\"https://static.stratuscdn.com/zohoim/\",\"fonts\":\"https://static.stratuscdn.com/zohoim/\",\"js\":\"https://static.stratuscdn.com/zohoim/\",\"i18n\":\"https://static.stratuscdn.com/zohoim/i18n/\"};window.ZOHOIM.defaultAvatarObj={\"defaultAvatar\":\"https://static.stratuscdn.com/zohoim/images/defaultAvatar.00abb7b0ab10ef7e6e9d.png\",\"defaultContactAvatar\":\"https://static.stratuscdn.com/zohoim/images/contactAvatar.9e3e92896307a4c2d96b.png\",\"defaultContactAvatarDark\":\"https://static.stratuscdn.com/zohoim/images/contactAvatarDark.6d69f15ebf8790ad7e24.png\"};(function(){var d=document;var s=d.createElement('script');s.type='text/javascript';s.defer=true;s.src='https://static.stratuscdn.com/zohoim/zohoim-efc-sdk-v1.19.js';d.getElementsByTagName('head')[0].appendChild(s); })();</script>
+                    kind: single.efc
+                    hasMore: false
+                Phone Number Widget:
+                  value:
+                    data: <script type='text/javascript'>window.ZOHOIM=window.ZOHOIM||function(a,b){ZOHOIM[a]=b;};window.ZOHOIM.staticServerPathInfo={\"css\":\"https://static.stratuscdn.com/zohoim/\",\"images\":\"https://static.stratuscdn.com/zohoim/\",\"fonts\":\"https://static.stratuscdn.com/zohoim/\",\"js\":\"https://static.stratuscdn.com/zohoim/\",\"i18n\":\"https://static.stratuscdn.com/zohoim/i18n/\"};(function(){var d=document;var s=d.createElement('script');s.type='text/javascript';s.defer=true;var c=window.ZOHOIM.context || '';s.src=c + '/_im/widgethandler?mode=serveEfcContent&widgetType=phoneNumberWidget&json=%7B%22userZuid%22%3A%2267414485%22%2C%22imOrgId%22%3A%2267414076%22%2C%22serviceOrgId%22%3A%2267414337%22%7D';d.getElementsByTagName('head')[0].appendChild(s); })();</script>
+                    kind: single.efc
+                    hasMore: false
+                Payment Widget:
+                  value:
+                    data: <script type='text/javascript'>window.ZOHOIM=window.ZOHOIM||function(a,b){ZOHOIM[a]=b;};window.ZOHOIM.zohoStoreWidgetInitInfo={\"offline\":false,\"code\":\"ZOHOIMCREDITS\",\"count\":5,\"serviceId\":\"4501\",\"customId\":\"67414337\",\"addonId\":\"10238\"};window.ZOHOIM.licenseInfo={};window.ZOHOIM.skipIntegrationSignups=[];window.ZOHOIM.paymentStaticInfo={\"css\":\"https://localcss.zohostatic.com/storehandler/v9/css/zswidget.min.css\",\"src\":\"https://static.stratuscdn.com/zohoim/zohoim-payments-efc-sdk-v4.js\",\"js\":\"https://localjs.zohostatic.com/storehandler/v9/js/zswidget.min.js\",\"version\":\"v9\"};(function(){var d=document;var s=d.createElement('script');s.type='text/javascript';s.defer=true;s.src='https://static.stratuscdn.com/zohoim/zohoim-payments-efc-sdk-v4.js';d.getElementsByTagName('head')[0].appendChild(s); })();</script>
+                    kind: single.efc
+                    hasMore: false
+        "500":      
+          description: Exception encountered while processing request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommonUnauthorized"
+
+  /channels:
+    post:
+      security:
+        - ApiKeyAuth: []
+      tags:
+        - Channels
+      description: Create a new channel
+      parameters:
+        - $ref: "#/components/parameters/service"
+        - $ref: "#/components/parameters/serviceOrgId"
+        - $ref: "#/components/parameters/orgId"
+      requestBody:
+        content:
+          WHATSAPP:
+            schema:
+              $ref: "#/components/schemas/WHATSAPP_CHANNEL_CREATE_PAYLOAD"
+            example:
+              name: Zylkey WhatsApp Channel
+              integrationServiceId: WHATSAPP
+              externalAccountId: +1712518151
+              configParams: 
+                [
+                  { 
+                    name: PHONE_NUMBER, 
+                    value: +1712518151
+                  }
+                ]
+          TELEGRAM:
+            schema:
+              $ref: "#/components/schemas/TELEGRAM_CHANNEL_CREATE_PAYLOAD"
+            example:
+              name: Zylkey Telegram Channel
+              integrationServiceId: TELEGRAM
+              configParams:
+                [
+                  {
+                    name: BOT_AUTH_TOKEN,
+                    value: "37457324:27eyh3827dh2387dh3282387dh8237hd7238hd"
+                  },
+                ]
+          WECHAT:
+            schema:
+              $ref: "#/components/schemas/WECHAT_CHANNEL_CREATE_PAYLOAD"
+            example:
+              name: Zylkey WeChat Channel
+              integrationServiceId: WECHAT
+              configParams:
+                [
+                  { name: ORIGINAL_ID, value: 638643 },
+                  { name: APP_ID, value: dt367d6736d2d372 },
+                  { name: TOKEN, value: dyg2d672gdxd23gx7238hxc823 },
+                  { name: APP_SECRET, value: dg27d6fy24f78h4o83 },
+                  { name: AES_KEY, value: d28yd7283yd287dyh3287hd872h832h3d2 }
+                ]
+          LINE:
+            schema:
+              $ref: "#/components/schemas/LINE_CHANNEL_CREATE_PAYLOAD"
+            example:
+              name: Zylkey Line Channel
+              integrationServiceId: LINE
+              configParams:
+                [
+                  { name: ORIGINAL_ID, value: 638643 },
+                  { name: CHANNEL_SECRET_ID, value: 2td8724yrhf874yfh748 }
+                ]
+          Facebook:
+            schema:
+              $ref: "#/components/schemas/FACEBOOK_CHANNEL_CREATE_PAYLOAD"
+            example:
+              name: Zylkey Facebook Channel
+              integrationServiceId: FACEBOOKMESSENGER
+              configParams:
+                [
+                  { name: FACEBOOK_USER, value: "Zylkey [114560454786876]" },
+                  { name: FACEBOOK_PAGE, value: "Zylkey Page [11456045476576]" }
+                ]
+      responses:
+        "200":
+          description: Channel created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SingleChannel"
+              examples:
+                WHATSAPP:
+                  value:
+                    id: "1554000002234371"
+                    integrationService:
+                      isParentAccountNeeded: false
+                      logoURL: "https://staticwhatsapp.4abb564eab8683c43df6.png"
+                      pricingParams:
+                        - name: "SESSION_MESSAGE"
+                          label: "Session messages"
+                          type: "COSTS"
+                          isVariable: true
+                          value: "0.005 USD"
+                      channelAlias: "WhatsApp"
+                      domain: "https://www.whatsapp.com"
+                      configParams:
+                        - name: "CURRENT_STATUS"
+                          index: "1"
+                          label: "Current Onboarding Status"
+                          isRequired: false
+                          type: "SYSTEM_DEFINED"
+                          options: null
+                          defaultValue: "CREATED"
+                          isSecured: false
+                          isInternal: false
+                          isDeprecated: false
+                          maxLen: "255"
+                          parentParams: []
+                        - name: "PHONE_NUMBER"
+                          index: "0"
+                          label: "WhatsApp Phone Number"
+                          isRequired: true
+                          type: "OPTIONS_COMPUTED"
+                          options: []
+                          defaultValue: null
+                          isSecured: false
+                          isInternal: false
+                          isDeprecated: false
+                          maxLen: "255"
+                          parentParams: []
+                      onBoardingList:
+                        - label: "CREATED"
+                          value: "New Channel Created"
+                        - label: "SANDBOX"
+                          value: "Number in SandBox Mode"
+                        - label: "WHATSAPP_APPROVED"
+                          value: "WABA Account & Phone Number Approved"
+                        - label: "WHATSAPP_REJECTED"
+                          value: "WABA Account & Phone Number Rejected"
+                        - label: "CONNECTED"
+                          value: "Phone Number connected with WABA Account"
+                        - label: "FAILED_ERROR"
+                          value: "Error Occured, Please try again or Contact Support"
+                        - label: "TESTING"
+                          value: "Testing Number"
+                        - label: "DISABLED"
+                          value: "Disabled"
+                        - label: "WABA_REMOVED"
+                          value: "WhatsApp Business Removed"
+                        - label: "DELETED"
+                          value: "Channel deleted"
+                      provider:
+                        name: "WhatsApp"
+                        domain: "www.whatsapp.com"
+                      label: "WhatsApp"
+                      id: "WHATSAPP"
+                      kind: "single.integrationService"
+                    name: "WhatsApp test channel 6"
+                    defaultBotId: null
+                    isActive: true
+                    isDeleted: false
+                    createdTime: "2024-04-04T10:07:40.000Z"
+                    accountName: "+14694059939"
+                    universalLink: "https://wa.me/14694059939"
+                    authenticationURL: null
+                    storageEnabled: false
+                    authorizationPending: false
+                    uuid: "482545d237ca5ef18333f120ccdc0ba7"
+                    isSubscribed: true
+                    meta: []
+                    logoURL: "https://static.whatsapp.4abb564eab8683c43df6.png"
+                    isOwner: true
+                    conversationCount: "3"
+                    createdBy: "75684005"
+                    configParams:
+                      - id: "1554000002234373"
+                        name: "CURRENT_STATUS"
+                        modifiedTime: "2024-04-04T10:07:40.000Z"
+                        isRequired: false
+                        secured: false
+                        isInternal: false
+                        isDeprecated: false
+                        label: "Current Onboarding Status"
+                        options: []
+                        type: "SYSTEM_DEFINED"
+                        defaultValue: "CREATED"
+                        maxLen: "255"
+                        uuid: "8ea9badfe0c7520aa3359efb8f8b7329"
+                        parentParams: []
+                        value: "CONNECTED"
+                        kind: "single.channel.configParam"
+                      - id: "1554000002234375"
+                        name: "PHONE_NUMBER"
+                        modifiedTime: "2024-04-04T10:07:40.000Z"
+                        isRequired: true
+                        secured: false
+                        isInternal: false
+                        isDeprecated: false
+                        label: "WhatsApp Phone Number"
+                        options: []
+                        type: "OPTIONS_COMPUTED"
+                        defaultValue: null
+                        maxLen: "255"
+                        uuid: "8ea9badfe0c7520aa3359efb8f8b7329"
+                        parentParams: []
+                        value: "+14694059939"
+                        kind: "single.channel.configParam"
+                    isSandBox: false
+                    kind: "single.channel"
+                LINE:
+                  value:
+                    id: "1554000001964611"
+                    integrationService:
+                      isParentAccountNeeded: false
+                      logoURL: "https://static.line.6358d1805e77d23f5945.png"
+                      pricingParams: []
+                      channelAlias: "Bot"
+                      domain: "https://line.me"
+                      configParams:
+                        - name: "CHANNEL_ID"
+                          index: "0"
+                          label: "Channel Id"
+                          isRequired: true
+                          type: "STRING"
+                          options: null
+                          defaultValue: null
+                          isSecured: false
+                          isInternal: false
+                          isDeprecated: false
+                          maxLen: "255"
+                          parentParams: []
+                        - name: "CHANNEL_SECRET"
+                          index: "1"
+                          label: "Channel Secret"
+                          isRequired: true
+                          type: "STRING"
+                          options: null
+                          defaultValue: null
+                          isSecured: false
+                          isInternal: false
+                          isDeprecated: false
+                          maxLen: "255"
+                          parentParams: []
+                      onBoardingList: []
+                      provider:
+                        name: "LINE"
+                        domain: "https://line.me"
+                      label: "LINE"
+                      id: "LINE"
+                      kind: "single.integrationService"
+                    name: "Line test"
+                    defaultBotId: null
+                    isActive: true
+                    isDeleted: false
+                    createdTime: "2024-03-13T16:07:42.000Z"
+                    accountName: "2000103450"
+                    universalLink: "https://line.me/R/oaMessage/@226nuxhq"
+                    authenticationURL: null
+                    storageEnabled: false
+                    authorizationPending: false
+                    uuid: "1bae7f0034a054fc99bee2489a30eee7"
+                    isSubscribed: true
+                    meta:
+                      - value: "@226nuxhq"
+                        name: "LINE_BASIC_ID"
+                    logoURL: "https://static.line.6358d1805e77d23f5945.png"
+                    isOwner: true
+                    conversationCount: "1"
+                    createdBy: "75684005"
+                    configParams:
+                      - id: "1554000001964613"
+                        name: "CHANNEL_ID"
+                        modifiedTime: "2024-03-13T16:07:42.000Z"
+                        isRequired: true
+                        secured: false
+                        isInternal: false
+                        isDeprecated: false
+                        label: "Channel Id"
+                        options: []
+                        type: "STRING"
+                        defaultValue: null
+                        maxLen: "255"
+                        uuid: "e4053da7a8da564eb4f9da3c58968be4"
+                        parentParams: []
+                        value: "2000103450"
+                        kind: "single.channel.configParam"
+                      - id: "1554000001964615"
+                        name: "CHANNEL_SECRET"
+                        modifiedTime: "2024-03-13T16:07:42.000Z"
+                        isRequired: true
+                        secured: false
+                        isInternal: false
+                        isDeprecated: false
+                        label: "Channel Secret"
+                        options: []
+                        type: "STRING"
+                        defaultValue: null
+                        maxLen: "255"
+                        uuid: "e4053da7a8da564eb4f9da3c58968be4"
+                        parentParams: []
+                        value: "e9e34030139af12d56e43a915352af23"
+                        kind: "single.channel.configParam"
+                      - id: "1554000001964617"
+                        name: "ACCESS_TOKEN"
+                        modifiedTime: "2024-03-13T16:07:42.000Z"
+                        isRequired: true
+                        secured: true
+                        isInternal: true
+                        isDeprecated: false
+                        label: "Access Token"
+                        options: []
+                        type: "PASSWORD"
+                        defaultValue: null
+                        maxLen: "255"
+                        uuid: "e4053da7a8da564eb4f9da3c58968be4"
+                        parentParams: []
+                        value: "*******"
+                        kind: "single.channel.configParam"
+                    isSandBox: false
+                    kind: "single.channel"
+                TELEGRAM:
+                  value:
+                    id: "1554000002238761"
+                    integrationService:
+                      isParentAccountNeeded: false
+                      logoURL: "https://static.telegram.3bd9ec85cdcbdb645b38.png"
+                      pricingParams: []
+                      channelAlias: "Bot"
+                      domain: "https://telegram.org"
+                      configParams:
+                        - name: "BOT_AUTH_TOKEN"
+                          index: "0"
+                          label: "Bot Auth Token"
+                          isRequired: true
+                          type: "PASSWORD"
+                          options: null
+                          defaultValue: null
+                          isSecured: true
+                          isInternal: false
+                          isDeprecated: false
+                          maxLen: "255"
+                          parentParams: []
+                      onBoardingList: []
+                      provider:
+                        name: "Telegram"
+                        domain: "https://telegram.org"
+                      label: "Telegram"
+                      id: "TELEGRAM"
+                      kind: "single.integrationService"
+                    name: "Telegram"
+                    defaultBotId: null
+                    isActive: true
+                    isDeleted: false
+                    createdTime: "2024-04-04T19:28:55.000Z"
+                    accountName: "imsadc_bot"
+                    universalLink: "https://t.me/imsadc_bot"
+                    authenticationURL: null
+                    storageEnabled: false
+                    authorizationPending: false
+                    uuid: "6d9105689d975d7293ee0d2cf64296ac"
+                    isSubscribed: true
+                    meta: []
+                    logoURL: "https://static.telegram.3bd9ec85cdcbdb645b38.png"
+                    isOwner: true
+                    conversationCount: "0"
+                    createdBy: "75684005"
+                    configParams:
+                      - id: "1554000002238763"
+                        name: "BOT_AUTH_TOKEN"
+                        modifiedTime: "2024-04-04T19:28:55.000Z"
+                        isRequired: true
+                        secured: true
+                        isInternal: false
+                        isDeprecated: false
+                        label: "Bot Auth Token"
+                        options: []
+                        type: "PASSWORD"
+                        defaultValue: null
+                        maxLen: "255"
+                        uuid: "38584ffbb419535a97c89b5a5c0691f9"
+                        parentParams: []
+                        value: "*******"
+                        kind: "single.channel.configParam"
+                      - id: "1554000002238765"
+                        name: "BOT_USER_NAME"
+                        modifiedTime: "2024-04-04T19:28:55.000Z"
+                        isRequired: false
+                        secured: false
+                        isInternal: true
+                        isDeprecated: false
+                        label: "Bot User Name"
+                        options: []
+                        type: "SYSTEM_DEFINED"
+                        defaultValue: null
+                        maxLen: "255"
+                        uuid: "38584ffbb419535a97c89b5a5c0691f9"
+                        parentParams: []
+                        value: "imsadc_bot"
+                        kind: "single.channel.configParam"
+                    isSandBox: false
+                    kind: "single.channel"
+        "500":
+          description: Exception encountered while processing request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+        "403":
+          description: Forbidden
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CommonUnauthorized"
+        "400":
+          description: Bad Request
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code: 
+                    type: string
+                  message:
+                    type: string
+                  kind:
+                    type: string
+              examples:
+                example-0:
+                  summary: Unsupported Integration
+                  value:
+                    code: UNSUPPORTED_INTEGRATION
+                    message: Channel cannot be created for unsupported integration service
+                    kind: single.error
+                example-1:
+                  summary: Invalid configuration value
+                  value:
+                    code: INVALID_CONFIG_VALUE
+                    message: Invalid value given for config param
+                    kind: single.error
+        "406":
+          description: Not Acceptable
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code: 
+                    type: string
+                  message:
+                    type: string
+                  kind:
+                    type: string
+              example:
+                code: CONFIGURATION_EXISTS
+                message: Found an active channel with same configuration
+                kind: single.error
+        "401":
+          description: Unauthorized
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code: 
+                    type: string
+                  message:
+                    type: string
+                  kind:
+                    type: string
+              example:
+                code: SUBSRIBER_ONLY_OPERATION
+                message: Channel subscribers only can perform this operation
+                kind: single.error
+components:
+  parameters:
+    orgId:
+      in: header
+      name: orgId
+      schema:
+        type: string
+      example: "85273209"
+      required: true
+    service:
+      in: header
+      name: service
+      schema:
+        type: string
+      example: "ZOHO_DESK"
+    serviceOrgId:
+      in: header
+      name: serviceOrgId
+      schema:
+        type: string
+      example: "71923149"
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: Authorization
+
+  schemas:
+    InternalServerError:
+      description: Exception encountered while processing request
+      type: object
+      required:
+        - message
+        - code
+        - kind
+      properties:
+        message:
+          type: string
+          example: An internal server error occurred while performing this operation.
+        code:
+          type: string
+          example: INTERNAL_SERVER_ERROR
+        kind:
+          type: string
+          example: single.error
+
+    NoContentResponse:
+      type: object
+      required:
+        - message
+        - kind
+      properties:
+        kind:
+          type: string
+          example: error.single
+        message:
+          type: string
+          example: No Content Available
+
+    Unauthorized:
+      description: Unauthorized
+      type: object
+      required:
+        - message
+        - code
+        - kind
+      properties:
+        kind:
+          type: string
+          example: single.error
+        code:
+          type: string
+          example: ADMIN_ONLY_OPERATION
+        message:
+          type: string
+          example: Only admin can perform this operation
+
+    CommonUnauthorized:
+      description: Forbidden
+      type: object
+      required:
+        - message
+        - kind
+      properties:
+        kind:
+          type: string
+          enum: [single.error]
+        message:
+          type: string
+          example: You are not authorized to access this resource.
+
+    Services:
+      type: string
+      enum:
+        [
+          ZOHO_IM,
+          ZOHO_DESK,
+          ZOHO_CRM,
+          TEAM_INBOX,
+          ZOHO_SALESIQ,
+          ZOHO_PEOPLE,
+          ZOHO_RECRUIT,
+          ZOHO_BOOKS,
+          ZOHO_INVENTORY,
+          ZOHO_QNTRL,
+          ZOHO_MAIL,
+          ZOHO_FORMS,
+          ZOHO_VOICE,
+          ZOHO_BIGIN,
+          SDP_ON_DEMAND,
+          ZOHO_FSM,
+          ZOHO_INVOICE,
+          ZOHO_PROJECTS,
+          ZOHO_ZIAPLATFORM,
+          ZOHO_SUBSCRIPTIONS,
+          ZOHO_POSAPI,
+          ZOHO_BACKSTAGE,
+          ZOHO_STOREAPI,
+          ZOHO_EXPENSE,
+          ZOHO_PAYROLL,
+          ZOHO_SIGN,
+          ZOHO_CAMPAIGN,
+          ZOHO_MARKETING_AUTOMATION,
+          ZOHO_ONDC,
+          ZOHO_SOCIAL,
+        ]
+      description: The service to be added
+
+    SingleOrganization:
+      properties:
+        isDefault:
+          type: boolean
+          description: Indicates if the organization is default
+        portalName:
+          type: string
+          description: The portal name of the organization (Unique across Zoho)
+        createdByZuid:
+          type: string
+          description: The ZUID of the user who created the organization
+        kind:
+          type: string
+          enum: [single.organization]
+          description: The type of response
+        name:
+          type: string
+          description: The name of the organization
+        createdTime:
+          type: string
+          description: The creation time of the organization
+        createdByService:
+          $ref: "#/components/schemas/Services"
+        id:
+          type: number
+          description: The ID of the organization
+        isPrivate:
+          type: boolean
+          description: Indicates if the organization is private
+        deactivatedTime:
+          type: number
+          description: The time when the organization was deactivated
+        isCurrentlyLinked:
+          type: boolean
+          description: Indicates if the organization is currently linked
+        isActive:
+          type: boolean
+          description: Indicates if the organization is active
+
+    ServiceOrganization:
+      type: object
+      properties:
+        serviceOrgId:
+          type: string
+          description: The Org ID of the service organization
+        zohoService:
+          type: string
+          description: The service of the organization
+        kind:
+          type: string
+          enum: ["single.organization.serviceOrg"]
+          description: The type of response
+      required:
+        - serviceOrgId
+        - zohoService
+        - kind
+
+    TELEGRAM_CHANNEL_CREATE_PAYLOAD:
+      type: object
+      description: WhatsApp Channel
+      properties:
+        name:
+          type: string
+          example: Zylkey Telegram Channel
+        integrationServiceId:
+          type: string
+          enum: [TELEGRAM]
+        configParams:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                enum: [BOT_AUTH_TOKEN]
+              value:
+                type: number
+                example: 37457324:27eyh3827dh2387dh3282387dh8237hd7238hd
+      required:
+        - name
+        - integrationServiceId
+        - configParams
+
+    WHATSAPP_CHANNEL_CREATE_PAYLOAD:
+      type: object
+      description: WhatsApp Channel
+      properties:
+        name:
+          type: string
+          example: Zylkey WhatsApp Channel
+        integrationServiceId:
+          type: string
+          enum: [WHATSAPP]
+        externalAccountId:
+          type: number
+          example: +1712518151
+        configParams:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                enum: [PHONE_NUMBER]
+              value:
+                type: number
+                example: +1712518151
+      required:
+        - name
+        - integrationServiceId
+        - configParams
+        - externalAccountId
+
+    WECHAT_CHANNEL_CREATE_PAYLOAD:
+      type: object
+      description: WeChat Channel
+      properties:
+        name:
+          type: string
+          example: Zylkey WeChat Channel
+        integrationServiceId:
+          type: string
+          enum: [WECHAT]
+        configParams:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                enum: [ORIGINAL_ID, APP_ID, APP_SECRET, TOKEN, AES_KEY]
+              value:
+                type: string
+                example: 23yd287dh2873r7823h8
+      required:
+        - name
+        - integrationServiceId
+        - configParams
+    LINE_CHANNEL_CREATE_PAYLOAD:
+      type: object
+      description: Line Channel
+      properties:
+        name:
+          type: string
+          example: Zylkey Line Channel
+        integrationServiceId:
+          type: string
+          enum: [LINE]
+        configParams:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                enum: [CHANNEL_ID, CHANNEL_SECRET]
+              value:
+                type: string
+                example: 23yd287dh2873r7823h8
+      required:
+        - name
+        - integrationServiceId
+        - configParams
+    FACEBOOK_CHANNEL_CREATE_PAYLOAD:
+      type: object
+      description: Facebook Channel
+      properties:
+        name:
+          type: string
+          example: Zylkey Facebook Channel
+        integrationServiceId:
+          type: string
+          enum: [FACEBOOKMESSENGER]
+        configParams:
+          type: array
+          items:
+            type: object
+            properties:
+              name:
+                type: string
+                enum: [FACEBOOK_USER, FACEBOOK_PAGE]
+              value:
+                type: string
+                example: Zylkey [114560454******]
+      required:
+        - name
+        - integrationServiceId
+        - configParams
+
+    SingleChannel:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "1554000002234371"
+          description: ID of the channel
+        integrationService:
+          type: object
+          properties:
+            isParentAccountNeeded:
+              type: boolean
+              example: false
+              description: Indicates if a parent account is needed
+            logoURL:
+              type: string
+              example: "https://staticwhatsapp.4abb564eab8683c43df6.png"
+              description: URL of the integration service's logo
+            pricingParams:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: "SESSION_MESSAGE"
+                    description: Name of the pricing parameter
+                  label:
+                    type: string
+                    example: "Session messages"
+                    description: Label for the pricing parameter
+                  type:
+                    type: string
+                    example: "COSTS"
+                    description: Type of the pricing parameter
+                  isVariable:
+                    type: boolean
+                    example: true
+                    description: Indicates if the pricing parameter is variable
+                  value:
+                    type: string
+                    example: "0.005 USD"
+                    description: Value of the pricing parameter
+            channelAlias:
+              type: string
+              example: "WhatsApp"
+              description: Alias of the channel
+            domain:
+              type: string
+              example: "https://www.whatsapp.com"
+              description: Domain of the integration service
+            configParams:
+              type: array
+              items:
+                type: object
+                properties:
+                  name:
+                    type: string
+                    example: "CURRENT_STATUS"
+                    description: Name of the configuration parameter
+                  label:
+                    type: string
+                    example: "Current Onboarding Status"
+                    description: Label for the configuration parameter
+                  isRequired:
+                    type: boolean
+                    example: false
+                    description: Indicates if the configuration parameter is required
+                  type:
+                    type: string
+                    example: "SYSTEM_DEFINED"
+                    description: Type of the configuration parameter
+                  options:
+                    type: array
+                    description: Options for the configuration parameter
+                  defaultValue:
+                    type: string
+                    example: "CREATED"
+                    description: Default value of the configuration parameter
+                  isSecured:
+                    type: boolean
+                    example: false
+                    description: Indicates if the configuration parameter is secured
+                  isInternal:
+                    type: boolean
+                    example: false
+                    description: Indicates if the configuration parameter is internal
+                  isDeprecated:
+                    type: boolean
+                    example: false
+                    description: Indicates if the configuration parameter is deprecated
+                  maxLen:
+                    type: string
+                    example: "255"
+                    description: Maximum length of the configuration parameter
+            onBoardingList:
+              type: array
+              items:
+                type: object
+                properties:
+                  label:
+                    type: string
+                    example: "CREATED"
+                    description: Label for the onboarding status
+                  value:
+                    type: string
+                    example: "New Channel Created"
+                    description: Value for the onboarding status
+            provider:
+              type: object
+              properties:
+                name:
+                  type: string
+                  example: "WhatsApp"
+                  description: Name of the provider
+                domain:
+                  type: string
+                  example: "www.whatsapp.com"
+                  description: Domain of the provider
+            label:
+              type: string
+              example: "WhatsApp"
+              description: Label of the integration service
+            id:
+              type: string
+              example: "WHATSAPP"
+              description: ID of the integration service
+            kind:
+              type: string
+              example: "single.integrationService"
+              description: Type of the integration service
+        name:
+          type: string
+          example: "WhatsApp test channel 6"
+          description: Name of the WhatsApp channel
+        defaultBotId:
+          type: string
+          example: null
+          description: ID of the default bot associated with the channel
+        isActive:
+          type: boolean
+          example: true
+          description: Indicates if the channel is active
+        isDeleted:
+          type: boolean
+          example: false
+          description: Indicates if the channel is deleted
+        createdTime:
+          type: string
+          format: date-time
+          example: "2024-04-04T10:07:40.000Z"
+          description: Timestamp when the channel was created
+        accountName:
+          type: string
+          example: "+14694059939"
+          description: Account name associated with the channel
+        universalLink:
+          type: string
+          example: "https://wa.me/14694059939"
+          description: Universal link of the channel
+        authenticationURL:
+          type: string
+          example: null
+          description: URL for authentication
+        storageEnabled:
+          type: boolean
+          example: false
+          description: Indicates if storage is enabled for the channel
+        authorizationPending:
+          type: boolean
+          example: false
+          description: Indicates if authorization is pending for the channel
+        uuid:
+          type: string
+          example: "482545d237ca5ef18333f120ccdc0ba7"
+          description: UUID of the channel
+        isSubscribed:
+          type: boolean
+          example: true
+          description: Indicates if the channel is subscribed
+        meta:
+          type: array
+          description: Additional metadata for the channel
+        logoURL:
+          type: string
+          example: "https://static.whatsapp.4abb564eab8683c43df6.png"
+          description: URL of the channel's logo
+        isOwner:
+          type: boolean
+          example: true
+          description: Indicates if the user is the owner of the channel
+        conversationCount:
+          type: string
+          example: "3"
+          description: Count of conversations associated with the channel
+        createdBy:
+          type: string
+          example: "75684005"
+          description: ID of the user who created the channel
+        configParams:
+          type: array
+          items:
+            type: object
+            properties:
+              id:
+                type: string
+                example: "1554000002234373"
+                description: ID of the configuration parameter
+              name:
+                type: string
+                example: "CURRENT_STATUS"
+                description: Name of the configuration parameter
+              modifiedTime:
+                type: string
+                format: date-time
+                example: "2024-04-04T10:07:40.000Z"
+                description: Timestamp when the configuration parameter was modified
+              isRequired:
+                type: boolean
+                example: false
+                description: Indicates if the configuration parameter is required
+              secured:
+                type: boolean
+                example: false
+                description: Indicates if the configuration parameter is secured
+              isInternal:
+                type: boolean
+                example: false
+                description: Indicates if the configuration parameter is internal
+              isDeprecated:
+                type: boolean
+                example: false
+                description: Indicates if the configuration parameter is deprecated
+              label:
+                type: string
+                example: "Current Onboarding Status"
+                description: Label for the configuration parameter
+              options:
+                type: array
+                description: Options for the configuration parameter
+              type:
+                type: string
+                example: "SYSTEM_DEFINED"
+                description: Type of the configuration parameter
+              defaultValue:
+                type: string
+                example: "CREATED"
+                description: Default value of the configuration parameter
+              maxLen:
+                type: string
+                example: "255"
+                description: Maximum length of the configuration parameter
+              uuid:
+                type: string
+                example: "8ea9badfe0c7520aa3359efb8f8b7329"
+                description: UUID of the configuration parameter
+        isSandBox:
+          type: boolean
+          example: false
+          description: Indicates if the channel is in sandbox mode
+        kind:
+          type: string
+          example: "single.channel"
+          description: Type of the channel
+
+security:
+  - ApiKeyAuth: []
