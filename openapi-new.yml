@@ -110,48 +110,6 @@ tags:
     description: |
       Channels represent a specific configured enity. <br>
       *OAuth Scope:* ZohoIM.channels.ALL
-  - name: Sessions
-    description: |
-      A session denotes the communication between an agent and an end-user, during which messages are exchanged. Several sessions can exist within a channel. Multiple messages can be included within a single session. Additionally, each end-user will have an exclusive session linked to a channel.
-      *OAuth Scopes:* ZohoIM.conversations.ALL
-  - name: Messages
-    description: |
-      Message entity is under the parent entity session. Multiple messages can be present within a single session. Messages are the contents shared between agent and end user in session. Agent can share text, location, emoji, attachments, interactive messages, template message to end users.
-      *OAuth Scopes:* ZohoIM.messages.ALL
-  - name: Search
-    description: |
-      Search Messages and Contacts of an Organization.
-      OAuth Scope: ZohoSearch.securesearch.READ, ZohoIM.messages.ALL, ZohoIM.contacts.ALL, ZohoIM.search.ALL
-  - name: Bots
-    description:
-  - name: Predefined Messages
-    description: |
-      Predefined Messages in an Organization. Used by agents for quick, easy and predefined responses.
-      OAuth Scope: ZohoIM.messages.ALL and ZohoIM.organizations.ALL
-  - name: Template Messages
-    description: |
-      Template Messages are supported only in whatsapp. Which can be used after the session time out (24 hours)
-      OAuth Scope: ZohoIM.messages.ALL and ZohoIM.organizations.ALL
-  - name: Broadcasts
-    description: |
-      Send message to multiple recipients simultaneously.
-  - name: Subscription
-    description: |
-      APIs for IM Licensing Details
-  - name: Metrics
-    description:
-  - name: Analytics
-    description: |
-      Analytics APIs are useful to perform systematic analysis of data and provides insights to help in decision making.
-  - name: Integration Custom APIs
-    description: |
-      APIs specific to each integration Service
-  - name: Users
-    description: Users are the executives in your organization. They are the primary users of the software, using which they interact with contacts.
-  - name: Contacts
-    description: Contacts are the end-customers who send an incoming message.
-  - name: Public APIs
-    description:
 
 paths:
   /organizations:
