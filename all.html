@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>ZOHO IM All APIs requests</title>
+    <!-- needed for adaptive design -->
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,700|Roboto:300,400,700" rel="stylesheet">
+    <style>
+      body {
+        margin: 0;
+        padding: 0;
+      }
+    </style>
+  </head>
+  <body>
+    <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"> </script>
+    <div id="redoc-container"></div>
+    <script>
+      Redoc.init('openapiallapis.yml', {
+        "expandDefaultServerVariables": true,
+        "hideDownloadButton": true,
+        "expandSingleSchemaField": true,
+        "hideSecuritySection": true,
+        "hideTryItPanel": false
+      }, document.getElementById('redoc-container'))
+    </script>
+    <script src="https://cdn.redoc.ly/redoc/latest/bundles/redoc.standalone.js"> </script>
+    <script type='text/javascript'>window.ZOHOIM=window.ZOHOIM||function(a,b){ZOHOIM[a]=b;};window.ZOHOIM.prefilledMessage="";(function(){var d=document;var s=d.createElement('script');s.type='text/javascript';s.nonce='{place_your_nonce_value_here}';s.defer=true;s.src="https://im.zoho.com/api/v1/public/channel/ac4a21fc284a50a3be69db6f1302b63a/widget";d.getElementsByTagName('head')[0].appendChild(s); })()</script>
+  </body>
