@@ -7,7 +7,7 @@
   },
   "servers": [
     {
-      "url": "https://im.localzoho.com",
+      "url": "https://api.example.com",
       "description": "API Server"
     }
   ],
@@ -17,6 +17,13 @@
         "summary": "Get existing canned messages",
         "tags": [
           "ZohoIM"
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              "organizations"
+            ]
+          }
         ],
         "responses": {
           "200": {
@@ -55,7 +62,8 @@
             "description": "After which date entities to be included. Enter a date in the ISO date format of yyyy-MM-ddThh:mm:ss.SSSZ.",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z))|null"
             }
           },
           {
@@ -64,7 +72,8 @@
             "description": "Tag to filter by",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "([a-zA-Z0-9\\-\\_#\\s]+)"
             }
           },
           {
@@ -73,7 +82,8 @@
             "description": "Desk department ID",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "([0-9]+)"
             }
           },
           {
@@ -82,7 +92,8 @@
             "description": "Filter by MessageType",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "TEMPLATE|CANNED|WELCOMEMSG|AWAY|DEFAULTTEMPLATE"
             }
           },
           {
@@ -100,7 +111,8 @@
             "description": "Filter with Integration Services. Applicable only if messageType is Template",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "INTERCOM|TELEGRAM|SALES_IQ|TWILIO|IM_TALK|LINE|WECHAT|WHATSAPP|FACEBOOKMESSENGER|INSTAGRAM|WECOM"
             }
           },
           {
@@ -109,7 +121,8 @@
             "description": "Filter with Status of Message Applicable only if messageType is Template",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "PENDING|FAILED|APPROVED|REJECTED"
             }
           },
           {
@@ -118,7 +131,8 @@
             "description": "WABA ID Filter. Applicable only if messageType is Template",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "([0-9]+)"
             }
           },
           {
@@ -127,7 +141,8 @@
             "description": "Channel ID. Applicable only if messageType is Template",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "([0-9]+)"
             }
           },
           {
@@ -136,7 +151,8 @@
             "description": "Filter by language",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "af|sq|ar|az|bn|bg|ca|zh_CN|zh_HK|zh_TW|hr|cs|da|nl|en|en_GB|en_US|et|fil|fi|fr|ka|de|el|gu|ha|he|hi|hu|id|ga|it|ja|kn|kk|rw_RW|ko|ky_KG|lo|lv|lt|mk|ms|ml|mr|nb|fa|pl|pt_BR|pt_PT|pa|ro|ru|sr|sk|sl|es|es_AR|es_ES|es_MX|sw|sv|ta|te|th|tr|uk|ur|uz|vi|zu"
             }
           }
         ]
@@ -165,17 +181,6 @@
             }
           }
         },
-        "parameters": [
-          {
-            "name": "payload",
-            "in": "path",
-            "description": "payload for POST",
-            "required": false,
-            "schema": {
-              "type": "jsonobject"
-            }
-          }
-        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -210,6 +215,16 @@
               }
             }
           }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/deleteCannedMessagesJSON"
+              }
+            }
+          }
         }
       }
     },
@@ -238,17 +253,6 @@
             }
           }
         },
-        "parameters": [
-          {
-            "name": "payload",
-            "in": "path",
-            "description": "payload for PATCH",
-            "required": false,
-            "schema": {
-              "type": "jsonobject"
-            }
-          }
-        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -476,17 +480,6 @@
             }
           }
         },
-        "parameters": [
-          {
-            "name": "payload",
-            "in": "path",
-            "description": "payload for POST",
-            "required": false,
-            "schema": {
-              "type": "jsonobject"
-            }
-          }
-        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -549,23 +542,259 @@
             }
           }
         },
-        "parameters": [
-          {
-            "name": "payload",
-            "in": "path",
-            "description": "payload for POST",
-            "required": false,
-            "schema": {
-              "type": "jsonobject"
-            }
-          }
-        ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/translationJSON"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/sessions/([0-9]+)/attachments/([0-9]+)": {
+      "get": {
+        "summary": "Get attachment of a message",
+        "tags": [
+          "ZohoIM"
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              "messages"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "inline",
+            "in": "query",
+            "description": "Display attachment content inline",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ]
+      }
+    },
+    "/api/v1/attachments/([a-zA-Z0-9]+)": {
+      "get": {
+        "summary": "Get attachment",
+        "tags": [
+          "ZohoIM"
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              "messages"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/attachments/([0-9]+)": {
+      "get": {
+        "summary": "Get attachment",
+        "tags": [
+          "ZohoIM"
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              "messages"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Get attachment",
+        "tags": [
+          "ZohoIM"
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              "messages"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/attachments/([0-9]+)/data": {
+      "get": {
+        "summary": "Get attachment",
+        "tags": [
+          "ZohoIM"
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              "messages"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/attachments/format": {
+      "get": {
+        "summary": "Get attachment",
+        "tags": [
+          "ZohoIM"
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              "messages"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/attachments": {
+      "post": {
+        "summary": "Get attachment",
+        "tags": [
+          "ZohoIM"
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              "messages"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "type",
+            "in": "path",
+            "description": "Which type of message this attachment will be used",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "message|template|channel"
+            }
+          }
+        ]
+      }
+    },
+    "/internalapi/export": {
+      "post": {
+        "summary": "Export Details",
+        "tags": [
+          "ZohoIM"
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              "messages"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/exportDataJSON"
               }
             }
           }
@@ -961,6 +1190,16 @@
               }
             }
           }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/pnsRegisterJSON"
+              }
+            }
+          }
         }
       }
     },
@@ -970,7 +1209,13 @@
         "tags": [
           "ZohoIM"
         ],
-        
+        "security": [
+          {
+            "OAuth2": [
+              "organizations"
+            ]
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -989,7 +1234,13 @@
         "tags": [
           "ZohoIM"
         ],
-        
+        "security": [
+          {
+            "OAuth2": [
+              "organizations"
+            ]
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -1020,7 +1271,13 @@
         "tags": [
           "ZohoIM"
         ],
-        
+        "security": [
+          {
+            "OAuth2": [
+              "organizations"
+            ]
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -1041,7 +1298,13 @@
         "tags": [
           "ZohoIM"
         ],
-        
+        "security": [
+          {
+            "OAuth2": [
+              "organizations"
+            ]
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -1070,7 +1333,13 @@
         "tags": [
           "ZohoIM"
         ],
-        
+        "security": [
+          {
+            "OAuth2": [
+              "organizations"
+            ]
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -1091,7 +1360,13 @@
         "tags": [
           "ZohoIM"
         ],
-        
+        "security": [
+          {
+            "OAuth2": [
+              "organizations"
+            ]
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -1112,7 +1387,13 @@
         "tags": [
           "ZohoIM"
         ],
-        
+        "security": [
+          {
+            "OAuth2": [
+              "organizations"
+            ]
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -1156,7 +1437,7 @@
     },
     "/api/v1/integrations/([a-zA-Z0-9\\-]+)": {
       "get": {
-        "summary": "Get detailed information     of a specific Integration",
+        "summary": "Get detailed information    of a specific Integration",
         "tags": [
           "ZohoIM"
         ],
@@ -1316,7 +1597,8 @@
             "description": "Index number, starting from which the channels must be fetched",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(^([a-zA-Z0-9\\s\\.\\?\\_\\-\\,@\\;\\+\\:\\(\\)])*$|null|undefined)"
             }
           },
           {
@@ -1325,7 +1607,8 @@
             "description": "Index number, starting from which the channels must be fetched",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "local|mobile|toll_free"
             }
           }
         ]
@@ -1501,7 +1784,8 @@
             "description": "After which date entities to be included. Enter a date in the ISO date format of yyyy-MM-ddThh:mm:ss.SSSZ.",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z))|null"
             }
           },
           {
@@ -1510,7 +1794,8 @@
             "description": "IntegrationService type",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "INTERCOM|TELEGRAM|SALES_IQ|TWILIO|IM_TALK|LINE|WECHAT|WHATSAPP|FACEBOOKMESSENGER|INSTAGRAM|WECOM"
             }
           },
           {
@@ -1519,7 +1804,8 @@
             "description": "External acccount Id of the channnel",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(^([a-zA-Z0-9\\s\\.\\?\\_\\-\\,@\\;\\+\\:\\(\\)])*$|null|undefined)"
             }
           },
           {
@@ -1564,7 +1850,8 @@
             "description": "Set this param to get Channels with configParam",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "WABA_ID"
             }
           },
           {
@@ -1591,7 +1878,8 @@
             "description": "Set this include config param and meta of channels",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "meta|configParams"
             }
           },
           {
@@ -1733,7 +2021,8 @@
             "description": "include param",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "REQUEST_DELETION"
             }
           }
         ]
@@ -1823,7 +2112,8 @@
             "description": "IntegrationService type",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "INTERCOM|TELEGRAM|SALES_IQ|TWILIO|IM_TALK|LINE|WECHAT|WHATSAPP|FACEBOOKMESSENGER|INSTAGRAM|WECOM"
             }
           },
           {
@@ -2116,7 +2406,8 @@
             "description": "",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "SESSION_AUTOCLOSE_EXPIRY|SESSION_AUTOCLOSE_MESSAGE"
             }
           },
           {
@@ -2125,7 +2416,8 @@
             "description": "",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "([0-9]+)"
             }
           },
           {
@@ -2134,7 +2426,8 @@
             "description": "",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "BOT|AGENT|END_USER"
             }
           }
         ]
@@ -2250,7 +2543,8 @@
             "description": "",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "SESSION_AUTOCLOSE_EXPIRY|SESSION_AUTOCLOSE_MESSAGE"
             }
           },
           {
@@ -2259,7 +2553,8 @@
             "description": "",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "([0-9]+)"
             }
           },
           {
@@ -2268,7 +2563,8 @@
             "description": "",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "BOT|AGENT|END_USER"
             }
           }
         ]
@@ -2280,7 +2576,13 @@
         "tags": [
           "ZohoIM"
         ],
-        
+        "security": [
+          {
+            "OAuth2": [
+              "organizations"
+            ]
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -2309,7 +2611,8 @@
             "description": "widget type for the EFC",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(imWidget|phoneNumberWidget|whatsAppEmbeddedSignup|paymentsWidget|facebookEmbeddedSignup|whatsAppMigration|instagramEmbeddedSignup|channelEmbedInfo|whatsAppCalculator)"
             }
           },
           {
@@ -2327,7 +2630,8 @@
             "description": "version for the efc script",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "([a-zA-Z0-9_.]+)"
             }
           }
         ]
@@ -2383,7 +2687,8 @@
             "description": "After which date entities to be included. Enter a date in the ISO date format of yyyy-MM-ddThh:mm:ss.SSSZ.",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z))|null"
             }
           }
         ]
@@ -2510,7 +2815,8 @@
             "description": "IntegrationService type",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "INTERCOM|TELEGRAM|SALES_IQ|TWILIO|IM_TALK|LINE|WECHAT|WHATSAPP|FACEBOOKMESSENGER|INSTAGRAM|WECOM"
             }
           },
           {
@@ -2528,7 +2834,8 @@
             "description": "After which date entities to be included. Enter a date in the ISO date format of yyyy-MM-ddThh:mm:ss.SSSZ.",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z))|null"
             }
           },
           {
@@ -2537,7 +2844,8 @@
             "description": "Online status of the user",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "contactProfileStatus"
             }
           }
         ]
@@ -2576,7 +2884,13 @@
         "tags": [
           "ZohoIM"
         ],
-        
+        "security": [
+          {
+            "OAuth2": [
+              "conversations"
+            ]
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -2668,7 +2982,8 @@
             "description": "After which modified date conversations should be included. Enter a date in the ISO date format of yyyy-MM-ddThh:mm:ss.SSSZ.",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z))|null"
             }
           },
           {
@@ -2677,7 +2992,8 @@
             "description": "Before which date conversations should be included. Enter a date in the ISO date format of yyyy-MM-ddThh:mm:ss.SSSZ.",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z))|null"
             }
           },
           {
@@ -2686,7 +3002,8 @@
             "description": "After which date conversations should be included. Enter a date in the ISO date format of yyyy-MM-ddThh:mm:ss.SSSZ.",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z))|null"
             }
           },
           {
@@ -2695,7 +3012,8 @@
             "description": "Status filter for the conversations",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "OPEN|ENDED|ON_PROGRESS|ON_HOLD|BLOCKED"
             }
           },
           {
@@ -2704,7 +3022,8 @@
             "description": "Assignment status filter for the conversations",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(MINE|UNASSIGNED|NONE|BOT)"
             }
           },
           {
@@ -2722,7 +3041,8 @@
             "description": "Comma-separated contatct Ext Ids.",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "([0-9]+)"
             }
           }
         ]
@@ -2734,7 +3054,13 @@
         "tags": [
           "ZohoIM"
         ],
-        
+        "security": [
+          {
+            "OAuth2": [
+              "conversations"
+            ]
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -2826,7 +3152,8 @@
             "description": "After which modified date conversations should be included. Enter a date in the ISO date format of yyyy-MM-ddThh:mm:ss.SSSZ.",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z))|null"
             }
           },
           {
@@ -2835,7 +3162,8 @@
             "description": "Before which date conversations should be included. Enter a date in the ISO date format of yyyy-MM-ddThh:mm:ss.SSSZ.",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z))|null"
             }
           },
           {
@@ -2844,7 +3172,8 @@
             "description": "After which date conversations should be included. Enter a date in the ISO date format of yyyy-MM-ddThh:mm:ss.SSSZ.",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z))|null"
             }
           },
           {
@@ -2853,7 +3182,8 @@
             "description": "Status filter for the conversations",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "OPEN|ENDED|ON_PROGRESS|ON_HOLD|BLOCKED"
             }
           },
           {
@@ -2862,7 +3192,8 @@
             "description": "Assignment status filter for the conversations",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(MINE|UNASSIGNED|NONE|BOT)"
             }
           },
           {
@@ -2880,7 +3211,8 @@
             "description": "Comma-separated contatct Ext Ids.",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "([0-9]+)"
             }
           }
         ]
@@ -2892,7 +3224,13 @@
         "tags": [
           "ZohoIM"
         ],
-        
+        "security": [
+          {
+            "OAuth2": [
+              "conversations"
+            ]
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -2911,7 +3249,13 @@
         "tags": [
           "ZohoIM"
         ],
-        
+        "security": [
+          {
+            "OAuth2": [
+              "conversations"
+            ]
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -2942,7 +3286,13 @@
         "tags": [
           "ZohoIM"
         ],
-        
+        "security": [
+          {
+            "OAuth2": [
+              "conversations"
+            ]
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -2971,7 +3321,8 @@
             "description": "IntegrationService type",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "INTERCOM|TELEGRAM|SALES_IQ|TWILIO|IM_TALK|LINE|WECHAT|WHATSAPP|FACEBOOKMESSENGER|INSTAGRAM|WECOM"
             }
           }
         ]
@@ -2983,7 +3334,13 @@
         "tags": [
           "ZohoIM"
         ],
-        
+        "security": [
+          {
+            "OAuth2": [
+              "conversations"
+            ]
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -3003,7 +3360,8 @@
             "description": "Before which modified date conversations should be included. Enter a date in the ISO date format of yyyy-MM-ddThh:mm:ss.SSSZ.",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z))|null"
             }
           },
           {
@@ -3086,7 +3444,13 @@
         "tags": [
           "ZohoIM"
         ],
-        
+        "security": [
+          {
+            "OAuth2": [
+              "conversations"
+            ]
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -3105,7 +3469,13 @@
         "tags": [
           "ZohoIM"
         ],
-        
+        "security": [
+          {
+            "OAuth2": [
+              "conversations"
+            ]
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -3136,7 +3506,13 @@
         "tags": [
           "ZohoIM"
         ],
-        
+        "security": [
+          {
+            "OAuth2": [
+              "conversations"
+            ]
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -3167,7 +3543,13 @@
         "tags": [
           "ZohoIM"
         ],
-        
+        "security": [
+          {
+            "OAuth2": [
+              "conversations"
+            ]
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -3198,7 +3580,13 @@
         "tags": [
           "ZohoIM"
         ],
-        
+        "security": [
+          {
+            "OAuth2": [
+              "conversations"
+            ]
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -3347,7 +3735,8 @@
             "description": "After which date conversations should be included. Enter a date in the ISO date format of yyyy-MM-ddThh:mm:ss.SSSZ.",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z))|null"
             }
           },
           {
@@ -3356,7 +3745,17 @@
             "description": "Type of the message to be filtered.",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(text|template)"
+            }
+          },
+          {
+            "name": "showAllSources",
+            "in": "query",
+            "description": "Whether to show all the messages sent from any service or not... False by default",
+            "required": false,
+            "schema": {
+              "type": "boolean"
             }
           }
         ]
@@ -3447,7 +3846,17 @@
             "description": "After which date conversations should be included. Enter a date in the ISO date format of yyyy-MM-ddThh:mm:ss.SSSZ.",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z))|null"
+            }
+          },
+          {
+            "name": "showAllSources",
+            "in": "query",
+            "description": "Whether to show all the messages sent from any service or not... False by default",
+            "required": false,
+            "schema": {
+              "type": "boolean"
             }
           }
         ]
@@ -3513,17 +3922,6 @@
             }
           }
         },
-        "parameters": [
-          {
-            "name": "payload",
-            "in": "path",
-            "description": "payload for POST",
-            "required": false,
-            "schema": {
-              "type": "jsonobject"
-            }
-          }
-        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -3561,17 +3959,6 @@
             }
           }
         },
-        "parameters": [
-          {
-            "name": "payload",
-            "in": "path",
-            "description": "",
-            "required": false,
-            "schema": {
-              "type": "jsonobject"
-            }
-          }
-        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -3609,17 +3996,6 @@
             }
           }
         },
-        "parameters": [
-          {
-            "name": "payload",
-            "in": "path",
-            "description": "",
-            "required": false,
-            "schema": {
-              "type": "jsonobject"
-            }
-          }
-        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -3709,7 +4085,8 @@
             "description": "After which date conversations should be included. Enter a date in the ISO date format of yyyy-MM-ddThh:mm:ss.SSSZ.",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z))|null"
             }
           },
           {
@@ -3736,7 +4113,8 @@
             "description": "To sort the list of attachments in either asc or desc order. By default descending",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "desc|asc"
             }
           }
         ]
@@ -4042,7 +4420,8 @@
             "description": "sort by column",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(modifiedTime|createdTime)"
             }
           },
           {
@@ -4051,7 +4430,8 @@
             "description": "sort order",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "desc|asc"
             }
           },
           {
@@ -4060,7 +4440,8 @@
             "description": "Key to Search",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(messages|contacts)"
             }
           }
         ]
@@ -4116,7 +4497,8 @@
             "description": "sort by column (To discuss which key to handle)",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(statusUpdatedTime|createdTime)"
             }
           },
           {
@@ -4125,7 +4507,8 @@
             "description": "sort order",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "desc|asc"
             }
           },
           {
@@ -4152,7 +4535,8 @@
             "description": "Filter conversations with channelType",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "String"
             }
           },
           {
@@ -4161,7 +4545,8 @@
             "description": "Conversation name",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "String"
             }
           },
           {
@@ -4206,7 +4591,8 @@
             "description": "Contact Profile name to be fetched",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "String"
             }
           },
           {
@@ -4224,7 +4610,8 @@
             "description": "Type of agent to be searched",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(agent|bot|enduser)"
             }
           },
           {
@@ -4233,7 +4620,8 @@
             "description": "time range of conversation created",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z)),(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z))|null"
             }
           },
           {
@@ -4242,7 +4630,8 @@
             "description": "time range of conversation update",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z)),(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z))|null"
             }
           },
           {
@@ -4260,7 +4649,8 @@
             "description": "type of Messge to be fetched",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "String"
             }
           },
           {
@@ -4269,7 +4659,8 @@
             "description": "Message ctime filter",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z)),(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z))|null"
             }
           },
           {
@@ -4278,7 +4669,8 @@
             "description": "message mtime filter",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z)),(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z))|null"
             }
           },
           {
@@ -4287,7 +4679,8 @@
             "description": "Filter messages based on metaType (CF-1 to CF-20)",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "String"
             }
           },
           {
@@ -4296,7 +4689,8 @@
             "description": "Filter messages based on metaValue (CRMLEAD|1234, DESKTICKET|123458)",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "String"
             }
           },
           {
@@ -4305,7 +4699,8 @@
             "description": "Filter messages based on attachmentType",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "String"
             }
           },
           {
@@ -4314,7 +4709,8 @@
             "description": "Filter messages based on attachmentName",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "String"
             }
           }
         ]
@@ -4388,7 +4784,8 @@
             "description": "Contact name to Search",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "String"
             }
           },
           {
@@ -4397,7 +4794,8 @@
             "description": "email of User from which the conversations must be fetched",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "([A-Za-z0-9._%\\-+\\'\\/]+@[A-Za-z0-9.\\-]+\\.[a-zA-Z]{2,22})$|null|NULL"
             }
           },
           {
@@ -4415,7 +4813,8 @@
             "description": "Contact update time",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z)),(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z))|null"
             }
           },
           {
@@ -4433,7 +4832,8 @@
             "description": "profileName to be Search",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "String"
             }
           },
           {
@@ -4442,7 +4842,8 @@
             "description": "profileName to be Search",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "String"
             }
           },
           {
@@ -4451,7 +4852,8 @@
             "description": "Type of agent to be searched",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "String"
             }
           },
           {
@@ -4469,7 +4871,8 @@
             "description": "",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "INTERCOM|TELEGRAM|SALES_IQ|TWILIO|IM_TALK|LINE|WECHAT|WHATSAPP|FACEBOOKMESSENGER|INSTAGRAM|WECOM"
             }
           },
           {
@@ -4478,7 +4881,8 @@
             "description": "profileUpdatedTimeRange",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z)),(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z))|null"
             }
           }
         ]
@@ -4490,7 +4894,13 @@
         "tags": [
           "ZohoIM"
         ],
-        
+        "security": [
+          {
+            "OAuth2": [
+              "conversations"
+            ]
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -4510,7 +4920,8 @@
             "description": "start date for metrics. Enter a date in the ISO date format of yyyy-MM-ddThh:mm:ss.SSSZ.",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z))|null"
             }
           },
           {
@@ -4519,7 +4930,8 @@
             "description": "end date for metrics. Enter a date in the ISO date format of yyyy-MM-ddThh:mm:ss.SSSZ.",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z))|null"
             }
           },
           {
@@ -4528,7 +4940,8 @@
             "description": "Denotes the dimension in metrics- Eg: status - provides the conversation status- ATTENDED OR MISSED OR ETC",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "status|contactType"
             }
           },
           {
@@ -4564,7 +4977,8 @@
             "description": "Provide metrics with time granularity",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "HOURLY|DAY"
             }
           },
           {
@@ -4573,7 +4987,8 @@
             "description": "Provides the info.on which criteria data need to be- Eg: CONTACT_LASTACTIVE- starttime and endtime will be considered based on contact_last_active_time column",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "CONTACT_LASTACTIVE|AGENT_LASTACTIVE|START_TIME|END_TIME"
             }
           },
           {
@@ -4582,7 +4997,8 @@
             "description": "IntegrationService type",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "INTERCOM|TELEGRAM|SALES_IQ|TWILIO|IM_TALK|LINE|WECHAT|WHATSAPP|FACEBOOKMESSENGER|INSTAGRAM|WECOM"
             }
           }
         ]
@@ -4620,7 +5036,8 @@
             "description": "start date for metrics. Enter a date in the ISO date format of yyyy-MM-ddThh:mm:ss.SSSZ.",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z))|null"
             }
           },
           {
@@ -4629,7 +5046,8 @@
             "description": "end date for metrics. Enter a date in the ISO date format of yyyy-MM-ddThh:mm:ss.SSSZ.",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z))|null"
             }
           },
           {
@@ -4638,7 +5056,8 @@
             "description": "Denotes the dimension in metrics - Eg: direction - metrics based on message direction like incoming and outgoing",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "direction"
             }
           },
           {
@@ -4665,7 +5084,8 @@
             "description": "Provide metrics with time granularity",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "HOURLY|DAY"
             }
           },
           {
@@ -4674,7 +5094,8 @@
             "description": "IntegrationService type",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "INTERCOM|TELEGRAM|SALES_IQ|TWILIO|IM_TALK|LINE|WECHAT|WHATSAPP|FACEBOOKMESSENGER|INSTAGRAM|WECOM"
             }
           }
         ]
@@ -4712,7 +5133,8 @@
             "description": "start date for metrics. Enter a date in the ISO date format of yyyy-MM-ddThh:mm:ss.SSSZ.",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z))|null"
             }
           },
           {
@@ -4721,7 +5143,8 @@
             "description": "end date for metrics. Enter a date in the ISO date format of yyyy-MM-ddThh:mm:ss.SSSZ.",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z))|null"
             }
           },
           {
@@ -4730,7 +5153,8 @@
             "description": "Denotes the dimension in metrics - Eg: responsiveness - it gives how responsive the sessions in particular time duration- eg: avg pickup time",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "responsiveness"
             }
           },
           {
@@ -4757,7 +5181,8 @@
             "description": "Provide metrics with time granularity",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "HOURLY|DAY"
             }
           },
           {
@@ -4766,7 +5191,8 @@
             "description": "Used to select the required metrics, based on Session Started time or Ended Time",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "START_TIME|END_TIME"
             }
           },
           {
@@ -4775,7 +5201,8 @@
             "description": "IntegrationService type",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "INTERCOM|TELEGRAM|SALES_IQ|TWILIO|IM_TALK|LINE|WECHAT|WHATSAPP|FACEBOOKMESSENGER|INSTAGRAM|WECOM"
             }
           }
         ]
@@ -4787,7 +5214,13 @@
         "tags": [
           "ZohoIM"
         ],
-        
+        "security": [
+          {
+            "OAuth2": [
+              "organizations"
+            ]
+          }
+        ],
         "responses": {
           "200": {
             "description": "Successful operation",
@@ -4807,7 +5240,8 @@
             "description": "start date for metrics. Enter a date in the ISO date format of yyyy-MM-ddThh:mm:ss.SSSZ.",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z))|null"
             }
           },
           {
@@ -4816,7 +5250,8 @@
             "description": "end date for metrics. Enter a date in the ISO date format of yyyy-MM-ddThh:mm:ss.SSSZ.",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z))|null"
             }
           },
           {
@@ -4825,7 +5260,8 @@
             "description": "Denotes the dimension in metrics - Eg: wa_credit_usage - it gives credit usage summary of Whatsapp Integration",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "wa_credit_usage"
             }
           },
           {
@@ -4852,7 +5288,8 @@
             "description": "Provide metrics with time granularity",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "HOURLY|DAY"
             }
           }
         ]
@@ -4890,7 +5327,8 @@
             "description": "Start date for metrics.Its a mandatory Param. Enter a date in the ISO date format of yyyy-MM-ddThh:mm:ss.SSSZ.",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z))|null"
             }
           },
           {
@@ -4899,7 +5337,8 @@
             "description": "End date for metrics.Its a mandatory Param. Enter a date in the ISO date format of yyyy-MM-ddThh:mm:ss.SSSZ.",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z))|null"
             }
           },
           {
@@ -4908,7 +5347,8 @@
             "description": "Denotes which attribute group data is required. Eg: responsiveness - AVG_RESPONSE_TIME comes under responsiveness group. It's Mandatory Param",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "responsiveness"
             }
           },
           {
@@ -4944,7 +5384,8 @@
             "description": "To get Agent Metrics based on the Conversation Started time or Ended Time. It's a Optional Param",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "START_TIME|END_TIME"
             }
           },
           {
@@ -4953,7 +5394,8 @@
             "description": "IntegrationService type",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "INTERCOM|TELEGRAM|SALES_IQ|TWILIO|IM_TALK|LINE|WECHAT|WHATSAPP|FACEBOOKMESSENGER|INSTAGRAM|WECOM"
             }
           }
         ]
@@ -5507,7 +5949,8 @@
             "description": "WABA ID for which the details has to be fetched - Comma seperated WABA IDs for multiple WABA Ids",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(^([a-zA-Z0-9\\s\\.\\?\\_\\-\\,@\\;\\+\\:\\(\\)])*$|null|undefined)"
             }
           }
         ]
@@ -5569,6 +6012,16 @@
                 "schema": {
                   "type": "object"
                 }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/catalogJSON"
               }
             }
           }
@@ -5872,7 +6325,8 @@
             "description": "WABA ID for which phonenumbers to be fetched",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(^([a-zA-Z0-9\\s\\.\\?\\_\\-\\,@\\;\\+\\:\\(\\)])*$|null|undefined)"
             }
           },
           {
@@ -5881,7 +6335,8 @@
             "description": "Include fields with phonenumbers",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "CHANNELS_CONFIGURED|COMMERCE_SETTINGS|QUALITY|TIER|CERTIFICATE_STATUS|THROUGHPUT"
             }
           }
         ]
@@ -5919,7 +6374,8 @@
             "description": "Comma seperated WABA IDs",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(^([a-zA-Z0-9\\s\\.\\?\\_\\-\\,@\\;\\+\\:\\(\\)])*$|null|undefined)"
             }
           }
         ]
@@ -6021,7 +6477,8 @@
             "description": "The type of sync",
             "required": true,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "STATUS"
             }
           }
         ]
@@ -6150,7 +6607,8 @@
             "description": "IntegrationService type",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "INTERCOM|TELEGRAM|SALES_IQ|TWILIO|IM_TALK|LINE|WECHAT|WHATSAPP|FACEBOOKMESSENGER|INSTAGRAM|WECOM"
             }
           },
           {
@@ -6168,7 +6626,8 @@
             "description": "Set CurrencyCode to get addon cost/balance in given currencyCode",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "([A-Z]+)"
             }
           }
         ]
@@ -6276,7 +6735,8 @@
             "description": "start date for statement. Enter a date in the ISO date format of yyyy-MM-ddThh:mm:ss.SSSZ.",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z))|null"
             }
           },
           {
@@ -6285,7 +6745,8 @@
             "description": "end date for statement. Enter a date in the ISO date format of yyyy-MM-ddThh:mm:ss.SSSZ.",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z))|null"
             }
           },
           {
@@ -6330,7 +6791,8 @@
             "description": "To filter out particular service's Entries",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "ZOHO_DESK|ZOHO_CRM|TEAM_INBOX|ZOHO_SALESIQ|ZOHO_PEOPLE|ZOHO_RECRUIT|ZOHO_BOOKS|ZOHO_INVENTORY|ZOHO_QNTRL|ZOHO_MAIL|ZOHO_FORMS|ZOHO_VOICE|ZOHO_BIGIN|SDP_ON_DEMAND|ZOHO_FSM|ZOHO_PROJECTS|ZOHO_INVOICE|ZOHO_ZIAPLATFORM|ZOHO_SUBSCRIPTIONS|ZOHO_POSAPI|ZOHO_BACKSTAGE|ZOHO_STOREAPI|ZOHO_EXPENSE|ZOHO_PAYROLL|ZOHO_SIGN|ZOHO_CAMPAIGN|ZOHO_MARKETING_AUTOMATION|ZOHO_ONDC|ZOHO_COMMERCE|ZOHO_SOCIAL|ZOHO_ACCOUNTANT|ZOHO_CREATOR|ZOHO_SOCIAL_LEADCHAIN|ZOHO_KALVI|ZOHO_SOLUTION|SITE_24X7"
             }
           }
         ]
@@ -6422,7 +6884,8 @@
             "description": "ExternalId type",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "FACEBOOK_USER_ID|WECOM_CORP_ID"
             }
           },
           {
@@ -6566,7 +7029,8 @@
             "description": "Type of Authentication URL by default ParentAccount auth url provided",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "PARENT_ACCOUNT|CHANNEL"
             }
           },
           {
@@ -6584,7 +7048,8 @@
             "description": "Custom redirect domain url",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "(^(ht|f)tp(s?)\\:\\/\\/[0-9a-zA-Z][-.\\w]*(:[0-9])*(\\/?)([a-zA-Z0-9\\-\\.\\?\\,|\\:\\'\\/\\\\\\+=&%\\$#_\\[\\]@!\\(\\)\\*;~]*)?$)|[*]"
             }
           }
         ]
@@ -6749,7 +7214,8 @@
             "description": "IntegrationService type",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "INTERCOM|TELEGRAM|SALES_IQ|TWILIO|IM_TALK|LINE|WECHAT|WHATSAPP|FACEBOOKMESSENGER|INSTAGRAM|WECOM"
             }
           },
           {
@@ -6758,7 +7224,8 @@
             "description": "Set this param to include deleted broadcasts",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "SUBMITTED|PROCESSING|COMPLETED|FAILED|DELETED"
             }
           },
           {
@@ -6939,7 +7406,8 @@
             "description": "Message status to be filtered",
             "required": false,
             "schema": {
-              "type": "string"
+              "type": "string",
+              "pattern": "QUEUED|PROCESSING|SENT|DELIVERED|READ|REPLIED|FAILED"
             }
           }
         ]
@@ -7057,54 +7525,16 @@
         }
       }
     },
-    "/api/v1/sessions/([0-9]+)/attachments/([0-9]+)": {
+    "/api/v1/botServices": {
       "get": {
-        "summary": "Get attachment of a message",
+        "summary": "Get list of available integrations to add as bot",
         "tags": [
           "ZohoIM"
         ],
         "security": [
           {
             "OAuth2": [
-              "messages"
-            ]
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "inline",
-            "in": "query",
-            "description": "Display attachment content inline",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ]
-      }
-    },
-    "/api/v1/attachments/([a-zA-Z0-9]+)": {
-      "get": {
-        "summary": "Get attachment",
-        "tags": [
-          "ZohoIM"
-        ],
-        "security": [
-          {
-            "OAuth2": [
-              "messages"
+              "bots"
             ]
           }
         ],
@@ -7122,41 +7552,16 @@
         }
       }
     },
-    "/api/v1/attachments/([0-9]+)": {
+    "/api/v1/botServices/([a-zA-Z0-9\\-\\_]+)": {
       "get": {
-        "summary": "Get attachment",
+        "summary": "Get detailed information     of a specific bot Integration",
         "tags": [
           "ZohoIM"
         ],
         "security": [
           {
             "OAuth2": [
-              "messages"
-            ]
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "summary": "Get attachment",
-        "tags": [
-          "ZohoIM"
-        ],
-        "security": [
-          {
-            "OAuth2": [
-              "messages"
+              "bots"
             ]
           }
         ],
@@ -7174,108 +7579,16 @@
         }
       }
     },
-    "/api/v1/attachments/([0-9]+)/data": {
-      "get": {
-        "summary": "Get attachment",
-        "tags": [
-          "ZohoIM"
-        ],
-        "security": [
-          {
-            "OAuth2": [
-              "messages"
-            ]
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/attachments/format": {
-      "get": {
-        "summary": "Get attachment",
-        "tags": [
-          "ZohoIM"
-        ],
-        "security": [
-          {
-            "OAuth2": [
-              "messages"
-            ]
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/v1/attachments": {
+    "/api/v1/botServices/([a-zA-Z0-9\\-\\_]+)/configParams/([a-zA-Z0-9_]+)/computeOptions": {
       "post": {
-        "summary": "Get attachment",
+        "summary": "Compute config params with parent params",
         "tags": [
           "ZohoIM"
         ],
         "security": [
           {
             "OAuth2": [
-              "messages"
-            ]
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Successful operation",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object"
-                }
-              }
-            }
-          }
-        },
-        "parameters": [
-          {
-            "name": "type",
-            "in": "path",
-            "description": "Which type of message this attachment will be used",
-            "required": false,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ]
-      }
-    },
-    "/internalapi/export": {
-      "post": {
-        "summary": "Export Details",
-        "tags": [
-          "ZohoIM"
-        ],
-        "security": [
-          {
-            "OAuth2": [
-              "messages"
+              "bots"
             ]
           }
         ],
@@ -7296,7 +7609,718 @@
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/exportDataJSON"
+                "$ref": "#/components/schemas/computeConfigParamsJSON"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/bots/([0-9]+)/configParams/([a-zA-Z0-9_]+)/computeOptions": {
+      "post": {
+        "summary": "Compute config params with parent params",
+        "tags": [
+          "ZohoIM"
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              "bots"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/computeConfigParamsJSON"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/bots": {
+      "get": {
+        "summary": "Get existing bots",
+        "tags": [
+          "ZohoIM"
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              "bots"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "description": "Index number, starting from which the bots must be fetched",
+            "required": false,
+            "schema": {
+              "type": "int"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Number of bots to fetch",
+            "required": false,
+            "schema": {
+              "type": "int"
+            }
+          },
+          {
+            "name": "modifiedAfter",
+            "in": "query",
+            "description": "After which date entities to be included. Enter a date in the ISO date format of yyyy-MM-ddThh:mm:ss.SSSZ.",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "(((19|20)\\d\\d)[-/.]{1}(0?[1-9]|1[012])[-/.]{1}(0?[1-9]|[12][0-9]|3[01])(T)([01]?[0-9]|2[0-3]):[0-5]?[0-9]:[0-5]?[0-9]([/.][\\d]{0,3})?(Z))|null"
+            }
+          },
+          {
+            "name": "botServiceId",
+            "in": "query",
+            "description": "BotService type",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "DESK_ZIA_BOT|DESK_GC_BOT|ZOHO_GC_BOT"
+            }
+          },
+          {
+            "name": "botIds",
+            "in": "query",
+            "description": "Comma-separated channel Ids",
+            "required": false,
+            "schema": {
+              "type": "long"
+            }
+          },
+          {
+            "name": "externalAccountId",
+            "in": "query",
+            "description": "External bot id",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "(^([a-zA-Z0-9\\s\\.\\?\\_\\-\\,@\\;\\+\\:\\(\\)])*$|null|undefined)"
+            }
+          }
+        ]
+      },
+      "post": {
+        "summary": "Create a new bot",
+        "tags": [
+          "ZohoIM"
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              "bots"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/botJSON"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/bots/([0-9]+)": {
+      "patch": {
+        "summary": "To update name and external Id of the bot of a bot",
+        "tags": [
+          "ZohoIM"
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              "bots"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateBotJSON"
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "summary": "Get detailed information of a bot",
+        "tags": [
+          "ZohoIM"
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              "bots"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Delete a bot",
+        "tags": [
+          "ZohoIM"
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              "bots"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/bots/([0-9]+)/activate": {
+      "patch": {
+        "summary": "Activate a bot",
+        "tags": [
+          "ZohoIM"
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              "bots"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "De-Activate a bot",
+        "tags": [
+          "ZohoIM"
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              "bots"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/bots/([0-9]+)/associate": {
+      "patch": {
+        "summary": "Associate bot with Channels",
+        "tags": [
+          "ZohoIM"
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              "bots,channels"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/associateBotJSON"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/bots/([0-9]+)/dissociate": {
+      "patch": {
+        "summary": "dissocaite bot from channels",
+        "tags": [
+          "ZohoIM"
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              "bots,channels"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/associateBotJSON"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/bots/([0-9]+)/preferences": {
+      "get": {
+        "summary": "get bot preferences",
+        "tags": [
+          "ZohoIM"
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              "bots"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "save preferences of a bot",
+        "tags": [
+          "ZohoIM"
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              "bots"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/botPreferenceJSON"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/bots/([0-9]+)/configParams": {
+      "get": {
+        "summary": "Get config param details of a bot",
+        "tags": [
+          "ZohoIM"
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              "bots"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update config param values of a bot",
+        "tags": [
+          "ZohoIM"
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              "bots"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/configParamsJSON"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/bots/([0-9]+)/configParams/([a-zA-Z0-9_]+)": {
+      "get": {
+        "summary": "Get single config param detail",
+        "tags": [
+          "ZohoIM"
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              "bots"
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users": {
+      "get": {
+        "summary": "Get all users",
+        "tags": [
+          "ZohoIM"
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              ""
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "parameters": [
+          {
+            "name": "from",
+            "in": "query",
+            "description": "Index number, starting from which the users must be fetched",
+            "required": false,
+            "schema": {
+              "type": "int"
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Number of users to fetch",
+            "required": false,
+            "schema": {
+              "type": "int"
+            }
+          },
+          {
+            "name": "status",
+            "in": "query",
+            "description": "status of the user filter",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "ACTIVE|INACTIVE|DELETED"
+            }
+          },
+          {
+            "name": "role",
+            "in": "query",
+            "description": "role of the user filter",
+            "required": false,
+            "schema": {
+              "type": "string",
+              "pattern": "ADMIN|AGENT|LIGHT_AGENT"
+            }
+          }
+        ]
+      },
+      "post": {
+        "summary": "Add a new User",
+        "tags": [
+          "ZohoIM"
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              ""
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/addUserJSON"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/v1/users/([0-9]+)": {
+      "get": {
+        "summary": "Get a User",
+        "tags": [
+          "ZohoIM"
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              ""
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch": {
+        "summary": "Update a User",
+        "tags": [
+          "ZohoIM"
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              ""
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        },
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/updateUserJSON"
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "summary": "Add a new User",
+        "tags": [
+          "ZohoIM"
+        ],
+        "security": [
+          {
+            "OAuth2": [
+              ""
+            ]
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
               }
             }
           }
@@ -7306,20 +8330,49 @@
   },
   "components": {
     "schemas": {
+      "addUserJSON": {
+        "type": "object",
+        "properties": {
+          "zuId": {
+            "type": "long",
+            "description": "ZUID of the user",
+            "minOccurs": 1
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the agent"
+          }
+        }
+      },
+      "updateUserJSON": {
+        "type": "object",
+        "properties": {
+          "role": {
+            "type": "string",
+            "description": "Role of the agent",
+            "pattern": "ADMIN|AGENT"
+          },
+          "name": {
+            "type": "string",
+            "description": "Name of the agent"
+          }
+        }
+      },
       "deleteCannedMessagesJSON": {
         "type": "object",
         "properties": {
           "ids": {
             "type": "jsonarray",
             "description": "cannedMessage Ids Array",
-            "maxLength": 2000
+            "maxLength": 2000,
+            "$ref": "#/components/schemas/cannedMessageIdsArrayJSON"
           }
         }
       },
       "cannedMessageIdsArrayJSON": {
         "type": "object",
         "properties": {
-          "null": {
+          "item": {
             "type": "long",
             "description": "",
             "maxLength": 30
@@ -7334,7 +8387,7 @@
             "description": "Canned message title",
             "maxLength": 150,
             "minLength": 1,
-            "pattern": "multiLanguagePattern"
+            "pattern": "[a-zA-Z0-9\\_\\-\\+\\#\\?\\!\\.\\:\\,@\\;\\P{InBasicLatin}\\(\\)\\s]+"
           },
           "isPrivate": {
             "type": "boolean",
@@ -7360,12 +8413,14 @@
           "translations": {
             "type": "jsonarray",
             "description": "list of translations",
-            "maxLength": 15000
+            "maxLength": 15000,
+            "$ref": "#/components/schemas/updateTranslationJSON"
           },
           "meta": {
             "type": "jsonarray",
             "description": "list of meta varibles",
-            "maxLength": 2000
+            "maxLength": 2000,
+            "$ref": "#/components/schemas/variableJSON"
           }
         }
       },
@@ -7375,18 +8430,20 @@
           "language": {
             "type": "string",
             "description": "Language of Translation",
-            "pattern": "templateMessageLangauges"
+            "pattern": "af|sq|ar|az|bn|bg|ca|zh_CN|zh_HK|zh_TW|hr|cs|da|nl|en|en_GB|en_US|et|fil|fi|fr|ka|de|el|gu|ha|he|hi|hu|id|ga|it|ja|kn|kk|rw_RW|ko|ky_KG|lo|lv|lt|mk|ms|ml|mr|nb|fa|pl|pt_BR|pt_PT|pa|ro|ru|sr|sk|sl|es|es_AR|es_ES|es_MX|sw|sv|ta|te|th|tr|uk|ur|uz|vi|zu"
           },
           "message": {
             "type": "string",
             "description": "Content of the message",
             "maxLength": 2500,
-            "minLength": 1
+            "minLength": 1,
+            "minOccurs": 1
           },
           "templateItems": {
             "type": "jsonobject",
             "description": "Template Items",
-            "maxLength": 5000
+            "maxLength": 5000,
+            "$ref": "#/components/schemas/templateItemsJSON"
           }
         }
       },
@@ -7398,7 +8455,8 @@
             "description": "Canned message title",
             "maxLength": 150,
             "minLength": 1,
-            "pattern": "multiLanguagePattern"
+            "pattern": "[a-zA-Z0-9\\_\\-\\+\\#\\?\\!\\.\\:\\,@\\;\\P{InBasicLatin}\\(\\)\\s]+",
+            "minOccurs": 1
           },
           "isPrivate": {
             "type": "boolean",
@@ -7408,18 +8466,21 @@
             "type": "string",
             "description": "Content of the message",
             "maxLength": 2500,
-            "minLength": 1
+            "minLength": 1,
+            "minOccurs": 1
           },
           "tags": {
             "type": "string",
             "description": "Canned message tags",
             "maxLength": 250,
-            "pattern": "multiLanguagePattern"
+            "pattern": "[a-zA-Z0-9\\_\\-\\+\\#\\?\\!\\.\\:\\,@\\;\\P{InBasicLatin}\\(\\)\\s]+",
+            "minOccurs": 1
           },
           "meta": {
             "type": "jsonarray",
             "description": "list of meta varibles",
-            "maxLength": 2000
+            "maxLength": 2000,
+            "$ref": "#/components/schemas/variableJSON"
           },
           "type": {
             "type": "string",
@@ -7429,12 +8490,13 @@
           "integService": {
             "type": "string",
             "description": "channelType to which tempalateMessage is created",
-            "pattern": "availIntegrationServices"
+            "pattern": "INTERCOM|TELEGRAM|SALES_IQ|TWILIO|IM_TALK|LINE|WECHAT|WHATSAPP|FACEBOOKMESSENGER|INSTAGRAM|WECOM"
           },
           "translations": {
             "type": "jsonarray",
             "description": "list of translations",
-            "maxLength": 20000
+            "maxLength": 20000,
+            "$ref": "#/components/schemas/translationJSON"
           },
           "channelId": {
             "type": "long",
@@ -7443,7 +8505,7 @@
           "primaryLanguage": {
             "type": "string",
             "description": "Primary Language of the Canned Message",
-            "pattern": "templateMessageLangauges"
+            "pattern": "af|sq|ar|az|bn|bg|ca|zh_CN|zh_HK|zh_TW|hr|cs|da|nl|en|en_GB|en_US|et|fil|fi|fr|ka|de|el|gu|ha|he|hi|hu|id|ga|it|ja|kn|kk|rw_RW|ko|ky_KG|lo|lv|lt|mk|ms|ml|mr|nb|fa|pl|pt_BR|pt_PT|pa|ro|ru|sr|sk|sl|es|es_AR|es_ES|es_MX|sw|sv|ta|te|th|tr|uk|ur|uz|vi|zu"
           }
         }
       },
@@ -7453,18 +8515,21 @@
           "language": {
             "type": "string",
             "description": "Language of Translation",
-            "pattern": "templateMessageLangauges"
+            "pattern": "af|sq|ar|az|bn|bg|ca|zh_CN|zh_HK|zh_TW|hr|cs|da|nl|en|en_GB|en_US|et|fil|fi|fr|ka|de|el|gu|ha|he|hi|hu|id|ga|it|ja|kn|kk|rw_RW|ko|ky_KG|lo|lv|lt|mk|ms|ml|mr|nb|fa|pl|pt_BR|pt_PT|pa|ro|ru|sr|sk|sl|es|es_AR|es_ES|es_MX|sw|sv|ta|te|th|tr|uk|ur|uz|vi|zu",
+            "minOccurs": 1
           },
           "message": {
             "type": "string",
             "description": "Content of the message",
             "maxLength": 2500,
-            "minLength": 1
+            "minLength": 1,
+            "minOccurs": 1
           },
           "templateItems": {
             "type": "jsonobject",
             "description": "Template Items",
-            "maxLength": 5000
+            "maxLength": 5000,
+            "$ref": "#/components/schemas/templateItemsJSON"
           }
         }
       },
@@ -7473,16 +8538,19 @@
         "properties": {
           "header": {
             "type": "jsonobject",
-            "description": "Header JSON"
+            "description": "Header JSON",
+            "$ref": "#/components/schemas/templateHeaderJSON"
           },
           "footer": {
             "type": "jsonobject",
-            "description": "Footer JSON"
+            "description": "Footer JSON",
+            "$ref": "#/components/schemas/templateFooterJSON"
           },
           "button": {
             "type": "jsonarray",
             "description": "Button JSON",
-            "maxLength": 5000
+            "maxLength": 5000,
+            "$ref": "#/components/schemas/templateButtonJSON"
           }
         }
       },
@@ -7492,7 +8560,8 @@
           "type": {
             "type": "string",
             "description": "Type of the Header to be sent",
-            "pattern": "TEXT|IMAGE|DOCUMENT|VIDEO"
+            "pattern": "TEXT|IMAGE|DOCUMENT|VIDEO",
+            "minOccurs": 1
           },
           "message": {
             "type": "string",
@@ -7513,13 +8582,15 @@
           "type": {
             "type": "string",
             "description": "Type of the Footer to be sent",
-            "pattern": "TEXT"
+            "pattern": "TEXT",
+            "minOccurs": 1
           },
           "message": {
             "type": "string",
             "description": "Footer Message Content. Only TEXT allowed",
             "maxLength": 60,
-            "minLength": 1
+            "minLength": 1,
+            "minOccurs": 1
           }
         }
       },
@@ -7529,13 +8600,15 @@
           "type": {
             "type": "string",
             "description": "Type of button",
-            "pattern": "QUICK_REPLY|PHONE_NUMBER|URL|OTP|CATALOG|MPM"
+            "pattern": "QUICK_REPLY|PHONE_NUMBER|URL|OTP|CATALOG|MPM",
+            "minOccurs": 1
           },
           "message": {
             "type": "string",
             "description": "Message content on the button",
             "maxLength": 20,
-            "minLength": 1
+            "minLength": 1,
+            "minOccurs": 1
           },
           "action": {
             "type": "string",
@@ -7544,7 +8617,26 @@
           }
         }
       },
-
+      "variableJSON": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "long",
+            "description": "id of the config param"
+          },
+          "name": {
+            "type": "string",
+            "description": "name of the config param",
+            "maxLength": 50,
+            "pattern": "(^([a-zA-Z0-9\\_])*$)"
+          },
+          "value": {
+            "type": "string",
+            "description": "value of the config param",
+            "maxLength": 500
+          }
+        }
+      },
       "exportDataJSON": {
         "type": "object",
         "properties": {
@@ -7552,18 +8644,21 @@
             "type": "string",
             "description": "Type of Export",
             "maxLength": 50,
-            "pattern": "AI"
+            "pattern": "AI",
+            "minOccurs": 1
           },
           "subType": {
             "type": "string",
             "description": "Sub-Type of Export",
             "maxLength": 100,
-            "pattern": "MESSAGES"
+            "pattern": "MESSAGES",
+            "minOccurs": 1
           },
           "exportFilter": {
             "type": "jsonobject",
             "description": "Filters to apply while exporting data",
-            "maxLength": 1000
+            "maxLength": 1000,
+            "$ref": "#/components/schemas/exportCriteria"
           }
         }
       },
@@ -7601,23 +8696,28 @@
           },
           "includeMessageType": {
             "type": "jsonarray",
-            "description": "message type to be fetched"
+            "description": "message type to be fetched",
+            "$ref": "#/components/schemas/exportMessageTypes"
           },
           "excludeMessageType": {
             "type": "jsonarray",
-            "description": "message type not to be fetched"
+            "description": "message type not to be fetched",
+            "$ref": "#/components/schemas/exportMessageTypes"
           },
           "includeMessageStatus": {
             "type": "jsonarray",
-            "description": "message status to be fetched"
+            "description": "message status to be fetched",
+            "$ref": "#/components/schemas/exportMessageStatus"
           },
           "includeMessageMetaType": {
             "type": "jsonarray",
-            "description": "message meta type to be fetched"
+            "description": "message meta type to be fetched",
+            "$ref": "#/components/schemas/exportMessageMeta"
           },
           "includeMessageMetaValue": {
             "type": "jsonarray",
-            "description": "message meta value to be fetched"
+            "description": "message meta value to be fetched",
+            "$ref": "#/components/schemas/exportMessageMeta"
           }
         }
       },
@@ -7639,7 +8739,9 @@
           "data": {
             "type": "jsonarray",
             "description": "",
-            "maxLength": 17800
+            "maxLength": 17800,
+            "minOccurs": 1,
+            "$ref": "#/components/schemas/getMessagesUsingUUIDDataJSON"
           }
         }
       },
@@ -7649,12 +8751,14 @@
           "sessionId": {
             "type": "string",
             "description": "",
-            "maxLength": 50
+            "maxLength": 50,
+            "minOccurs": 1
           },
           "messageUuid": {
             "type": "string",
             "description": "",
-            "maxLength": 50
+            "maxLength": 50,
+            "minOccurs": 1
           }
         }
       },
@@ -7665,7 +8769,8 @@
             "type": "string",
             "description": "Organization name",
             "maxLength": 100,
-            "pattern": "cleartextampersand"
+            "pattern": "[0-9a-zA-Z_\\-\\&\\.\\$\\@\\^\\(\\)\\{\\}\\~\\=\\-\\|\\*\\+\\?\\[\\]\\,\\:\\'\\/\\!\\P{InBasicLatin}\\s]+",
+            "minOccurs": 1
           },
           "isPrivate": {
             "type": "boolean",
@@ -7680,7 +8785,7 @@
             "type": "string",
             "description": "Channel name",
             "maxLength": 200,
-            "pattern": "channelName"
+            "pattern": "[a-zA-Z0-9\\_\\-\\+\\?\\!\\.\\:\\,@\\;\\P{InBasicLatin}\\(\\)\\s]+"
           },
           "isStorageEnabled": {
             "type": "boolean",
@@ -7689,7 +8794,8 @@
           "configParams": {
             "type": "jsonarray",
             "description": "Values of channel config params for the IntegrationService type",
-            "maxLength": 5050
+            "maxLength": 5050,
+            "$ref": "#/components/schemas/variableJSON"
           },
           "defaultBotId": {
             "type": "long",
@@ -7707,12 +8813,14 @@
           "new_owner_id": {
             "type": "long",
             "description": "new createdBy user to be updated",
-            "maxLength": 20
+            "maxLength": 20,
+            "minOccurs": 1
           },
           "old_owner_id": {
             "type": "long",
             "description": "already createdBy user",
-            "maxLength": 20
+            "maxLength": 20,
+            "minOccurs": 1
           }
         }
       },
@@ -7723,12 +8831,14 @@
             "type": "string",
             "description": "Channel name",
             "maxLength": 200,
-            "pattern": "channelName"
+            "pattern": "[a-zA-Z0-9\\_\\-\\+\\?\\!\\.\\:\\,@\\;\\P{InBasicLatin}\\(\\)\\s]+",
+            "minOccurs": 1
           },
           "integrationServiceId": {
             "type": "string",
             "description": "IntegrationService type of the channel",
-            "pattern": "availIntegrationServices"
+            "pattern": "INTERCOM|TELEGRAM|SALES_IQ|TWILIO|IM_TALK|LINE|WECHAT|WHATSAPP|FACEBOOKMESSENGER|INSTAGRAM|WECOM",
+            "minOccurs": 1
           },
           "isStorageEnabled": {
             "type": "boolean",
@@ -7737,7 +8847,8 @@
           "configParams": {
             "type": "jsonarray",
             "description": "Values of channel config params for the IntegrationService type",
-            "maxLength": 5050
+            "maxLength": 5050,
+            "$ref": "#/components/schemas/variableJSON"
           },
           "defaultBotId": {
             "type": "long",
@@ -7747,7 +8858,7 @@
             "type": "string",
             "description": "External acccount Id of the channnel",
             "maxLength": 50,
-            "pattern": "String_safe"
+            "pattern": "(^([a-zA-Z0-9\\s\\.\\?\\_\\-\\,@\\;\\+\\:\\(\\)])*$|null|undefined)"
           },
           "isSandBox": {
             "type": "boolean",
@@ -7769,7 +8880,7 @@
           "status": {
             "type": "string",
             "description": "Current status of the session",
-            "pattern": "sessionStatus"
+            "pattern": "OPEN|ENDED|ON_PROGRESS|ON_HOLD|BLOCKED"
           },
           "type": {
             "type": "string",
@@ -7784,7 +8895,7 @@
           "name": {
             "type": "string",
             "description": "Name of the contact",
-            "pattern": "ContactName"
+            "pattern": "(^([a-zA-Z0-9\\s\\.\\?\\_\\-\\,@\\;\\+\\:\\(\\)\\[\\]\\!\\P{InBasicLatin}])*$|null|undefined)"
           }
         }
       },
@@ -7794,7 +8905,8 @@
           "data": {
             "type": "jsonarray",
             "description": "list of ChannelMeta",
-            "maxLength": 5050
+            "maxLength": 5050,
+            "$ref": "#/components/schemas/metaVariableJSON"
           }
         }
       },
@@ -7804,7 +8916,8 @@
           "data": {
             "type": "jsonarray",
             "description": "list of varibles",
-            "maxLength": 5050
+            "maxLength": 5050,
+            "$ref": "#/components/schemas/variableJSON"
           }
         }
       },
@@ -7814,27 +8927,8 @@
           "configParams": {
             "type": "jsonarray",
             "description": "list of varibles",
-            "maxLength": 5050
-          }
-        }
-      },
-      "variableJSON": {
-        "type": "object",
-        "properties": {
-          "id": {
-            "type": "long",
-            "description": "id of the config param"
-          },
-          "name": {
-            "type": "string",
-            "description": "name of the config param",
-            "maxLength": 50,
-            "pattern": "PredefinedJavaEnums"
-          },
-          "value": {
-            "type": "string",
-            "description": "value of the config param",
-            "maxLength": 500
+            "maxLength": 5050,
+            "$ref": "#/components/schemas/variableJSON"
           }
         }
       },
@@ -7849,13 +8943,13 @@
             "type": "string",
             "description": "name of the config param",
             "maxLength": 50,
-            "pattern": "PredefinedJavaEnums"
+            "pattern": "(^([a-zA-Z0-9\\_])*$)"
           },
           "value": {
             "type": "string",
             "description": "value of the config param",
             "maxLength": 7000,
-            "pattern": "channelMeta"
+            "pattern": "[^<>\\']+"
           }
         }
       },
@@ -7869,7 +8963,8 @@
           "values": {
             "type": "jsonarray",
             "description": "Selected values",
-            "maxLength": 5000
+            "maxLength": 5000,
+            "$ref": "#/components/schemas/stringArrayJSON"
           }
         }
       },
@@ -7879,7 +8974,7 @@
           "extSessionId": {
             "type": "string",
             "description": "External Session ID",
-            "pattern": "String_safe"
+            "pattern": "(^([a-zA-Z0-9\\s\\.\\?\\_\\-\\,@\\;\\+\\:\\(\\)])*$|null|undefined)"
           },
           "replyToMessageId": {
             "type": "long",
@@ -7888,12 +8983,12 @@
           "extId": {
             "type": "string",
             "description": "External ID of the messsage",
-            "pattern": "String_safe"
+            "pattern": "(^([a-zA-Z0-9\\s\\.\\?\\_\\-\\,@\\;\\+\\:\\(\\)])*$|null|undefined)"
           },
           "extParentId": {
             "type": "string",
             "description": "External Parent ID of the message",
-            "pattern": "String_safe"
+            "pattern": "(^([a-zA-Z0-9\\s\\.\\?\\_\\-\\,@\\;\\+\\:\\(\\)])*$|null|undefined)"
           },
           "displayMessage": {
             "type": "string",
@@ -7920,12 +9015,14 @@
           "location": {
             "type": "jsonobject",
             "description": "Properties of the location for LOCATION message",
-            "maxLength": 100
+            "maxLength": 100,
+            "$ref": "#/components/schemas/chatMessageLocationObjectJSON"
           },
           "text": {
             "type": "jsonobject",
             "description": "Text message",
-            "maxLength": 65536
+            "maxLength": 65536,
+            "$ref": "#/components/schemas/textMessageJSON"
           },
           "type": {
             "type": "string",
@@ -7939,7 +9036,8 @@
           "meta": {
             "type": "jsonarray",
             "description": "Message meta to be added to chat message",
-            "maxLength": 10000
+            "maxLength": 10000,
+            "$ref": "#/components/schemas/variableJSON"
           }
         }
       },
@@ -7949,12 +9047,14 @@
           "layout": {
             "type": "jsonarray",
             "description": "Layout for sending",
-            "maxLength": 66000
+            "maxLength": 66000,
+            "$ref": "#/components/schemas/chatLayoutArray"
           },
           "meta": {
             "type": "jsonarray",
             "description": "Message meta to be added to chat message",
-            "maxLength": 10000
+            "maxLength": 10000,
+            "$ref": "#/components/schemas/variableJSON"
           }
         }
       },
@@ -7964,12 +9064,14 @@
           "type": {
             "type": "string",
             "description": "Type of the message",
-            "pattern": "(TEXT|IMAGE|DOCUMENT|VIDEO|BUTTON)"
+            "pattern": "(TEXT|IMAGE|DOCUMENT|VIDEO|BUTTON)",
+            "minOccurs": 1
           },
           "style": {
             "type": "string",
             "description": "style of the type",
-            "pattern": "(TITLE|SUB_TITLE|DESCRIPTION|REPLY|SECTION|URL_BUTTON)"
+            "pattern": "(TITLE|SUB_TITLE|DESCRIPTION|REPLY|SECTION|URL_BUTTON)",
+            "minOccurs": 1
           },
           "message": {
             "type": "string",
@@ -7979,7 +9081,8 @@
           "buttons": {
             "type": "jsonobject",
             "description": "Button Array",
-            "maxLength": 50000
+            "maxLength": 50000,
+            "$ref": "#/components/schemas/chatButtonLayoutJSON"
           }
         }
       },
@@ -7989,12 +9092,14 @@
           "buttonElements": {
             "type": "jsonarray",
             "description": "For button style REPLY",
-            "maxLength": 6000
+            "maxLength": 6000,
+            "$ref": "#/components/schemas/buttonElementsLayoutArray"
           },
           "sectionButtonElements": {
             "type": "jsonarray",
             "description": "For button style REPLY",
-            "maxLength": 15000
+            "maxLength": 15000,
+            "$ref": "#/components/schemas/sectionButtonElementsLayoutArray"
           }
         }
       },
@@ -8004,7 +9109,8 @@
           "message": {
             "type": "string",
             "description": "Message for button",
-            "maxLength": 40
+            "maxLength": 40,
+            "minOccurs": 1
           },
           "type": {
             "type": "string",
@@ -8023,12 +9129,15 @@
           "title": {
             "type": "string",
             "description": "Title of the section",
-            "maxLength": 20
+            "maxLength": 20,
+            "minOccurs": 1
           },
           "section": {
             "type": "jsonarray",
             "description": "section Array",
-            "maxLength": 66000
+            "maxLength": 66000,
+            "minOccurs": 1,
+            "$ref": "#/components/schemas/subSectionButtonElementsLayoutArray"
           }
         }
       },
@@ -8038,7 +9147,8 @@
           "message": {
             "type": "string",
             "description": "Message for button",
-            "maxLength": 20
+            "maxLength": 20,
+            "minOccurs": 1
           },
           "desciption": {
             "type": "string",
@@ -8052,7 +9162,7 @@
           "receiverId": {
             "type": "string",
             "description": "ID to which Message Has to be sent",
-            "pattern": "String_safe"
+            "pattern": "(^([a-zA-Z0-9\\s\\.\\?\\_\\-\\,@\\;\\+\\:\\(\\)])*$|null|undefined)"
           },
           "receiverType": {
             "type": "string",
@@ -8061,7 +9171,8 @@
           },
           "cannedMessageId": {
             "type": "long",
-            "description": "CannedMessageId to validate against"
+            "description": "CannedMessageId to validate against",
+            "minOccurs": 1
           },
           "language": {
             "type": "string",
@@ -8071,11 +9182,13 @@
           "parameters": {
             "type": "jsonobject",
             "description": "Values for the placeholders in given canned message",
-            "maxLength": 10000
+            "maxLength": 10000,
+            "$ref": "#/components/schemas/placeholderParamsJSON"
           },
           "params": {
             "type": "jsonarray",
-            "description": "Values for the body placeholders in given canned message"
+            "description": "Values for the body placeholders in given canned message",
+            "$ref": "#/components/schemas/paramsJSON"
           },
           "message": {
             "type": "string",
@@ -8100,7 +9213,8 @@
           "meta": {
             "type": "jsonarray",
             "description": "Message meta to be added to chat message",
-            "maxLength": 10000
+            "maxLength": 10000,
+            "$ref": "#/components/schemas/variableJSON"
           }
         }
       },
@@ -8109,7 +9223,8 @@
         "properties": {
           "cannedMessageId": {
             "type": "long",
-            "description": "CannedMessageId to validate against"
+            "description": "CannedMessageId to validate against",
+            "minOccurs": 1
           },
           "language": {
             "type": "string",
@@ -8119,7 +9234,8 @@
           "params": {
             "type": "jsonobject",
             "description": "Values for the placeholders in given canned message",
-            "maxLength": 3000
+            "maxLength": 3000,
+            "$ref": "#/components/schemas/layoutCannedMessageParams"
           }
         }
       },
@@ -8129,7 +9245,7 @@
           "receiverId": {
             "type": "string",
             "description": "ID to which Message Has to be sent",
-            "pattern": "String_safe"
+            "pattern": "(^([a-zA-Z0-9\\s\\.\\?\\_\\-\\,@\\;\\+\\:\\(\\)])*$|null|undefined)"
           },
           "channelId": {
             "type": "long",
@@ -8138,7 +9254,8 @@
           "receiverIds": {
             "type": "jsonarray",
             "description": "receiver Ids Array",
-            "maxLength": 14000
+            "maxLength": 14000,
+            "$ref": "#/components/schemas/phoneNumberArrayJSON"
           }
         }
       },
@@ -8148,27 +9265,32 @@
           "bodyParams": {
             "type": "jsonarray",
             "description": "Body Parameters",
-            "maxLength": 2200
+            "maxLength": 2200,
+            "$ref": "#/components/schemas/itemParamArray"
           },
           "headerParams": {
             "type": "jsonarray",
             "description": "Header Parameters",
-            "maxLength": 1500
+            "maxLength": 1500,
+            "$ref": "#/components/schemas/headerItemParamArray"
           },
           "urlParams": {
             "type": "jsonarray",
             "description": "Url Parameters",
-            "maxLength": 1500
+            "maxLength": 1500,
+            "$ref": "#/components/schemas/itemParamArray"
           },
           "otpParams": {
             "type": "jsonarray",
             "description": "OTP Parameters",
-            "maxLength": 500
+            "maxLength": 500,
+            "$ref": "#/components/schemas/itemParamArray"
           },
           "buttonParams": {
             "type": "jsonarray",
             "description": "Button Parameters",
-            "maxLength": 70000
+            "maxLength": 70000,
+            "$ref": "#/components/schemas/buttonParamsArray"
           }
         }
       },
@@ -8192,12 +9314,14 @@
           "subTitleParams": {
             "type": "jsonarray",
             "description": "Body Parameters",
-            "maxLength": 1000
+            "maxLength": 1000,
+            "$ref": "#/components/schemas/itemParamArray"
           },
           "titleParams": {
             "type": "jsonarray",
             "description": "Header Parameters",
-            "maxLength": 500
+            "maxLength": 500,
+            "$ref": "#/components/schemas/itemParamArray"
           }
         }
       },
@@ -8247,7 +9371,8 @@
           "attributes": {
             "type": "jsonarray",
             "description": "",
-            "maxLength": 70000
+            "maxLength": 70000,
+            "$ref": "#/components/schemas/attributesArray"
           }
         }
       },
@@ -8262,28 +9387,30 @@
           "value": {
             "type": "string",
             "description": "",
-            "pattern": "String_safe"
+            "pattern": "(^([a-zA-Z0-9\\s\\.\\?\\_\\-\\,@\\;\\+\\:\\(\\)])*$|null|undefined)"
           },
           "values": {
             "type": "jsonarray",
             "description": "",
-            "maxLength": 2000
+            "maxLength": 2000,
+            "$ref": "#/components/schemas/attributeValueArray"
           },
           "attributes": {
             "type": "jsonarray",
             "description": "",
-            "maxLength": 70000
+            "maxLength": 70000,
+            "$ref": "#/components/schemas/attributesArray"
           }
         }
       },
       "attributeValueArray": {
         "type": "object",
         "properties": {
-          "null": {
+          "item": {
             "type": "string",
             "description": "",
             "maxLength": 25,
-            "pattern": "String_safe"
+            "pattern": "(^([a-zA-Z0-9\\s\\.\\?\\_\\-\\,@\\;\\+\\:\\(\\)])*$|null|undefined)"
           }
         }
       },
@@ -8294,7 +9421,8 @@
             "type": "string",
             "description": "Content of the message",
             "maxLength": 65536,
-            "minLength": 1
+            "minLength": 1,
+            "minOccurs": 1
           }
         }
       },
@@ -8304,7 +9432,8 @@
           "data": {
             "type": "jsonarray",
             "description": "Session Partipants ID Array",
-            "maxLength": 5000
+            "maxLength": 5000,
+            "$ref": "#/components/schemas/longArrayJSON"
           }
         }
       },
@@ -8314,7 +9443,8 @@
           "data": {
             "type": "jsonarray",
             "description": "Session ID Array",
-            "maxLength": 5000
+            "maxLength": 5000,
+            "$ref": "#/components/schemas/longArrayJSON"
           }
         }
       },
@@ -8324,12 +9454,12 @@
           "latitude": {
             "type": "string",
             "description": "latitude of the location",
-            "pattern": "String_null"
+            "pattern": "(^([a-zA-Z0-9\\s\\.\\?\\_\\-\\,\\@\\:/+\\(\\)])*$|null|undefined)"
           },
           "longitude": {
             "type": "string",
             "description": "longitude of the location",
-            "pattern": "String_null"
+            "pattern": "(^([a-zA-Z0-9\\s\\.\\?\\_\\-\\,\\@\\:/+\\(\\)])*$|null|undefined)"
           }
         }
       },
@@ -8345,7 +9475,7 @@
       "longArrayJSON": {
         "type": "object",
         "properties": {
-          "null": {
+          "item": {
             "type": "long",
             "description": ""
           }
@@ -8354,7 +9484,7 @@
       "stringArrayJSON": {
         "type": "object",
         "properties": {
-          "null": {
+          "item": {
             "type": "string",
             "description": "",
             "maxLength": 500
@@ -8396,7 +9526,8 @@
           "mode": {
             "type": "string",
             "description": "mode can be get/post OTP",
-            "pattern": "get|post"
+            "pattern": "get|post",
+            "minOccurs": 1
           },
           "channelId": {
             "type": "long",
@@ -8406,12 +9537,13 @@
             "type": "string",
             "description": "Code of country from which phone number is bought",
             "maxLength": 3,
-            "pattern": "String_safe"
+            "pattern": "(^([a-zA-Z0-9\\s\\.\\?\\_\\-\\,@\\;\\+\\:\\(\\)])*$|null|undefined)"
           },
           "sandBoxTesters": {
             "type": "jsonarray",
             "description": "Numbers From which Sandbox ",
-            "maxLength": 5000
+            "maxLength": 5000,
+            "$ref": "#/components/schemas/stringArrayJSON"
           }
         }
       },
@@ -8445,7 +9577,7 @@
           "name": {
             "type": "string",
             "description": "CS Account Name for cs creation",
-            "pattern": "String_safe"
+            "pattern": "(^([a-zA-Z0-9\\s\\.\\?\\_\\-\\,@\\;\\+\\:\\(\\)])*$|null|undefined)"
           }
         }
       },
@@ -8454,11 +9586,13 @@
         "properties": {
           "parentAccountId": {
             "type": "long",
-            "description": "ParentAccount Id of the wecom org"
+            "description": "ParentAccount Id of the wecom org",
+            "minOccurs": 1
           },
           "months": {
             "type": "long",
-            "description": "Purchase duration in months"
+            "description": "Purchase duration in months",
+            "minOccurs": 1
           }
         }
       },
@@ -8468,51 +9602,61 @@
           "portalName": {
             "type": "string",
             "description": "portal name",
-            "maxLength": 255
+            "maxLength": 255,
+            "minOccurs": 1
           },
           "firstName": {
             "type": "string",
             "description": "first name",
-            "maxLength": 255
+            "maxLength": 255,
+            "minOccurs": 1
           },
           "lastName": {
             "type": "string",
             "description": "last name",
-            "maxLength": 255
+            "maxLength": 255,
+            "minOccurs": 1
           },
           "phoneNumber": {
             "type": "string",
-            "description": "phone number"
+            "description": "phone number",
+            "minOccurs": 1
           },
           "companyName": {
             "type": "string",
             "description": "company name",
-            "maxLength": 255
+            "maxLength": 255,
+            "minOccurs": 1
           },
           "companyAddress": {
             "type": "string",
             "description": "company address",
-            "maxLength": 255
+            "maxLength": 255,
+            "minOccurs": 1
           },
           "companyProfileLogo": {
             "type": "string",
             "description": "company profile logo",
-            "maxLength": 255
+            "maxLength": 255,
+            "minOccurs": 1
           },
           "companyEmail": {
             "type": "string",
             "description": "company email",
-            "maxLength": 255
+            "maxLength": 255,
+            "minOccurs": 1
           },
           "companyWebsite": {
             "type": "string",
             "description": "company website",
-            "maxLength": 255
+            "maxLength": 255,
+            "minOccurs": 1
           },
           "companyHQ": {
             "type": "string",
             "description": "company headquarter country",
-            "maxLength": 255
+            "maxLength": 255,
+            "minOccurs": 1
           },
           "twilioSID": {
             "type": "string",
@@ -8522,41 +9666,49 @@
           "fbBusinessManagerId": {
             "type": "string",
             "description": "Facebook Business Manager ID",
-            "maxLength": 255
+            "maxLength": 255,
+            "minOccurs": 1
           },
           "fbBusinessManagerName": {
             "type": "string",
             "description": "Facebook Business Manager Name",
-            "maxLength": 255
+            "maxLength": 255,
+            "minOccurs": 1
           },
           "verification": {
             "type": "string",
             "description": "Completed Facebook Business Verification",
-            "pattern": "Yes|No"
+            "pattern": "Yes|No",
+            "minOccurs": 1
           },
           "companyVertical": {
             "type": "string",
             "description": "Company vertical",
-            "pattern": "companyVertical"
+            "pattern": "Automotive|Consumer|Education|Energy|Entertainment|Financial|Food|Government or State Owned Entity|Healthcare Technology|Insurance|Legal|Marketing|Media|Manufacturing|Real Estate|Religion|Retail|Jewelry|Technology|Telecommunications|Transportation|Not for Profit",
+            "minOccurs": 1
           },
           "useCase": {
             "type": "string",
             "description": "Use case",
-            "pattern": "useCases"
+            "pattern": "Notifications|Customer Support|2FA or User Verification",
+            "minOccurs": 1
           },
           "region": {
             "type": "string",
             "description": "Which region are you sending messages to",
-            "pattern": "region"
+            "pattern": "Global|US and Canada|Latin America|Europe|Africa|Middle East|Australia and New Zealand|South Asia|South-East Asia|East Asia",
+            "minOccurs": 1
           },
           "messagesCount": {
             "type": "string",
             "description": "How many messages are you sending per month during the first year",
-            "pattern": "messagesCount"
+            "pattern": "0 - 10,000|10,000 - 100,000|100,000 - 1,000,000|1,000,000 - 10,000,000",
+            "minOccurs": 1
           },
           "approval": {
             "type": "boolean",
-            "description": "user approval"
+            "description": "user approval",
+            "minOccurs": 1
           }
         }
       },
@@ -8566,25 +9718,25 @@
           "numberType": {
             "type": "string",
             "description": "List of Phone number types supported by Twilio",
-            "pattern": "twilioNumberTypes"
+            "pattern": "local|mobile|toll_free|owned"
           },
           "countryCode": {
             "type": "string",
             "description": "Code of country from which phone number is bought",
             "maxLength": 2,
-            "pattern": "String_safe"
+            "pattern": "(^([a-zA-Z0-9\\s\\.\\?\\_\\-\\,@\\;\\+\\:\\(\\)])*$|null|undefined)"
           },
           "countryName": {
             "type": "string",
             "description": "Country from which phone number is bought",
             "maxLength": 30,
-            "pattern": "String_safe"
+            "pattern": "(^([a-zA-Z0-9\\s\\.\\?\\_\\-\\,@\\;\\+\\:\\(\\)])*$|null|undefined)"
           },
           "phoneNumber": {
             "type": "string",
             "description": "Phone Number of Twilio",
             "maxLength": 20,
-            "pattern": "String_safe"
+            "pattern": "(^([a-zA-Z0-9\\s\\.\\?\\_\\-\\,@\\;\\+\\:\\(\\)])*$|null|undefined)"
           }
         }
       },
@@ -8594,7 +9746,8 @@
           "name": {
             "type": "string",
             "description": "addOn name as given in GET response",
-            "pattern": "IM_CREDITS|WHATSAPP_CREDITS"
+            "pattern": "IM_CREDITS|WHATSAPP_CREDITS",
+            "minOccurs": 1
           },
           "count": {
             "type": "int",
@@ -8626,13 +9779,15 @@
             "type": "string",
             "description": "application specific ID e.g com.vtouch.desk",
             "maxLength": 255,
-            "pattern": "vaildinappbundlename"
+            "pattern": "[a-zA-Z0-9\\_\\-\\$\\P{InBasicLatin}]+(\\.[a-zA-Z0-9\\_\\-\\$\\P{InBasicLatin}]+)*",
+            "minOccurs": 1
           },
           "registrationToken": {
             "type": "string",
             "description": "unique notification ID",
             "maxLength": 255,
-            "pattern": "nfId"
+            "pattern": "^[a-zA-Z0-9]+[a-zA-Z0-9\\-\\.\\?\\:\\/\\=%_]*$",
+            "minOccurs": 1
           },
           "deviceInfo": {
             "type": "string",
@@ -8643,19 +9798,22 @@
             "type": "string",
             "description": "installation ID",
             "maxLength": 255,
-            "pattern": "insId"
+            "pattern": "^[a-zA-Z0-9%]*$",
+            "minOccurs": 1
           },
           "osName": {
             "type": "string",
             "description": "",
             "maxLength": 10,
-            "pattern": "android|ios"
+            "pattern": "android|ios",
+            "minOccurs": 1
           },
           "osInfo": {
             "type": "string",
             "description": "",
             "maxLength": 10,
-            "pattern": "sInfo"
+            "pattern": "^[0-9]+([\\.]{1}[0-9]+)*$",
+            "minOccurs": 1
           },
           "deploymentType": {
             "type": "string",
@@ -8671,15 +9829,18 @@
             "type": "string",
             "description": "Bundle Name to be updated",
             "maxLength": 50,
-            "pattern": "supportedBundles"
+            "pattern": "ZOHO_CRMPLUS|ZOHO_NEWCRM|ZOHO_MARKETINGPLUS|ZOHO_ONE|ZOHO_FINANCEPLUS|ZOHO_PEOPLEPLUS|ZOHO_SERVICEPLUS",
+            "minOccurs": 1
           },
           "bundleOrgId": {
             "type": "long",
-            "description": "Bundle OrgId to be updated"
+            "description": "Bundle OrgId to be updated",
+            "minOccurs": 1
           },
           "currentUserId": {
             "type": "long",
-            "description": "ZUId of the user who initiated the update action"
+            "description": "ZUId of the user who initiated the update action",
+            "minOccurs": 1
           },
           "isTrail": {
             "type": "boolean",
@@ -8688,7 +9849,8 @@
           "services": {
             "type": "jsonarray",
             "description": "Child Services integrated with bundle",
-            "maxLength": 1000
+            "maxLength": 1000,
+            "$ref": "#/components/schemas/bundleChildService"
           }
         }
       },
@@ -8699,7 +9861,7 @@
             "type": "string",
             "description": "Zoho Service Name",
             "maxLength": 100,
-            "pattern": "ZohoServices"
+            "pattern": "ZOHO_DESK|ZOHO_CRM|TEAM_INBOX|ZOHO_SALESIQ|ZOHO_PEOPLE|ZOHO_RECRUIT|ZOHO_BOOKS|ZOHO_INVENTORY|ZOHO_QNTRL|ZOHO_MAIL|ZOHO_FORMS|ZOHO_VOICE|ZOHO_BIGIN|SDP_ON_DEMAND|ZOHO_FSM|ZOHO_PROJECTS|ZOHO_INVOICE|ZOHO_ZIAPLATFORM|ZOHO_SUBSCRIPTIONS|ZOHO_POSAPI|ZOHO_BACKSTAGE|ZOHO_STOREAPI|ZOHO_EXPENSE|ZOHO_PAYROLL|ZOHO_SIGN|ZOHO_CAMPAIGN|ZOHO_MARKETING_AUTOMATION|ZOHO_ONDC|ZOHO_COMMERCE|ZOHO_SOCIAL|ZOHO_ACCOUNTANT|ZOHO_CREATOR|ZOHO_SOCIAL_LEADCHAIN|ZOHO_KALVI|ZOHO_SOLUTION|SITE_24X7"
           },
           "serviceOrgId": {
             "type": "long",
@@ -8714,11 +9876,13 @@
             "type": "string",
             "description": "Bundle Name to be updated",
             "maxLength": 50,
-            "pattern": "supportedBundles"
+            "pattern": "ZOHO_CRMPLUS|ZOHO_NEWCRM|ZOHO_MARKETINGPLUS|ZOHO_ONE|ZOHO_FINANCEPLUS|ZOHO_PEOPLEPLUS|ZOHO_SERVICEPLUS",
+            "minOccurs": 1
           },
           "bundleOrgId": {
             "type": "long",
-            "description": "Bundle OrgId to be updated"
+            "description": "Bundle OrgId to be updated",
+            "minOccurs": 1
           }
         }
       },
@@ -8733,7 +9897,8 @@
           "signUpStatus": {
             "type": "jsonobject",
             "description": "Status of Embedded SignUp Process",
-            "maxLength": 1600
+            "maxLength": 1600,
+            "$ref": "#/components/schemas/signUpStatusJSON"
           }
         }
       },
@@ -8743,7 +9908,8 @@
           "data": {
             "type": "jsonobject",
             "description": "Data sent during Embedded Sign Up",
-            "maxLength": 800
+            "maxLength": 800,
+            "$ref": "#/components/schemas/signUpStatusDataJSON"
           },
           "type": {
             "type": "string",
@@ -8781,12 +9947,14 @@
         "properties": {
           "serviceOrgId": {
             "type": "long",
-            "description": "Integration Ord ID "
+            "description": "Integration Ord ID ",
+            "minOccurs": 1
           },
           "service": {
             "type": "string",
             "description": "Zoho Service OrgType",
-            "pattern": "ZohoServices"
+            "pattern": "ZOHO_DESK|ZOHO_CRM|TEAM_INBOX|ZOHO_SALESIQ|ZOHO_PEOPLE|ZOHO_RECRUIT|ZOHO_BOOKS|ZOHO_INVENTORY|ZOHO_QNTRL|ZOHO_MAIL|ZOHO_FORMS|ZOHO_VOICE|ZOHO_BIGIN|SDP_ON_DEMAND|ZOHO_FSM|ZOHO_PROJECTS|ZOHO_INVOICE|ZOHO_ZIAPLATFORM|ZOHO_SUBSCRIPTIONS|ZOHO_POSAPI|ZOHO_BACKSTAGE|ZOHO_STOREAPI|ZOHO_EXPENSE|ZOHO_PAYROLL|ZOHO_SIGN|ZOHO_CAMPAIGN|ZOHO_MARKETING_AUTOMATION|ZOHO_ONDC|ZOHO_COMMERCE|ZOHO_SOCIAL|ZOHO_ACCOUNTANT|ZOHO_CREATOR|ZOHO_SOCIAL_LEADCHAIN|ZOHO_KALVI|ZOHO_SOLUTION|SITE_24X7",
+            "minOccurs": 1
           }
         }
       },
@@ -8795,12 +9963,14 @@
         "properties": {
           "serviceOrgId": {
             "type": "long",
-            "description": "Integration Ord ID "
+            "description": "Integration Ord ID ",
+            "minOccurs": 1
           },
           "service": {
             "type": "string",
             "description": "Zoho Service OrgType",
-            "pattern": "ZOHO_COMMERCE"
+            "pattern": "ZOHO_COMMERCE",
+            "minOccurs": 1
           }
         }
       },
@@ -8825,7 +9995,8 @@
           "catalogId": {
             "type": "string",
             "description": "whatsapp catalog id",
-            "maxLength": 30
+            "maxLength": 30,
+            "minOccurs": 1
           }
         }
       },
@@ -8869,12 +10040,13 @@
             "type": "string",
             "description": "External Id Type",
             "maxLength": 30,
-            "pattern": "availableExternalIdType"
+            "pattern": "FACEBOOK_USER_ID|WECOM_CORP_ID"
           },
           "parentAccountParams": {
             "type": "jsonarray",
             "description": "Parent Account Params",
-            "maxLength": 3000
+            "maxLength": 3000,
+            "$ref": "#/components/schemas/integrationServiceAccountParams"
           }
         }
       },
@@ -8899,28 +10071,29 @@
           "sessionId": {
             "type": "string",
             "description": "Session Id",
-            "pattern": "String_safe"
+            "pattern": "(^([a-zA-Z0-9\\s\\.\\?\\_\\-\\,@\\;\\+\\:\\(\\)])*$|null|undefined)"
           },
           "message": {
             "type": "string",
             "description": "Message to be sent",
-            "maxLength": 4096
+            "maxLength": 4096,
+            "minOccurs": 1
           },
           "cannedMessageId": {
             "type": "string",
             "description": "CannedMessage Id",
-            "pattern": "String_safe"
+            "pattern": "(^([a-zA-Z0-9\\s\\.\\?\\_\\-\\,@\\;\\+\\:\\(\\)])*$|null|undefined)"
           },
           "language": {
             "type": "string",
             "description": "Language Of the Template message to be sent",
             "maxLength": 6,
-            "pattern": "String_safe"
+            "pattern": "(^([a-zA-Z0-9\\s\\.\\?\\_\\-\\,@\\;\\+\\:\\(\\)])*$|null|undefined)"
           },
           "receiverId": {
             "type": "string",
             "description": "ID to which Message Has to be sent",
-            "pattern": "String_safe"
+            "pattern": "(^([a-zA-Z0-9\\s\\.\\?\\_\\-\\,@\\;\\+\\:\\(\\)])*$|null|undefined)"
           },
           "receiverType": {
             "type": "string",
@@ -8930,12 +10103,14 @@
           "interactive": {
             "type": "jsonobject",
             "description": "Template Interactive Message Data",
-            "maxLength": 3000
+            "maxLength": 3000,
+            "$ref": "#/components/schemas/chatSystemMessageInteractiveJSON"
           },
           "meta": {
             "type": "jsonarray",
             "description": "Message meta to be added to chat message",
-            "maxLength": 10000
+            "maxLength": 10000,
+            "$ref": "#/components/schemas/variableJSON"
           }
         }
       },
@@ -8945,12 +10120,13 @@
           "title": {
             "type": "string",
             "description": "Title Message",
-            "pattern": "String_safe"
+            "pattern": "(^([a-zA-Z0-9\\s\\.\\?\\_\\-\\,@\\;\\+\\:\\(\\)])*$|null|undefined)"
           },
           "buttons": {
             "type": "jsonobject",
             "description": "Template Interactive Buttons Data",
-            "maxLength": 1000
+            "maxLength": 1000,
+            "$ref": "#/components/schemas/chatSystemMessageInteractiveButtonJSON"
           }
         }
       },
@@ -8959,7 +10135,8 @@
         "properties": {
           "url": {
             "type": "string",
-            "description": "Url Full link"
+            "description": "Url Full link",
+            "minOccurs": 1
           }
         }
       },
@@ -8970,20 +10147,24 @@
             "type": "string",
             "description": "Name of the broadcast",
             "maxLength": 200,
-            "pattern": "String_safe"
+            "pattern": "(^([a-zA-Z0-9\\s\\.\\?\\_\\-\\,@\\;\\+\\:\\(\\)])*$|null|undefined)",
+            "minOccurs": 1
           },
           "channelId": {
             "type": "long",
-            "description": "Specifies to which channel this broadcast is been done to"
+            "description": "Specifies to which channel this broadcast is been done to",
+            "minOccurs": 1
           },
           "receiverType": {
             "type": "string",
             "description": "Specifies receiver type",
-            "pattern": "(PHONENUMBER|EXTERNALID)"
+            "pattern": "(PHONENUMBER|EXTERNALID)",
+            "minOccurs": 1
           },
           "cannedMessageId": {
             "type": "long",
-            "description": "CannedMessageId to validate against"
+            "description": "CannedMessageId to validate against",
+            "minOccurs": 1
           },
           "language": {
             "type": "string",
@@ -8994,12 +10175,14 @@
             "type": "jsonarray",
             "description": "receiver Id and message data",
             "maxLength": 2000000,
-            "minLength": 1
+            "minLength": 1,
+            "$ref": "#/components/schemas/broadcastAddReceiverDataJSON"
           },
           "meta": {
             "type": "jsonarray",
             "description": "Message meta to be added to chat message",
-            "maxLength": 10000
+            "maxLength": 10000,
+            "$ref": "#/components/schemas/variableJSON"
           },
           "skipOngoingConversations": {
             "type": "boolean",
@@ -9013,7 +10196,8 @@
           "receiverIds": {
             "type": "jsonarray",
             "description": "receiver Ids Array",
-            "maxLength": 14000
+            "maxLength": 14000,
+            "$ref": "#/components/schemas/phoneNumberArrayJSON"
           },
           "receiverId": {
             "type": "string",
@@ -9039,19 +10223,21 @@
           "parameters": {
             "type": "jsonobject",
             "description": "Values for the placeholders in given canned message",
-            "maxLength": 3000
+            "maxLength": 3000,
+            "$ref": "#/components/schemas/placeholderParamsJSON"
           },
           "meta": {
             "type": "jsonarray",
             "description": "Message meta to be added to chat message",
-            "maxLength": 600
+            "maxLength": 600,
+            "$ref": "#/components/schemas/variableJSON"
           }
         }
       },
       "phoneNumberArrayJSON": {
         "type": "object",
         "properties": {
-          "null": {
+          "item": {
             "type": "string",
             "description": "",
             "maxLength": 25,
@@ -9090,13 +10276,15 @@
             "type": "string",
             "description": "Country Code",
             "maxLength": 5,
-            "pattern": "([0-9]+)"
+            "pattern": "([0-9]+)",
+            "minOccurs": 1
           },
           "phoneNumber": {
             "type": "string",
             "description": "Phone Number",
             "maxLength": 24,
-            "pattern": "([0-9]+)"
+            "pattern": "([0-9]+)",
+            "minOccurs": 1
           }
         }
       },
@@ -9106,12 +10294,14 @@
           "category": {
             "type": "string",
             "description": "Category to which messages has to be sent",
-            "pattern": "MARKETING|UTILITY|AUTHENTICATION|SERVICE"
+            "pattern": "MARKETING|UTILITY|AUTHENTICATION|SERVICE",
+            "minOccurs": 1
           },
           "data": {
             "type": "jsonarray",
             "description": "Country vs phone numbers count",
-            "maxLength": 6000
+            "maxLength": 6000,
+            "$ref": "#/components/schemas/countryVsPhoneNumberCountJSON"
           }
         }
       },
@@ -9122,13 +10312,113 @@
             "type": "string",
             "description": "Country code",
             "maxLength": 5,
-            "pattern": "^[+]([0-9]+)"
+            "pattern": "^[+]([0-9]+)",
+            "minOccurs": 1
           },
           "count": {
             "type": "string",
             "description": "Count of phone numbers",
             "maxLength": 9,
-            "pattern": "([0-9]+)"
+            "pattern": "([0-9]+)",
+            "minOccurs": 1
+          }
+        }
+      },
+      "botJSON": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "bot name",
+            "maxLength": 200,
+            "pattern": "[^<>\\'\",]+",
+            "minOccurs": 1
+          },
+          "botServiceId": {
+            "type": "string",
+            "description": "BotService type of the BOT",
+            "pattern": "DESK_ZIA_BOT|DESK_GC_BOT|ZOHO_GC_BOT",
+            "minOccurs": 1
+          },
+          "externalAccountId": {
+            "type": "string",
+            "description": "External bot id",
+            "pattern": "(^([a-zA-Z0-9\\s\\.\\?\\_\\-\\,@\\;\\+\\:\\(\\)])*$|null|undefined)",
+            "minOccurs": 1
+          },
+          "configParams": {
+            "type": "jsonarray",
+            "description": "Values of bot config params for the BotService type",
+            "maxLength": 5050,
+            "$ref": "#/components/schemas/variableJSON"
+          }
+        }
+      },
+      "updateBotJSON": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "bot name",
+            "maxLength": 200,
+            "pattern": "[^<>\\'\",]+"
+          },
+          "externalAccountId": {
+            "type": "string",
+            "description": "External bot id",
+            "pattern": "(^([a-zA-Z0-9\\s\\.\\?\\_\\-\\,@\\;\\+\\:\\(\\)])*$|null|undefined)"
+          },
+          "configParams": {
+            "type": "jsonarray",
+            "description": "Values of bot config params for the BotService type",
+            "maxLength": 5050,
+            "$ref": "#/components/schemas/variableJSON"
+          },
+          "isActive": {
+            "type": "boolean",
+            "description": "=set Bot to active"
+          },
+          "isExpired": {
+            "type": "boolean",
+            "description": "=set Bot if expired"
+          }
+        }
+      },
+      "associateBotJSON": {
+        "type": "object",
+        "properties": {
+          "channelIds": {
+            "type": "jsonarray",
+            "description": "channel ID Array",
+            "maxLength": 5050,
+            "$ref": "#/components/schemas/longArrayJSON"
+          }
+        }
+      },
+      "botPreferenceJSON": {
+        "type": "object",
+        "properties": {
+          "autoClose": {
+            "type": "boolean",
+            "description": "Specify whether Conversation has to be closed automatically after idle time"
+          },
+          "autoCloseInterval": {
+            "type": "int",
+            "description": "Time in minutes for idle time of the session"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "OAuth2": {
+        "type": "oauth2",
+        "flows": {
+          "implicit": {
+            "authorizationUrl": "https://example.com/oauth/authorize",
+            "scopes": {
+              "messages": "Access to messages",
+              "organizations": "Access to organization data"
+            }
           }
         }
       }
