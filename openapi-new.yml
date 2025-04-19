@@ -24,35 +24,35 @@ tags:
       - Our seamless integration with customers' best-loved platforms such as WhatsApp, Telegram, LINE, WeChat and Facebook Messenger.
 
       ## Getting Started
-      All Zoho Desk APIs require these two mandatory fields in the header.
+      All Zoho IM APIs require these two mandatory fields in the header.
       - Authorization - Authentication request token
       - orgId -ID of the organization to access. All API endpoints except /organizations mandatorily require the orgId.
 
 
       ## HTTP Methods
-      Zoho Desk APIs enable data manipulation and retrieval through different HTTP methods.
+      Zoho IM APIs enable data manipulation and retrieval through different HTTP methods.
 
-      | Method   | Purpose |
-      | -------- | ------- |
-      | GET      | Retrieve resources    |
+      | Method   | Purpose                                          |
+      | -------- | -------------------------------------------------|
+      | GET      | Retrieve resources                               |
       | POST     | Create resources and perform resource actions    |
-      | PATCH    | Update resources    |
-      | DELETE   | Delete resources   |
+      | PATCH    | Update resources                                 |
+      | DELETE   | Delete resources                                 |
 
 
       ## Errors
       Zoho IM uses HTTP status codes to indicate success or failure of API calls. Status codes in the 2xx range indicate success, 4xx range indicate error in the information provided, and 5xx range indicate server side errors. The following table lists some commonly used HTTP status codes.
 
-      | Method   | Purpose |
-      | -------- | ------- |
-      | 200      | OK    |
-      | 204     | No content    |
-      | 400    | Bad Request    |
-      | 401   | Unauthorized   |
-      | 403   | Forbidden (Unauthorised access)   |
-      | 404   | URL not found   |
-      | 422   | Unprocessable Entity   |
-      | 500   | Internal error  |
+      | Method   | Purpose                            |
+      | -------- | -----------------------------------|
+      | 200      | OK                                 |
+      | 204      | No content                         |
+      | 400      | Bad Request                        |
+      | 401      | Unauthorized                       |
+      | 403      | Forbidden (Unauthorised access)    |
+      | 404      | URL not found                      |
+      | 422      | Unprocessable Entity               |
+      | 500      | Internal error                     |
 
   - name: Authorization
     description: |
@@ -82,14 +82,14 @@ tags:
 
   - name: Organization
     description: |
-      In Zoho Desk, each business is categorized as an organization. If you have multiple businesses, set each business up as an individual organization by creating a new signup and generating a unique organization ID. All APIs except the ones directly related to organizations must include the organization ID in the header in this format: **orgId:{organization_id}**
+      In Zoho IM, each business is categorized as an organization. If you have multiple businesses, set each business up as an individual organization by creating a new signup and generating a unique organization ID. All APIs except the ones directly related to organizations must include the organization ID in the header in this format: **orgId:{organization_id}**
 
       ## Organization Object
 
       | Attributes          | Type          |   Explanation                                       |
       |---------------------|---------------|-----------------------------------------------------|
       | isDefault           | boolean       |  Indicates if the organization is default           |
-      | portalName          | string        |   The portal name of the organization               |
+      | portalName          | string        |  The portal name of the organization                |
       | createdByZuId       | long          |  The ZUID of the user who created the organization  |
       | kind                | string        |  The type of response                               |
       | name                | string        |  The name of the organization                       |
@@ -110,6 +110,26 @@ tags:
     description: |
       Channels represent a specific configured enity. <br>
       *OAuth Scope:* ZohoIM.channels.ALL
+  - name: Canned Messages
+    description: |
+      For starters, you can create a message with a salutation or one with a question that asks for specific information from the customer.
+      
+      ## Canned Message Object
+
+      | Attributes          | Type          |   Explanation                                                     |
+      |---------------------|---------------|-------------------------------------------------------------------|
+      | id                  | long          |  The ID of the canned message                                     |
+      | title               | string        |  Name of the canned message                                       |
+      | tags                | string        |  Tags associated to the canned message                            |
+      | createdBy           | long          |  The ZUID of the user who created the canned message              |
+      | uuid                | string        |  A uniqiue identifer                                              |
+      | displayMessage      | string        |  The Message associated with the canned message                   |
+      | translations        | array         |  Multi lingual translation data                                   |
+      | type                | string        |  Type of canned message (canned,template,away, end)               |
+      | modifiedTime        | TimeStamp     |  The time when the canned message was updated                     | 
+      | isPrivate           | boolean       |  Indicates of Canned message is private only the createdBy user   |
+      | meta                | array         |  Additional data associated with the canned message               |
+      | isActive            | boolean       |  Indicates if the canned message is active                        |
 
 paths:
   /organizations:
@@ -141,20 +161,9 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SingleOrganization"
+                $ref: "#organizations/schema.json#/components/schemas/SingleOrganization"
               example:
-                isDefault: false
-                portalName: imzylkerorg
-                createdByZuId: "75684005"
-                kind: single.organization
-                name: IM Zylker Org
-                createdTime: "2024-04-03T11:15:43.000Z"
-                createdByService: ZOHO_IM
-                id: "85273209"
-                isPrivate: false
-                deactivatedTime: null
-                isCurrentlyLinked: false
-                isActive: true
+              ref: "#organizations/example.json#/components/schemas/SingleOrganization"
         "500":
           description: Exception encountered while processing request
           content:
@@ -586,7 +595,7 @@ paths:
                     data: <script type='text/javascript'>window.ZOHOIM=window.ZOHOIM||function(a,b){ZOHOIM[a]=b;};window.ZOHOIM.zohoStoreWidgetInitInfo={\"offline\":false,\"code\":\"ZOHOIMCREDITS\",\"count\":5,\"serviceId\":\"4501\",\"customId\":\"67414337\",\"addonId\":\"10238\"};window.ZOHOIM.licenseInfo={};window.ZOHOIM.skipIntegrationSignups=[];window.ZOHOIM.paymentStaticInfo={\"css\":\"https://localcss.zohostatic.com/storehandler/v9/css/zswidget.min.css\",\"src\":\"https://static.stratuscdn.com/zohoim/zohoim-payments-efc-sdk-v4.js\",\"js\":\"https://localjs.zohostatic.com/storehandler/v9/js/zswidget.min.js\",\"version\":\"v9\"};(function(){var d=document;var s=d.createElement('script');s.type='text/javascript';s.defer=true;s.src='https://static.stratuscdn.com/zohoim/zohoim-payments-efc-sdk-v4.js';d.getElementsByTagName('head')[0].appendChild(s); })();</script>
                     kind: single.efc
                     hasMore: false
-        "500":      
+        "500":
           description: Exception encountered while processing request
           content:
             application/json:
@@ -619,13 +628,7 @@ paths:
               name: Zylkey WhatsApp Channel
               integrationServiceId: WHATSAPP
               externalAccountId: +1712518151
-              configParams: 
-                [
-                  { 
-                    name: PHONE_NUMBER, 
-                    value: +1712518151
-                  }
-                ]
+              configParams: [{ name: PHONE_NUMBER, value: +1712518151 }]
           TELEGRAM:
             schema:
               $ref: "#/components/schemas/TELEGRAM_CHANNEL_CREATE_PAYLOAD"
@@ -636,7 +639,7 @@ paths:
                 [
                   {
                     name: BOT_AUTH_TOKEN,
-                    value: "37457324:27eyh3827dh2387dh3282387dh8237hd7238hd"
+                    value: "37457324:27eyh3827dh2387dh3282387dh8237hd7238hd",
                   },
                 ]
           WECHAT:
@@ -651,7 +654,7 @@ paths:
                   { name: APP_ID, value: dt367d6736d2d372 },
                   { name: TOKEN, value: dyg2d672gdxd23gx7238hxc823 },
                   { name: APP_SECRET, value: dg27d6fy24f78h4o83 },
-                  { name: AES_KEY, value: d28yd7283yd287dyh3287hd872h832h3d2 }
+                  { name: AES_KEY, value: d28yd7283yd287dyh3287hd872h832h3d2 },
                 ]
           LINE:
             schema:
@@ -662,7 +665,7 @@ paths:
               configParams:
                 [
                   { name: ORIGINAL_ID, value: 638643 },
-                  { name: CHANNEL_SECRET_ID, value: 2td8724yrhf874yfh748 }
+                  { name: CHANNEL_SECRET_ID, value: 2td8724yrhf874yfh748 },
                 ]
           Facebook:
             schema:
@@ -673,7 +676,10 @@ paths:
               configParams:
                 [
                   { name: FACEBOOK_USER, value: "Zylkey [114560454786876]" },
-                  { name: FACEBOOK_PAGE, value: "Zylkey Page [11456045476576]" }
+                  {
+                    name: FACEBOOK_PAGE,
+                    value: "Zylkey Page [11456045476576]",
+                  },
                 ]
       responses:
         "200":
@@ -1123,7 +1129,7 @@ paths:
                     isOwner: true
                     isSandBox: false
                     kind: single.channel
-                    
+
         "500":
           description: Exception encountered while processing request
           content:
@@ -1143,7 +1149,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  code: 
+                  code:
                     type: string
                   message:
                     type: string
@@ -1169,7 +1175,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  code: 
+                  code:
                     type: string
                   message:
                     type: string
@@ -1186,7 +1192,7 @@ paths:
               schema:
                 type: object
                 properties:
-                  code: 
+                  code:
                     type: string
                   message:
                     type: string
