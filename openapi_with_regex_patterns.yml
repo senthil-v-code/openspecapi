@@ -43,11 +43,10 @@ info:
       - Access token should be prefixed with the prefix "Zoho-oauthtoken" <br>
         Example token, **Zoho-oauthtoken 1000.dfe95e72e98e1657****
 servers:
-  - url: http://127.0.0.1:3000
-    description: Mock Server
   - url: https://im.localzoho.com
     description: Local Zoho Server
-  
+  - url: http://127.0.0.1:3000
+    description: Mock Server
 paths:
   /api/v1/cannedMessages:
     get:
