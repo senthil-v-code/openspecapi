@@ -2,7 +2,46 @@ openapi: 3.0.0
 info:
   title: ZohoIM
   version: 1.0.0
-  description: API specification for ZohoIM
+  description: >-
+      ZohoIM abstracts the difficulties in integrating various Instant Messaging Channels by Providing an Unified API.
+      ### Communicate with your customers through any Instant Messaging Channel
+      <img src="https://content.pstmn.io/001c6190-9c45-4b0f-87cb-6c1043f209cd/aW1hZ2UucG5n" /> <br><br><br>
+      
+      **Why Zoho IM?**
+      Most of the support channels often bring layers of complexities - IM manages all these interactions into a single connected system.
+      Our focus was on improving agent productivity with an intuitive approach and compatible interface.
+      Our seamless integration with customers' best-loved platforms such as WhatsApp, Telegram, LINE, WeChat and Facebook Messenger.
+      <br><br>
+      **Getting Started** <br>
+      - All Zoho IM APIs require these two mandatory fields in the header. <br>
+      - Authorization - Authentication request token <br>
+      - orgId -ID of the organization to access. All API endpoints except /organizations mandatorily require the orgId. <br>
+
+      
+      <img src="https://content.pstmn.io/7ba8a04d-b133-46e2-8d4c-633a5bc57378/ZXpnaWYuY29tLXZpZGVvLXRvLWdpZiAoMSkuZ2lm" /> <br><br>
+      For detailed flow of Authorization [visit](https://www.zoho.com/accounts/protocol/oauth/self-client/authorization-code-flow.html)
+      <br><br>
+      **Steps (refer the above gif):** <br>
+      - Sign into https://www.accounts.zoho.com <br>
+      - Go to [Zoho Developer Console](https://api-console.zoho.com/) -> Add Client <br>
+      - Choose Self Client  <br>
+      - Note down Client ID and Client Secret under Client Secret Tab <br>
+      - Under Generate Code - Provide scopes, time duration and desciption  <br>
+      - Choose create which will provide a code.  <br>
+      <br><br>
+      **Scopes:** <br>
+      - ZohoIM.organizations.ALL <br>
+      - ZohoIM.channels.ALL <br>
+      - ZohoIM.conversations.ALL  <br>
+      - ZohoIM.messages.ALL <br>
+      - ZohoIM.bots.ALL <br>
+      - ZohoIM.users.ALL  <br>
+      - ZohoIM.contacts.ALL <br>
+      - ZohoIM.search.READ  <br>
+      <br><br>
+      **Note:**
+      - Access token should be prefixed with the prefix "Zoho-oauthtoken" <br>
+        Example token, **Zoho-oauthtoken 1000.dfe95e72e98e1657****
 servers:
   - url: https://im.localzoho.com
     description: Local Zoho Server
