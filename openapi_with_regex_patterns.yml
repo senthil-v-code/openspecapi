@@ -6,7 +6,7 @@ info:
 servers:
   - url: https://im.localzoho.com
     description: Local Zoho Server
-  - url: https://im.localzoho.com
+  - url: https://im.zoho.com
     description: Production Server
   - url: http://127.0.0.1:3000
     description: Mock Server
