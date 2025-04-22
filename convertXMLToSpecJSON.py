@@ -166,6 +166,7 @@ def create_openapi_spec(xml_file):
         schema = "object"
         if response.status_code == 200:
             response_json = response.json()
+            schema = generate_json_schema(response_json)
             operation["responses"]["200"]["content"]["application/json"]["schema"] = schema
             operation["responses"]["200"]["content"]["application/json"]["example"] = response_json
         if path not in openapi_spec["paths"]:
@@ -227,7 +228,7 @@ def create_openapi_spec(xml_file):
 # Reprocess the uploaded XML
 xml_path = "security.xml"
 spec = create_openapi_spec(xml_path)
-output_path = "openapi_with_regex_patterns123456789.json"
+output_path = "openapi_with_regex_patterns.json"
 
 with open(output_path, "w", encoding="utf-8") as f:
     json.dump(spec, f, indent=2, ensure_ascii=False)

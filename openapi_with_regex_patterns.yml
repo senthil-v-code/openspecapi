@@ -24,7 +24,141 @@ paths:
           description: Successful operation
           content:
             application/json:
-              schema: object
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        modifiedTime:
+                          type: string
+                        kind:
+                          type: string
+                        isPrivate:
+                          type: string
+                        isActive:
+                          type: string
+                        title:
+                          type: string
+                        type:
+                          type: string
+                        uuid:
+                          type: string
+                        tags:
+                          type: string
+                        wabaId:
+                          type: string
+                        displayMessage:
+                          type: string
+                        createdBy:
+                          type: string
+                        translations:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              modifiedTime:
+                                type: string
+                              displayMessage:
+                                type: string
+                              kind:
+                                type: string
+                              templateItems:
+                                type: object
+                                properties:
+                                  buttons:
+                                    type: array
+                                    items:
+                                      type: object
+                                      properties:
+                                        action:
+                                          type: string
+                                        type:
+                                          type: string
+                                        message:
+                                          type: string
+                                      required:
+                                        - action
+                                        - message
+                                        - type
+                                  footer:
+                                    type: object
+                                    properties:
+                                      type:
+                                        type: string
+                                      message:
+                                        type: string
+                                    required:
+                                      - message
+                                      - type
+                                required:
+                                  - buttons
+                                  - footer
+                              language:
+                                type: string
+                              id:
+                                type: string
+                              uuid:
+                                type: string
+                              status:
+                                type: string
+                            required:
+                              - displayMessage
+                              - id
+                              - kind
+                              - language
+                              - modifiedTime
+                              - status
+                              - templateItems
+                              - uuid
+                        meta:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                              uuid:
+                                type: string
+                              value:
+                                type: string
+                            required:
+                              - name
+                              - uuid
+                              - value
+                        id:
+                          type: string
+                        primaryLanguage:
+                          type: string
+                        status:
+                          type: string
+                      required:
+                        - createdBy
+                        - displayMessage
+                        - id
+                        - isActive
+                        - isPrivate
+                        - kind
+                        - meta
+                        - modifiedTime
+                        - primaryLanguage
+                        - status
+                        - tags
+                        - title
+                        - translations
+                        - type
+                        - uuid
+                        - wabaId
+                  kind:
+                    type: string
+                  hasMore:
+                    type: string
+                required:
+                  - data
+                  - hasMore
+                  - kind
               example:
                 data:
                   - modifiedTime: '2024-12-24T09:09:19.000Z'
@@ -147,6 +281,7 @@ paths:
           schema:
             type: string
             pattern: TEMPLATE|CANNED|WELCOMEMSG|AWAY|DEFAULTTEMPLATE
+        - required: true
         - name: isActive
           in: query
           description: Canned Message Active Status
@@ -200,7 +335,65 @@ paths:
           description: Successful operation
           content:
             application/json:
-              schema: object
+              schema:
+                type: object
+                properties:
+                  modifiedTime:
+                    type: string
+                  kind:
+                    type: string
+                  isPrivate:
+                    type: boolean
+                  isActive:
+                    type: boolean
+                  title:
+                    type: string
+                  message:
+                    type: string
+                  type:
+                    type: string
+                  uuid:
+                    type: string
+                  tags:
+                    type: string
+                  displayMessage:
+                    type: string
+                  createdBy:
+                    type: string
+                  translations:
+                    type: array
+                  meta:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        name:
+                          type: string
+                        uuid:
+                          type: string
+                        value:
+                          type: string
+                      required:
+                        - name
+                        - uuid
+                        - value
+                  id:
+                    type: string
+                required:
+                  - createdBy
+                  - displayMessage
+                  - id
+                  - isActive
+                  - isPrivate
+                  - kind
+                  - message
+                  - meta
+                  - modifiedTime
+                  - tags
+                  - title
+                  - translations
+                  - type
+                  - uuid
               example:
                 modifiedTime: '2024-10-23T05:23:43.000Z'
                 kind: single.cannedMessage
@@ -403,6 +596,7 @@ paths:
           description: The wabaId from which the template sync should happen
           schema:
             type: string
+        - required: true
   /api/v1/cannedMessages/([0-9]+)/translations/([0-9]+):
     get:
       summary: Get a single canned message translation for a Canned Message
@@ -703,7 +897,8 @@ paths:
           description: Successful operation
           content:
             application/json:
-              schema: object
+              schema:
+                type: object
               example: {}
       x-throttling:
         - duration: 1M
@@ -835,11 +1030,13 @@ paths:
           description: Bundle Name to be downgraded
           schema:
             type: string
+        - required: true
         - name: bundleOrgId
           in: query
           description: Bundle OrgId to be downgraded
           schema:
             type: number
+        - required: true
   /internalapi/organizations/bundle/subscription:
     patch:
       summary: To update subscription changes on bundle
@@ -985,7 +1182,46 @@ paths:
           description: Successful operation
           content:
             application/json:
-              schema: object
+              schema:
+                type: object
+                properties:
+                  isDefault:
+                    type: boolean
+                  portalName:
+                    type: string
+                  createdByZuId:
+                    type: string
+                  kind:
+                    type: string
+                  name:
+                    type: string
+                  createdTime:
+                    type: string
+                  createdByService:
+                    type: string
+                  id:
+                    type: string
+                  isPrivate:
+                    type: boolean
+                  deactivatedTime:
+                    type: 'null'
+                  isCurrentlyLinked:
+                    type: boolean
+                  isActive:
+                    type: boolean
+                required:
+                  - createdByService
+                  - createdByZuId
+                  - createdTime
+                  - deactivatedTime
+                  - id
+                  - isActive
+                  - isCurrentlyLinked
+                  - isDefault
+                  - isPrivate
+                  - kind
+                  - name
+                  - portalName
               example:
                 isDefault: false
                 portalName: spencerinc
@@ -1044,7 +1280,19 @@ paths:
           description: Successful operation
           content:
             application/json:
-              schema: object
+              schema:
+                type: object
+                properties:
+                  serviceOrgId:
+                    type: string
+                  zohoService:
+                    type: string
+                  kind:
+                    type: string
+                required:
+                  - kind
+                  - serviceOrgId
+                  - zohoService
               example:
                 serviceOrgId: '63981649'
                 zohoService: ZOHO_DESK
@@ -1134,7 +1382,55 @@ paths:
           description: Successful operation
           content:
             application/json:
-              schema: object
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        channelAlias:
+                          type: string
+                        provider:
+                          type: object
+                          properties:
+                            domain:
+                              type: string
+                            name:
+                              type: string
+                          required:
+                            - domain
+                            - name
+                        kind:
+                          type: string
+                        domain:
+                          type: string
+                        label:
+                          type: string
+                        id:
+                          type: string
+                        logoURL:
+                          type: string
+                        isParentAccountNeeded:
+                          type: boolean
+                      required:
+                        - channelAlias
+                        - domain
+                        - id
+                        - isParentAccountNeeded
+                        - kind
+                        - label
+                        - logoURL
+                        - provider
+                  kind:
+                    type: string
+                  hasMore:
+                    type: boolean
+                required:
+                  - data
+                  - hasMore
+                  - kind
               example:
                 data:
                   - channelAlias: FaceBookMessenger
@@ -1450,7 +1746,183 @@ paths:
           description: Successful operation
           content:
             application/json:
-              schema: object
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: string
+                        accountName:
+                          type: string
+                        integrationServiceType:
+                          type: string
+                        defaultBotId:
+                          type: string
+                        name:
+                          type: string
+                        isActive:
+                          type: boolean
+                        isStorageEnabled:
+                          type: boolean
+                        isSandBox:
+                          type: boolean
+                        createdTime:
+                          type: string
+                        createdBy:
+                          type: string
+                        isAuthorizationPending:
+                          type: boolean
+                        isSubscribed:
+                          type: boolean
+                        authenticationURL:
+                          type: 'null'
+                        isOwner:
+                          type: boolean
+                        universalLink:
+                          type: string
+                        isDeleted:
+                          type: boolean
+                        departmentId:
+                          type: string
+                        appName:
+                          type: string
+                        photoURL:
+                          type: string
+                        creator:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            name:
+                              type: string
+                            email:
+                              type: string
+                            photoURL:
+                              type: string
+                            type:
+                              type: string
+                            firstName:
+                              type: string
+                            lastName:
+                              type: string
+                            externalId:
+                              type: 'null'
+                            zuid:
+                              type:
+                                - 'null'
+                                - string
+                            displayName:
+                              type: 'null'
+                            agent:
+                              type: boolean
+                            roleName:
+                              type: 'null'
+                            emailId:
+                              type: string
+                          required:
+                            - agent
+                            - displayName
+                            - email
+                            - emailId
+                            - externalId
+                            - firstName
+                            - id
+                            - lastName
+                            - name
+                            - photoURL
+                            - roleName
+                            - type
+                            - zuid
+                        code:
+                          type: string
+                        configParams:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              isRequired:
+                                type: boolean
+                              modifiedTime:
+                                type: string
+                              isSecured:
+                                type: boolean
+                              isDeprecated:
+                                type: boolean
+                              defaultValue:
+                                type:
+                                  - 'null'
+                                  - string
+                              parentParams:
+                                type: array
+                              label:
+                                type: string
+                              type:
+                                type: string
+                              uuid:
+                                type: string
+                              isInternal:
+                                type: boolean
+                              name:
+                                type: string
+                              options:
+                                type: 'null'
+                              id:
+                                type: string
+                              value:
+                                type: string
+                              maxLen:
+                                type: string
+                            required:
+                              - defaultValue
+                              - id
+                              - isDeprecated
+                              - isInternal
+                              - isRequired
+                              - isSecured
+                              - label
+                              - maxLen
+                              - modifiedTime
+                              - name
+                              - options
+                              - parentParams
+                              - type
+                              - uuid
+                              - value
+                      required:
+                        - accountName
+                        - appName
+                        - authenticationURL
+                        - code
+                        - configParams
+                        - createdBy
+                        - createdTime
+                        - creator
+                        - defaultBotId
+                        - departmentId
+                        - id
+                        - integrationServiceType
+                        - isActive
+                        - isAuthorizationPending
+                        - isDeleted
+                        - isOwner
+                        - isSandBox
+                        - isStorageEnabled
+                        - isSubscribed
+                        - name
+                        - photoURL
+                        - universalLink
+                  kind:
+                    type: string
+                  hasMore:
+                    type: boolean
+                required:
+                  - data
+                  - hasMore
+                  - kind
               example:
                 data:
                   - id: '1597000002403074'
@@ -2043,7 +2515,214 @@ paths:
           description: Successful operation
           content:
             application/json:
-              schema: object
+              schema:
+                type: object
+                properties:
+                  defaultBotId:
+                    type: 'null'
+                  accountName:
+                    type: string
+                  kind:
+                    type: string
+                  universalLink:
+                    type: string
+                  integrationService:
+                    type: object
+                    properties:
+                      channelAlias:
+                        type: string
+                      configParams:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            isInternal:
+                              type: boolean
+                            isRequired:
+                              type: boolean
+                            isSecured:
+                              type: boolean
+                            isDeprecated:
+                              type: boolean
+                            defaultValue:
+                              type: 'null'
+                            name:
+                              type: string
+                            options:
+                              type: 'null'
+                            parentParams:
+                              type: array
+                            index:
+                              type: string
+                            label:
+                              type: string
+                            type:
+                              type: string
+                            maxLen:
+                              type: string
+                          required:
+                            - defaultValue
+                            - index
+                            - isDeprecated
+                            - isInternal
+                            - isRequired
+                            - isSecured
+                            - label
+                            - maxLen
+                            - name
+                            - options
+                            - parentParams
+                            - type
+                      provider:
+                        type: object
+                        properties:
+                          domain:
+                            type: string
+                          name:
+                            type: string
+                        required:
+                          - domain
+                          - name
+                      kind:
+                        type: string
+                      domain:
+                        type: string
+                      onBoardingList:
+                        type: array
+                      pricingParams:
+                        type: array
+                      label:
+                        type: string
+                      id:
+                        type: string
+                      logoURL:
+                        type: string
+                      isParentAccountNeeded:
+                        type: boolean
+                    required:
+                      - channelAlias
+                      - configParams
+                      - domain
+                      - id
+                      - isParentAccountNeeded
+                      - kind
+                      - label
+                      - logoURL
+                      - onBoardingList
+                      - pricingParams
+                      - provider
+                  isActive:
+                    type: boolean
+                  uuid:
+                    type: 'null'
+                  logoURL:
+                    type: string
+                  authorizationPending:
+                    type: boolean
+                  isSubscribed:
+                    type: boolean
+                  isGeneralConfigSkipped:
+                    type: boolean
+                  isDeleted:
+                    type: boolean
+                  configParams:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        modifiedTime:
+                          type: string
+                        isRequired:
+                          type: boolean
+                        isDeprecated:
+                          type: boolean
+                        defaultValue:
+                          type: 'null'
+                        kind:
+                          type: string
+                        parentParams:
+                          type: array
+                        label:
+                          type: string
+                        type:
+                          type: string
+                        uuid:
+                          type: 'null'
+                        isInternal:
+                          type: boolean
+                        name:
+                          type: string
+                        options:
+                          type: array
+                        id:
+                          type: string
+                        secured:
+                          type: boolean
+                        value:
+                          type: string
+                        maxLen:
+                          type: string
+                      required:
+                        - defaultValue
+                        - id
+                        - isDeprecated
+                        - isInternal
+                        - isRequired
+                        - kind
+                        - label
+                        - maxLen
+                        - modifiedTime
+                        - name
+                        - options
+                        - parentParams
+                        - secured
+                        - type
+                        - uuid
+                        - value
+                  createdBy:
+                    type: string
+                  isOwner:
+                    type: boolean
+                  meta:
+                    type: array
+                  conversationCount:
+                    type: string
+                  name:
+                    type: string
+                  createdTime:
+                    type: string
+                  id:
+                    type: string
+                  authenticationURL:
+                    type: 'null'
+                  storageEnabled:
+                    type: boolean
+                  isSandBox:
+                    type: boolean
+                required:
+                  - accountName
+                  - authenticationURL
+                  - authorizationPending
+                  - configParams
+                  - conversationCount
+                  - createdBy
+                  - createdTime
+                  - defaultBotId
+                  - id
+                  - integrationService
+                  - isActive
+                  - isDeleted
+                  - isGeneralConfigSkipped
+                  - isOwner
+                  - isSandBox
+                  - isSubscribed
+                  - kind
+                  - logoURL
+                  - meta
+                  - name
+                  - storageEnabled
+                  - universalLink
+                  - uuid
               example:
                 defaultBotId: null
                 accountName: SenthilPerBot
@@ -2267,7 +2946,16 @@ paths:
           description: Successful operation
           content:
             application/json:
-              schema: object
+              schema:
+                type: object
+                properties:
+                  kind:
+                    type: string
+                  count:
+                    type: string
+                required:
+                  - count
+                  - kind
               example:
                 kind: single.json
                 count: '0'
@@ -2614,7 +3302,19 @@ paths:
           description: Successful operation
           content:
             application/json:
-              schema: object
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: string
+                  kind:
+                    type: string
+                  hasMore:
+                    type: string
+                required:
+                  - data
+                  - hasMore
+                  - kind
               example:
                 data: >-
                   <script
@@ -2641,6 +3341,7 @@ paths:
             type: string
             pattern: >-
               (imWidget|phoneNumberWidget|whatsAppEmbeddedSignup|paymentsWidget|facebookEmbeddedSignup|whatsAppMigration|instagramEmbeddedSignup|channelEmbedInfo|whatsAppCalculator)
+        - required: true
         - name: skipCDN
           in: query
           description: To skip cdn for embed script
@@ -2837,7 +3538,119 @@ paths:
           description: Successful operation
           content:
             application/json:
-              schema: object
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        agentId:
+                          type: string
+                        lastActiveTime:
+                          type: string
+                        contactId:
+                          type: string
+                        subject:
+                          type: string
+                        kind:
+                          type: string
+                        unreadMessagesCount:
+                          type: string
+                        integrationServiceId:
+                          type: string
+                        contactLastActiveTime:
+                          type: string
+                        actor:
+                          type: object
+                          properties:
+                            photoURL:
+                              type: string
+                            phone:
+                              type: string
+                            service:
+                              type: string
+                            name:
+                              type: string
+                            id:
+                              type: string
+                            extId:
+                              type: string
+                            type:
+                              type: string
+                            extIdType:
+                              type: string
+                            email:
+                              type: string
+                            status:
+                              type: string
+                          required:
+                            - email
+                            - extId
+                            - extIdType
+                            - id
+                            - name
+                            - phone
+                            - photoURL
+                            - service
+                            - status
+                            - type
+                        meta:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              name:
+                                type: string
+                              value:
+                                type: string
+                            required:
+                              - name
+                              - value
+                        createdTime:
+                          type: string
+                        replyStatus:
+                          type: string
+                        messagesCount:
+                          type: string
+                        id:
+                          type: string
+                        botId:
+                          type: string
+                        channelId:
+                          type: string
+                        agentLastActiveTime:
+                          type: string
+                        status:
+                          type: string
+                      required:
+                        - actor
+                        - agentId
+                        - agentLastActiveTime
+                        - botId
+                        - channelId
+                        - contactId
+                        - contactLastActiveTime
+                        - createdTime
+                        - id
+                        - integrationServiceId
+                        - kind
+                        - lastActiveTime
+                        - messagesCount
+                        - meta
+                        - replyStatus
+                        - status
+                        - subject
+                        - unreadMessagesCount
+                  kind:
+                    type: string
+                  hasMore:
+                    type: string
+                required:
+                  - data
+                  - hasMore
+                  - kind
               example:
                 data:
                   - agentId: ''
@@ -3350,7 +4163,96 @@ paths:
           description: Successful operation
           content:
             application/json:
-              schema: object
+              schema:
+                type: object
+                properties:
+                  kind:
+                    type: string
+                  assignee:
+                    type: object
+                    properties:
+                      UNASSIGNED:
+                        type: object
+                        properties:
+                          CREATED:
+                            type: string
+                          BLOCKED:
+                            type: string
+                          ENDED:
+                            type: string
+                          MISSED:
+                            type: string
+                          ON_HOLD:
+                            type: string
+                          ON_PROGRESS:
+                            type: string
+                          OPEN:
+                            type: string
+                        required:
+                          - BLOCKED
+                          - CREATED
+                          - ENDED
+                          - MISSED
+                          - ON_HOLD
+                          - ON_PROGRESS
+                          - OPEN
+                      MINE:
+                        type: object
+                        properties:
+                          CREATED:
+                            type: string
+                          BLOCKED:
+                            type: string
+                          ENDED:
+                            type: string
+                          MISSED:
+                            type: string
+                          ON_HOLD:
+                            type: string
+                          ON_PROGRESS:
+                            type: string
+                          OPEN:
+                            type: string
+                        required:
+                          - BLOCKED
+                          - CREATED
+                          - ENDED
+                          - MISSED
+                          - ON_HOLD
+                          - ON_PROGRESS
+                          - OPEN
+                      NONE:
+                        type: object
+                        properties:
+                          CREATED:
+                            type: string
+                          BLOCKED:
+                            type: string
+                          ENDED:
+                            type: string
+                          MISSED:
+                            type: string
+                          ON_HOLD:
+                            type: string
+                          ON_PROGRESS:
+                            type: string
+                          OPEN:
+                            type: string
+                        required:
+                          - BLOCKED
+                          - CREATED
+                          - ENDED
+                          - MISSED
+                          - ON_HOLD
+                          - ON_PROGRESS
+                          - OPEN
+                    required:
+                      - MINE
+                      - NONE
+                      - UNASSIGNED
+                required:
+                  - assignee
+                  - kind
               example:
                 kind: single.session.metrics
                 assignee:
@@ -3603,7 +4505,215 @@ paths:
           description: Successful operation
           content:
             application/json:
-              schema: object
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        template:
+                          anyOf:
+                            - type: 'null'
+                            - type: object
+                              properties:
+                                layout:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                    rows:
+                                      type: array
+                                      items:
+                                        type: object
+                                        properties:
+                                          arrangement:
+                                            type: string
+                                          columns:
+                                            type: array
+                                            items:
+                                              type: object
+                                              properties:
+                                                text:
+                                                  type: object
+                                                  properties:
+                                                    style:
+                                                      type: string
+                                                    text:
+                                                      type: string
+                                                  required:
+                                                    - style
+                                                    - text
+                                                type:
+                                                  type: string
+                                                button:
+                                                  type: object
+                                                  properties:
+                                                    action:
+                                                      type: string
+                                                    text:
+                                                      type: string
+                                                    value:
+                                                      type: string
+                                                  required:
+                                                    - action
+                                                    - text
+                                                    - value
+                                              required:
+                                                - type
+                                        required:
+                                          - arrangement
+                                          - columns
+                                  required:
+                                    - rows
+                                    - type
+                        externalInfo:
+                          type: 'null'
+                        isRead:
+                          type: boolean
+                        type:
+                          type: string
+                        uuid:
+                          type: string
+                        displayMessage:
+                          type: string
+                        attachment:
+                          type: 'null'
+                        replyToMessage:
+                          type: 'null'
+                        createdTime:
+                          type: string
+                        action:
+                          type: 'null'
+                        id:
+                          type: string
+                        text:
+                          type:
+                            - 'null'
+                            - object
+                        contentType:
+                          type: string
+                        direction:
+                          type: string
+                        info:
+                          type: 'null'
+                        fullContentURL:
+                          type: 'null'
+                        kind:
+                          type: string
+                        index:
+                          type: string
+                        sessionId:
+                          type: string
+                        actor:
+                          type: object
+                          properties:
+                            photoURL:
+                              type: 'null'
+                            phone:
+                              type:
+                                - 'null'
+                                - string
+                            service:
+                              type: string
+                            name:
+                              type: string
+                            id:
+                              type: string
+                            extId:
+                              type:
+                                - 'null'
+                                - string
+                            type:
+                              type: string
+                            extIdType:
+                              type:
+                                - 'null'
+                                - string
+                            email:
+                              type: 'null'
+                            status:
+                              type:
+                                - 'null'
+                                - string
+                          required:
+                            - email
+                            - extId
+                            - extIdType
+                            - id
+                            - name
+                            - phone
+                            - photoURL
+                            - service
+                            - status
+                            - type
+                        layout:
+                          type: 'null'
+                        meta:
+                          anyOf:
+                            - type: 'null'
+                            - type: array
+                              items:
+                                type: object
+                                properties:
+                                  name:
+                                    type: string
+                                  value:
+                                    type: string
+                                required:
+                                  - name
+                                  - value
+                        statusUpdatedTime:
+                          type: string
+                        location:
+                          anyOf:
+                            - type: 'null'
+                            - type: object
+                              properties:
+                                latitude:
+                                  type: string
+                                longitude:
+                                  type: string
+                              required:
+                                - latitude
+                                - longitude
+                        status:
+                          type: string
+                      required:
+                        - action
+                        - actor
+                        - attachment
+                        - contentType
+                        - createdTime
+                        - direction
+                        - displayMessage
+                        - externalInfo
+                        - fullContentURL
+                        - id
+                        - index
+                        - info
+                        - isRead
+                        - kind
+                        - layout
+                        - location
+                        - meta
+                        - replyToMessage
+                        - sessionId
+                        - status
+                        - statusUpdatedTime
+                        - template
+                        - text
+                        - type
+                        - uuid
+                  kind:
+                    type: string
+                  hasMore:
+                    type: boolean
+                required:
+                  - data
+                  - hasMore
+                  - kind
               example:
                 data:
                   - template: null
@@ -6865,7 +7975,46 @@ paths:
           description: Successful operation
           content:
             application/json:
-              schema: object
+              schema:
+                type: object
+                properties:
+                  aggregatedMetrics:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        dimension:
+                          type: string
+                        value:
+                          type: string
+                      required:
+                        - dimension
+                        - value
+                  trendDataList:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        data:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              dimension:
+                                type: string
+                              value:
+                                type: string
+                            required:
+                              - dimension
+                              - value
+                        time:
+                          type: string
+                      required:
+                        - data
+                        - time
+                required:
+                  - aggregatedMetrics
+                  - trendDataList
               example:
                 aggregatedMetrics:
                   - dimension: TOTAL
@@ -7142,7 +8291,46 @@ paths:
           description: Successful operation
           content:
             application/json:
-              schema: object
+              schema:
+                type: object
+                properties:
+                  aggregatedMetrics:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        dimension:
+                          type: string
+                        value:
+                          type: string
+                      required:
+                        - dimension
+                        - value
+                  trendDataList:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        data:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              dimension:
+                                type: string
+                              value:
+                                type: string
+                            required:
+                              - dimension
+                              - value
+                        time:
+                          type: string
+                      required:
+                        - data
+                        - time
+                required:
+                  - aggregatedMetrics
+                  - trendDataList
               example:
                 aggregatedMetrics:
                   - dimension: INCOMING
@@ -7363,7 +8551,46 @@ paths:
           description: Successful operation
           content:
             application/json:
-              schema: object
+              schema:
+                type: object
+                properties:
+                  aggregatedMetrics:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        dimension:
+                          type: string
+                        value:
+                          type: string
+                      required:
+                        - dimension
+                        - value
+                  trendDataList:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        data:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              dimension:
+                                type: string
+                              value:
+                                type: string
+                            required:
+                              - dimension
+                              - value
+                        time:
+                          type: string
+                      required:
+                        - data
+                        - time
+                required:
+                  - aggregatedMetrics
+                  - trendDataList
               example:
                 aggregatedMetrics:
                   - dimension: AVG_PICKUP_TIME
@@ -7635,7 +8862,46 @@ paths:
           description: Successful operation
           content:
             application/json:
-              schema: object
+              schema:
+                type: object
+                properties:
+                  aggregatedMetrics:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        dimension:
+                          type: string
+                        value:
+                          type: string
+                      required:
+                        - dimension
+                        - value
+                  trendDataList:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        data:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              dimension:
+                                type: string
+                              value:
+                                type: string
+                            required:
+                              - dimension
+                              - value
+                        time:
+                          type: string
+                      required:
+                        - data
+                        - time
+                required:
+                  - aggregatedMetrics
+                  - trendDataList
               example:
                 aggregatedMetrics:
                   - dimension: ''
@@ -7795,7 +9061,36 @@ paths:
           description: Successful operation
           content:
             application/json:
-              schema: object
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        values:
+                          type: array
+                          items:
+                            type: object
+                            properties:
+                              attribute:
+                                type: string
+                              value:
+                                type: string
+                            required:
+                              - attribute
+                              - value
+                        id:
+                          type: string
+                      required:
+                        - id
+                        - values
+                  entity:
+                    type: string
+                required:
+                  - data
+                  - entity
               example:
                 data:
                   - values:
@@ -8217,7 +9512,23 @@ paths:
           description: Successful operation
           content:
             application/json:
-              schema: object
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      tags:
+                        type: array
+                        items:
+                          type: string
+                    required:
+                      - tags
+                  kind:
+                    type: string
+                required:
+                  - data
+                  - kind
               example:
                 data:
                   tags:
@@ -8247,7 +9558,26 @@ paths:
           description: Successful operation
           content:
             application/json:
-              schema: object
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        code:
+                          type: string
+                        language:
+                          type: string
+                      required:
+                        - code
+                        - language
+                  kind:
+                    type: string
+                required:
+                  - data
+                  - kind
               example:
                 data:
                   - code: af
@@ -8441,7 +9771,49 @@ paths:
           description: Successful operation
           content:
             application/json:
-              schema: object
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      numberStatus:
+                        type: string
+                      wabaDetail:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            wabaId:
+                              type: string
+                            catalogId:
+                              type: string
+                            name:
+                              type: string
+                            businessId:
+                              type: string
+                            numberStatus:
+                              type: string
+                            wabaStatus:
+                              type: string
+                          required:
+                            - businessId
+                            - catalogId
+                            - name
+                            - numberStatus
+                            - wabaId
+                            - wabaStatus
+                      wabaStatus:
+                        type: string
+                    required:
+                      - numberStatus
+                      - wabaDetail
+                      - wabaStatus
+                  kind:
+                    type: string
+                required:
+                  - data
+                  - kind
               example:
                 data:
                   numberStatus: PRESENT
@@ -8880,6 +10252,7 @@ paths:
           schema:
             type: string
             pattern: STATUS
+        - required: true
   /api/v1/integrations/WHATSAPP/broadcast/pricing:
     post:
       summary: >-
@@ -8970,7 +10343,63 @@ paths:
           description: Successful operation
           content:
             application/json:
-              schema: object
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        cost:
+                          type: string
+                        subscriptionInfo:
+                          anyOf:
+                            - type: string
+                            - type: object
+                              properties:
+                                reserved:
+                                  type: string
+                                count:
+                                  type: string
+                                available:
+                                  type: string
+                                renewalCount:
+                                  type: string
+                                renewalThreshold:
+                                  type: string
+                                status:
+                                  type: string
+                              required:
+                                - available
+                                - count
+                                - renewalCount
+                                - renewalThreshold
+                                - reserved
+                                - status
+                        kind:
+                          type: string
+                        module:
+                          type: string
+                        name:
+                          type: string
+                        type:
+                          type: string
+                      required:
+                        - cost
+                        - kind
+                        - module
+                        - name
+                        - subscriptionInfo
+                        - type
+                  kind:
+                    type: string
+                  hasMore:
+                    type: string
+                required:
+                  - data
+                  - hasMore
+                  - kind
               example:
                 data:
                   - cost: 168.0 INR
@@ -9091,7 +10520,19 @@ paths:
           description: Successful operation
           content:
             application/json:
-              schema: object
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                  kind:
+                    type: string
+                  hasMore:
+                    type: string
+                required:
+                  - data
+                  - hasMore
+                  - kind
               example:
                 data: []
                 kind: single.statement
@@ -9169,7 +10610,16 @@ paths:
           description: Successful operation
           content:
             application/json:
-              schema: object
+              schema:
+                type: object
+                properties:
+                  kind:
+                    type: string
+                  paymentSource:
+                    type: boolean
+                required:
+                  - kind
+                  - paymentSource
               example:
                 kind: single.license
                 paymentSource: false
