@@ -3,6 +3,7 @@ import xml.etree.ElementTree as ET
 import json
 import requests
 from genson import SchemaBuilder
+import re
 
 WIREMOCK_URL = "http://localhost:9120"
 
@@ -10,6 +11,10 @@ def generate_json_schema(json_data):
     builder = SchemaBuilder()
     builder.add_object(json_data)
     return builder.to_schema()
+
+def to_pascal_case(s):
+    words = re.split(r'[\s_\-]+', s)
+    return ''.join(word.capitalize() for word in words)
 
 # Re-define functions after reset
 def extract_regexes(root):
@@ -96,10 +101,6 @@ def create_openapi_spec(xml_file):
                 "description": "Local Zoho Server"
             },
             {
-                "url": "https://im.localzoho.com",
-                "description": "Production Server"
-            },
-            {
                 "url": "http://127.0.0.1:3000",
                 "description": "Mock Server"
             }
@@ -137,6 +138,8 @@ def create_openapi_spec(xml_file):
             tag = path.split("/")[3]
         else:
             tag = path.split("/")[1]
+
+        tag = to_pascal_case(tag)
         
         oauthscope_raw = url.get('oauthscope')
         scope = "default"

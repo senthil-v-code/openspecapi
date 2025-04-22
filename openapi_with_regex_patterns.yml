@@ -43,18 +43,17 @@ info:
       - Access token should be prefixed with the prefix "Zoho-oauthtoken" <br>
         Example token, **Zoho-oauthtoken 1000.dfe95e72e98e1657****
 servers:
-  - url: https://im.localzoho.com
-    description: Local Zoho Server
-  - url: https://im.zoho.com
-    description: Production Server
   - url: http://127.0.0.1:3000
     description: Mock Server
+  - url: https://im.localzoho.com
+    description: Local Zoho Server
+  
 paths:
   /api/v1/cannedMessages:
     get:
       summary: Get existing canned messages
       tags:
-        - cannedMessages
+        - Cannedmessages
       security:
         - OAuth2:
             - organizations
@@ -365,7 +364,7 @@ paths:
     post:
       summary: Create a new canned messsage
       tags:
-        - cannedMessages
+        - Cannedmessages
       security:
         - OAuth2:
             - messages
@@ -464,7 +463,7 @@ paths:
     delete:
       summary: De-Activate a Canned Message
       tags:
-        - cannedMessages
+        - Cannedmessages
       security:
         - OAuth2:
             - messages
@@ -495,7 +494,7 @@ paths:
     patch:
       summary: Update a canned message
       tags:
-        - cannedMessages
+        - Cannedmessages
       security:
         - OAuth2:
             - messages
@@ -525,7 +524,7 @@ paths:
     get:
       summary: Get detailed information of a canned message
       tags:
-        - cannedMessages
+        - Cannedmessages
       security:
         - OAuth2:
             - messages
@@ -543,7 +542,7 @@ paths:
     delete:
       summary: Delete a canned message
       tags:
-        - cannedMessages
+        - Cannedmessages
       security:
         - OAuth2:
             - messages
@@ -565,7 +564,7 @@ paths:
     patch:
       summary: Activate a Canned Message
       tags:
-        - cannedMessages
+        - Cannedmessages
       security:
         - OAuth2:
             - messages
@@ -589,7 +588,7 @@ paths:
     delete:
       summary: De-Activate a Canned Message
       tags:
-        - cannedMessages
+        - Cannedmessages
       security:
         - OAuth2:
             - messages
@@ -614,7 +613,7 @@ paths:
     post:
       summary: Sync Template Message From Whatsapp
       tags:
-        - templateMessages
+        - Templatemessages
       security:
         - OAuth2:
             - messages
@@ -640,7 +639,7 @@ paths:
     get:
       summary: Get a single canned message translation for a Canned Message
       tags:
-        - cannedMessages
+        - Cannedmessages
       security:
         - OAuth2:
             - messages
@@ -661,7 +660,7 @@ paths:
     delete:
       summary: Delete a canned message translation
       tags:
-        - cannedMessages
+        - Cannedmessages
       security:
         - OAuth2:
             - messages
@@ -682,7 +681,7 @@ paths:
     patch:
       summary: Update a canned message translation
       tags:
-        - cannedMessages
+        - Cannedmessages
       security:
         - OAuth2:
             - messages
@@ -713,7 +712,7 @@ paths:
     get:
       summary: Get all translations for a Canned Message
       tags:
-        - cannedMessages
+        - Cannedmessages
       security:
         - OAuth2:
             - messages
@@ -734,7 +733,7 @@ paths:
     post:
       summary: Create a canned message translation
       tags:
-        - cannedMessages
+        - Cannedmessages
       security:
         - OAuth2:
             - messages
@@ -759,7 +758,7 @@ paths:
     get:
       summary: Get attachment of a message
       tags:
-        - sessions
+        - Sessions
       security:
         - OAuth2:
             - messages
@@ -784,7 +783,7 @@ paths:
     get:
       summary: Get attachment
       tags:
-        - attachments
+        - Attachments
       security:
         - OAuth2:
             - messages
@@ -803,7 +802,7 @@ paths:
     get:
       summary: Get attachment
       tags:
-        - attachments
+        - Attachments
       security:
         - OAuth2:
             - messages
@@ -821,7 +820,7 @@ paths:
     delete:
       summary: Get attachment
       tags:
-        - attachments
+        - Attachments
       security:
         - OAuth2:
             - messages
@@ -840,7 +839,7 @@ paths:
     get:
       summary: Get attachment
       tags:
-        - attachments
+        - Attachments
       security:
         - OAuth2:
             - messages
@@ -859,7 +858,7 @@ paths:
     get:
       summary: Get attachment
       tags:
-        - attachments
+        - Attachments
       security:
         - OAuth2:
             - messages
@@ -878,7 +877,7 @@ paths:
     post:
       summary: Get attachment
       tags:
-        - attachments
+        - Attachments
       security:
         - OAuth2:
             - messages
@@ -904,7 +903,7 @@ paths:
     post:
       summary: Export Details
       tags:
-        - internalapi
+        - Internalapi
       security:
         - OAuth2:
             - messages
@@ -929,7 +928,7 @@ paths:
     get:
       summary: Get Kafka Meta of IM Service
       tags:
-        - internalapi
+        - Internalapi
       security: []
       responses:
         '200':
@@ -947,7 +946,7 @@ paths:
     get:
       summary: Get Linked IM Portal of given Bundle Service
       tags:
-        - internalapi
+        - Internalapi
       security: []
       responses:
         '200':
@@ -964,7 +963,7 @@ paths:
     post:
       summary: Link Commerce ZohoService org with IM Org
       tags:
-        - internalapi
+        - Internalapi
       security: []
       responses:
         '200':
@@ -990,7 +989,7 @@ paths:
     delete:
       summary: Remove linking of Commerce ZohoService org from IM Org
       tags:
-        - internalapi
+        - Internalapi
       security: []
       responses:
         '200':
@@ -1010,7 +1009,7 @@ paths:
     get:
       summary: Get IM Supported Zoho services
       tags:
-        - internalapi
+        - Internalapi
       security: []
       responses:
         '200':
@@ -1027,7 +1026,7 @@ paths:
     post:
       summary: Upgrade Standalone IM org to Bundle
       tags:
-        - internalapi
+        - Internalapi
       security: []
       responses:
         '200':
@@ -1050,7 +1049,7 @@ paths:
     delete:
       summary: Downgrade Bundle Org
       tags:
-        - internalapi
+        - Internalapi
       security: []
       responses:
         '200':
@@ -1080,7 +1079,7 @@ paths:
     patch:
       summary: To update subscription changes on bundle
       tags:
-        - internalapi
+        - Internalapi
       security: []
       responses:
         '200':
@@ -1103,7 +1102,7 @@ paths:
     patch:
       summary: Disassociate IM org from Bundle
       tags:
-        - internalapi
+        - Internalapi
       security: []
       responses:
         '200':
@@ -1126,7 +1125,7 @@ paths:
     get:
       summary: To get a InstallationId for a device
       tags:
-        - pns
+        - Pns
       security:
         - OAuth2:
             - messages
@@ -1145,7 +1144,7 @@ paths:
     post:
       summary: To register a device for push notifications
       tags:
-        - pns
+        - Pns
       security:
         - OAuth2:
             - messages
@@ -1169,7 +1168,7 @@ paths:
     delete:
       summary: To un-register a device for push notifications
       tags:
-        - pns
+        - Pns
       security:
         - OAuth2:
             - messages
@@ -1194,7 +1193,7 @@ paths:
     get:
       summary: Get IM Organizations of an User
       tags:
-        - organizations
+        - Organizations
       security:
         - OAuth2:
             - organizations
@@ -1212,7 +1211,7 @@ paths:
     post:
       summary: Create an IM Orgniazation
       tags:
-        - organizations
+        - Organizations
       security:
         - OAuth2:
             - organizations
@@ -1291,7 +1290,7 @@ paths:
     get:
       summary: Get details of an IM Org
       tags:
-        - organizations
+        - Organizations
       security:
         - OAuth2:
             - organizations
@@ -1310,7 +1309,7 @@ paths:
     post:
       summary: Link other ZohoService org with IM Org
       tags:
-        - serviceOrganizations
+        - Serviceorganizations
       security:
         - OAuth2:
             - organizations
@@ -1352,7 +1351,7 @@ paths:
     get:
       summary: Get zoho service organizations linked with an IM Org
       tags:
-        - serviceOrganizations
+        - Serviceorganizations
       security:
         - OAuth2:
             - organizations
@@ -1371,7 +1370,7 @@ paths:
     delete:
       summary: Remove linking of other ZohoService org from IM Org
       tags:
-        - serviceOrganizations
+        - Serviceorganizations
       security:
         - OAuth2:
             - organizations
@@ -1393,7 +1392,7 @@ paths:
     post:
       summary: Remove linking of other ZohoService org from IM Org
       tags:
-        - migrateDC
+        - Migratedc
       security:
         - OAuth2:
             - organizations
@@ -1412,7 +1411,7 @@ paths:
     get:
       summary: Get list of available integrations to add as channel
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -1570,7 +1569,7 @@ paths:
     get:
       summary: Get detailed information    of a specific Integration
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -1589,7 +1588,7 @@ paths:
     get:
       summary: Get twilio subaccount details for this org
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -1608,7 +1607,7 @@ paths:
     get:
       summary: Get Purchased Phone Numbers in Twilio Subaccount
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -1633,7 +1632,7 @@ paths:
     patch:
       summary: To release the whatsapp phone number from twilio
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -1664,7 +1663,7 @@ paths:
     get:
       summary: Get Available Phone Numbers,Country,Number Type for Purchase from Twilio
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -1695,7 +1694,7 @@ paths:
     post:
       summary: Create twilio subaccount for this org
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -1726,7 +1725,7 @@ paths:
     post:
       summary: Compute config params with parent params
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -1751,7 +1750,7 @@ paths:
     post:
       summary: Compute config params with parent params
       tags:
-        - channels
+        - Channels
       security:
         - OAuth2:
             - channels
@@ -1776,7 +1775,7 @@ paths:
     get:
       summary: Get existing channels
       tags:
-        - channels
+        - Channels
       security:
         - OAuth2:
             - channels
@@ -2545,7 +2544,7 @@ paths:
     post:
       summary: Create a new channel
       tags:
-        - channels
+        - Channels
       security:
         - OAuth2:
             - channels
@@ -2865,7 +2864,7 @@ paths:
     patch:
       summary: Update channel info and config params
       tags:
-        - channels
+        - Channels
       security:
         - OAuth2:
             - channels
@@ -2892,7 +2891,7 @@ paths:
     get:
       summary: Get detailed information of a channel
       tags:
-        - channels
+        - Channels
       security:
         - OAuth2:
             - channels
@@ -2910,7 +2909,7 @@ paths:
     delete:
       summary: Delete a channel
       tags:
-        - channels
+        - Channels
       security:
         - OAuth2:
             - channels
@@ -2939,7 +2938,7 @@ paths:
     patch:
       summary: Activate a channel
       tags:
-        - channels
+        - Channels
       security:
         - OAuth2:
             - channels
@@ -2957,7 +2956,7 @@ paths:
     delete:
       summary: De-Activate a channel
       tags:
-        - channels
+        - Channels
       security:
         - OAuth2:
             - channels
@@ -2976,7 +2975,7 @@ paths:
     get:
       summary: Channels count
       tags:
-        - channels
+        - Channels
       security:
         - OAuth2:
             - channels
@@ -3024,7 +3023,7 @@ paths:
     get:
       summary: Get list of subscribers of a channel
       tags:
-        - channels
+        - Channels
       security:
         - OAuth2:
             - channels
@@ -3042,7 +3041,7 @@ paths:
     post:
       summary: Add a subscriber (other zoho service org) to the channel
       tags:
-        - channels
+        - Channels
       security:
         - OAuth2:
             - channels
@@ -3060,7 +3059,7 @@ paths:
     delete:
       summary: Remove a subscriber (other zoho service org) from the channel
       tags:
-        - channels
+        - Channels
       security:
         - OAuth2:
             - channels
@@ -3079,7 +3078,7 @@ paths:
     get:
       summary: Get config param details of a channel
       tags:
-        - channels
+        - Channels
       security:
         - OAuth2:
             - channels
@@ -3103,7 +3102,7 @@ paths:
     patch:
       summary: Update config param values of a channel
       tags:
-        - channels
+        - Channels
       security:
         - OAuth2:
             - channels
@@ -3131,7 +3130,7 @@ paths:
     get:
       summary: Get single config param detail
       tags:
-        - channels
+        - Channels
       security:
         - OAuth2:
             - channels
@@ -3156,7 +3155,7 @@ paths:
     get:
       summary: GET Channel Meta
       tags:
-        - channels
+        - Channels
       security:
         - OAuth2:
             - channels
@@ -3174,7 +3173,7 @@ paths:
     patch:
       summary: Save Channel Meta
       tags:
-        - channels
+        - Channels
       security:
         - OAuth2:
             - channels
@@ -3199,7 +3198,7 @@ paths:
     get:
       summary: Get existing channels
       tags:
-        - channels
+        - Channels
       security:
         - OAuth2:
             - channels
@@ -3241,7 +3240,7 @@ paths:
     patch:
       summary: Update a Channel Preference
       tags:
-        - channels
+        - Channels
       security:
         - OAuth2:
             - channels
@@ -3265,7 +3264,7 @@ paths:
     delete:
       summary: Delete all preferences of a Channel
       tags:
-        - channels
+        - Channels
       security:
         - OAuth2:
             - channels
@@ -3284,7 +3283,7 @@ paths:
     get:
       summary: Get existing channels
       tags:
-        - channels
+        - Channels
       security:
         - OAuth2:
             - channels
@@ -3332,7 +3331,7 @@ paths:
     get:
       summary: Get EFC Script
       tags:
-        - sdk
+        - Sdk
       security:
         - OAuth2:
             - organizations
@@ -3396,7 +3395,7 @@ paths:
     get:
       summary: Get list of Contacts
       tags:
-        - contacts
+        - Contacts
       security:
         - OAuth2:
             - contacts
@@ -3438,7 +3437,7 @@ paths:
     get:
       summary: Get detailed information of a contact
       tags:
-        - contacts
+        - Contacts
       security:
         - OAuth2:
             - contacts
@@ -3459,7 +3458,7 @@ paths:
     patch:
       summary: Upadte a contact
       tags:
-        - contacts
+        - Contacts
       security:
         - OAuth2:
             - contacts
@@ -3487,7 +3486,7 @@ paths:
     get:
       summary: Get list of integration user profiles
       tags:
-        - profiles
+        - Profiles
       security:
         - OAuth2:
             - contacts
@@ -3549,7 +3548,7 @@ paths:
     get:
       summary: Get detailed information of a user profile
       tags:
-        - profiles
+        - Profiles
       security:
         - OAuth2:
             - contacts
@@ -3568,7 +3567,7 @@ paths:
     get:
       summary: Get list of conversations with filters
       tags:
-        - sessions
+        - Sessions
       security:
         - OAuth2:
             - conversations
@@ -4033,7 +4032,7 @@ paths:
     get:
       summary: Get list of conversations with filters along with LastMessages
       tags:
-        - sessionsWithLastMessages
+        - Sessionswithlastmessages
       security:
         - OAuth2:
             - conversations
@@ -4147,7 +4146,7 @@ paths:
     get:
       summary: Get detailed information of a conversation
       tags:
-        - sessions
+        - Sessions
       security:
         - OAuth2:
             - conversations
@@ -4165,7 +4164,7 @@ paths:
     patch:
       summary: Update conversation status
       tags:
-        - sessions
+        - Sessions
       security:
         - OAuth2:
             - conversations
@@ -4193,7 +4192,7 @@ paths:
     get:
       summary: Get session metrics for all channels or get metrics for specific channel
       tags:
-        - sessions
+        - Sessions
       security:
         - OAuth2:
             - conversations
@@ -4340,7 +4339,7 @@ paths:
     post:
       summary: End inactive sessions
       tags:
-        - sessions
+        - Sessions
       security:
         - OAuth2:
             - conversations
@@ -4374,7 +4373,7 @@ paths:
     get:
       summary: GET Session Meta
       tags:
-        - sessions
+        - Sessions
       security:
         - OAuth2:
             - messages
@@ -4392,7 +4391,7 @@ paths:
     patch:
       summary: Save Session Meta
       tags:
-        - sessions
+        - Sessions
       security:
         - OAuth2:
             - messages
@@ -4417,7 +4416,7 @@ paths:
     get:
       summary: Get list of conversation participants
       tags:
-        - sessions
+        - Sessions
       security:
         - OAuth2:
             - conversations
@@ -4435,7 +4434,7 @@ paths:
     post:
       summary: Add participants to a conversation
       tags:
-        - sessions
+        - Sessions
       security:
         - OAuth2:
             - conversations
@@ -4460,7 +4459,7 @@ paths:
     post:
       summary: Remove participants from a conversation
       tags:
-        - sessions
+        - Sessions
       security:
         - OAuth2:
             - conversations
@@ -4485,7 +4484,7 @@ paths:
     patch:
       summary: Mark the conversation as read by an agent until the given message id
       tags:
-        - sessions
+        - Sessions
       security:
         - OAuth2:
             - conversations
@@ -4510,7 +4509,7 @@ paths:
     patch:
       summary: mark the message as consumed, pushed through realtime
       tags:
-        - sessions
+        - Sessions
       security:
         - OAuth2:
             - conversations
@@ -4535,7 +4534,7 @@ paths:
     post:
       summary: Fetch last messages of a conversation
       tags:
-        - sessions
+        - Sessions
       security:
         - OAuth2:
             - messages
@@ -7188,7 +7187,7 @@ paths:
     post:
       summary: Fetch messages of a conversation matching given meta
       tags:
-        - sessions
+        - Sessions
       security:
         - OAuth2:
             - messages
@@ -7213,7 +7212,7 @@ paths:
     get:
       summary: Fetch messages of a conversation with filters
       tags:
-        - sessions
+        - Sessions
       security:
         - OAuth2:
             - messages
@@ -7264,7 +7263,7 @@ paths:
     post:
       summary: Add message to a particular conversation
       tags:
-        - sessions
+        - Sessions
       security:
         - OAuth2:
             - messages
@@ -7289,7 +7288,7 @@ paths:
     get:
       summary: Fetch messages of a conversation with filters
       tags:
-        - channels
+        - Channels
       security:
         - OAuth2:
             - messages
@@ -7334,7 +7333,7 @@ paths:
     post:
       summary: Add message to a particular channel conversation
       tags:
-        - channels
+        - Channels
       security:
         - OAuth2:
             - messages
@@ -7359,7 +7358,7 @@ paths:
     post:
       summary: Initiate New Conversation in a channel
       tags:
-        - channels
+        - Channels
       security:
         - OAuth2:
             - messages
@@ -7384,7 +7383,7 @@ paths:
     post:
       summary: Add message to a particular conversation
       tags:
-        - sessions
+        - Sessions
       security:
         - OAuth2:
             - messages
@@ -7409,7 +7408,7 @@ paths:
     post:
       summary: Add message to a particular conversation
       tags:
-        - sessions
+        - Sessions
       security:
         - OAuth2:
             - messages
@@ -7434,7 +7433,7 @@ paths:
     post:
       summary: Send attachment to a particular conversation
       tags:
-        - sessions
+        - Sessions
       security:
         - OAuth2:
             - messages
@@ -7463,7 +7462,7 @@ paths:
     get:
       summary: Get attachments under a session
       tags:
-        - sessions
+        - Sessions
       security:
         - OAuth2:
             - messages
@@ -7510,7 +7509,7 @@ paths:
     post:
       summary: Retry a failed message
       tags:
-        - sessions
+        - Sessions
       security:
         - OAuth2:
             - messages
@@ -7529,7 +7528,7 @@ paths:
     delete:
       summary: Delete a failed message
       tags:
-        - sessions
+        - Sessions
       security:
         - OAuth2:
             - messages
@@ -7547,7 +7546,7 @@ paths:
     get:
       summary: Get detailed information of a message
       tags:
-        - sessions
+        - Sessions
       security:
         - OAuth2:
             - messages
@@ -7566,7 +7565,7 @@ paths:
     get:
       summary: GET Message Meta
       tags:
-        - sessions
+        - Sessions
       security:
         - OAuth2:
             - messages
@@ -7584,7 +7583,7 @@ paths:
     patch:
       summary: Save Message Meta
       tags:
-        - sessions
+        - Sessions
       security:
         - OAuth2:
             - messages
@@ -7609,7 +7608,7 @@ paths:
     post:
       summary: Perform action on a message
       tags:
-        - sessions
+        - Sessions
       security:
         - OAuth2:
             - messages
@@ -7634,7 +7633,7 @@ paths:
     get:
       summary: Get full content of a message
       tags:
-        - sessions
+        - Sessions
       security:
         - OAuth2:
             - messages
@@ -7653,7 +7652,7 @@ paths:
     get:
       summary: Get raw content of a message
       tags:
-        - sessions
+        - Sessions
       security:
         - OAuth2:
             - messages
@@ -7672,7 +7671,7 @@ paths:
     get:
       summary: Get list of conversations with SearchKey
       tags:
-        - search
+        - Search
       security:
         - OAuth2:
             - messages
@@ -7730,7 +7729,7 @@ paths:
     get:
       summary: Get list of Conversations with SearchKey
       tags:
-        - messages
+        - Messages
       security:
         - OAuth2:
             - messages
@@ -7898,7 +7897,7 @@ paths:
     get:
       summary: Get list of Contacts with SearchKey
       tags:
-        - contacts
+        - Contacts
       security:
         - OAuth2:
             - contacts
@@ -8005,7 +8004,7 @@ paths:
     get:
       summary: Get Conversation based metrics
       tags:
-        - metrics
+        - Metrics
       security:
         - OAuth2:
             - conversations
@@ -8321,7 +8320,7 @@ paths:
     get:
       summary: Get Message based metrics
       tags:
-        - metrics
+        - Metrics
       security:
         - OAuth2:
             - messages
@@ -8581,7 +8580,7 @@ paths:
     get:
       summary: Get Session based metrics
       tags:
-        - metrics
+        - Metrics
       security:
         - OAuth2:
             - messages
@@ -8892,7 +8891,7 @@ paths:
     get:
       summary: Get Payment based metrics
       tags:
-        - metrics
+        - Metrics
       security:
         - OAuth2:
             - organizations
@@ -9091,7 +9090,7 @@ paths:
     get:
       summary: Get Agent's Performance metrics
       tags:
-        - metrics
+        - Metrics
       security:
         - OAuth2:
             - messages
@@ -9215,7 +9214,7 @@ paths:
     post:
       summary: get IM portal using the fb account
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -9245,7 +9244,7 @@ paths:
     patch:
       summary: get IM portal using the fb account
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -9275,7 +9274,7 @@ paths:
     get:
       summary: get IM portals and services using this fb business manager account
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -9296,7 +9295,7 @@ paths:
     delete:
       summary: delete mapped fbBmId and twilio SID for this IM portal
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -9321,7 +9320,7 @@ paths:
     get:
       summary: Get mapped FB Business manager account for this org
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -9340,7 +9339,7 @@ paths:
     post:
       summary: To submit the Wecom on-boarding data form
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -9365,7 +9364,7 @@ paths:
     post:
       summary: To create Wechat Customer Service Account - on Wecom Channel Creation
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -9389,7 +9388,7 @@ paths:
     get:
       summary: To get Wechat Customer Service Accounts - on Wecom Channel Creation
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -9424,7 +9423,7 @@ paths:
     post:
       summary: To purchase Wecom Account License for the organization
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -9449,7 +9448,7 @@ paths:
     post:
       summary: To submit the whatsapp on-boarding data in creator form
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -9480,7 +9479,7 @@ paths:
     post:
       summary: To get and verify phoneNumber's OTP
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -9511,7 +9510,7 @@ paths:
     post:
       summary: To get and verify phoneNumber's OTP
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -9542,7 +9541,7 @@ paths:
     post:
       summary: To get supported Whatsapp template message categories list
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -9588,7 +9587,7 @@ paths:
     post:
       summary: To get supported Whatsapp template message categories list
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -9776,7 +9775,7 @@ paths:
     post:
       summary: To get and verify phoneNumber's OTP
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -9801,7 +9800,7 @@ paths:
     post:
       summary: To get Details of WABA
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -9882,7 +9881,7 @@ paths:
     post:
       summary: Connect catalog with waba
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -9912,7 +9911,7 @@ paths:
     delete:
       summary: Disconnect catalog from waba
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -9943,7 +9942,7 @@ paths:
     post:
       summary: cart and catalog should be visible or not for business phone number
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -9974,7 +9973,7 @@ paths:
     post:
       summary: To enable/disable two step verification
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -10011,7 +10010,7 @@ paths:
     post:
       summary: To update whatsapp - about profile
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -10042,7 +10041,7 @@ paths:
     get:
       summary: Get whatsapp - about profile
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -10067,7 +10066,7 @@ paths:
     get:
       summary: Get whatsapp - about profile
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -10091,7 +10090,7 @@ paths:
     post:
       summary: Update profile photo
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -10110,7 +10109,7 @@ paths:
     post:
       summary: Request Official Business Account (Green tick badge)
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -10129,7 +10128,7 @@ paths:
     post:
       summary: To check template credit exhausted for the passed receivernumber
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -10154,7 +10153,7 @@ paths:
     get:
       summary: Get all whatsapp phone numbers
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -10187,7 +10186,7 @@ paths:
     get:
       summary: Get all mapped WABA
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -10219,7 +10218,7 @@ paths:
     delete:
       summary: Remove WABA from IM
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -10244,7 +10243,7 @@ paths:
     post:
       summary: Migrate Phone Number to WABA
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -10269,7 +10268,7 @@ paths:
     post:
       summary: template message sync
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -10298,7 +10297,7 @@ paths:
         To check template credit exhausted for the passed receiver numbers wrt
         to country
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -10323,7 +10322,7 @@ paths:
     get:
       summary: Get configured webhook
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -10348,7 +10347,7 @@ paths:
     get:
       summary: Get bot details
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -10373,7 +10372,7 @@ paths:
     get:
       summary: Get configured or active subscription details
       tags:
-        - subscription
+        - Subscription
       security:
         - OAuth2:
             - channels
@@ -10487,7 +10486,7 @@ paths:
     post:
       summary: Buy credits pack for an integration
       tags:
-        - subscription
+        - Subscription
       security:
         - OAuth2:
             - channels
@@ -10519,7 +10518,7 @@ paths:
         Update credits pack for an integration. Enable/disable auto renewal /
         update renewal package count or renewal threshold count 
       tags:
-        - subscription
+        - Subscription
       security:
         - OAuth2:
             - channels
@@ -10550,7 +10549,7 @@ paths:
     get:
       summary: To get Payment statement of IM Credits for a particular organization
       tags:
-        - subscription
+        - Subscription
       security:
         - OAuth2:
             - channels
@@ -10640,7 +10639,7 @@ paths:
     get:
       summary: Get configured or active subscription details
       tags:
-        - subscription
+        - Subscription
       security:
         - OAuth2:
             - channels
@@ -10670,7 +10669,7 @@ paths:
     post:
       summary: Migrate Twilio number to new licensing model
       tags:
-        - subscription
+        - Subscription
       security:
         - OAuth2:
             - channels
@@ -10689,7 +10688,7 @@ paths:
     get:
       summary: Get Integration service Parent Account List
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -10719,7 +10718,7 @@ paths:
     post:
       summary: Add Integration service Parent Account
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -10750,7 +10749,7 @@ paths:
     patch:
       summary: Update Integration service Parent Account
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -10780,7 +10779,7 @@ paths:
     delete:
       summary: Delete Integration service Parent Account
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -10805,7 +10804,7 @@ paths:
     get:
       summary: Get Authentication Url for parent Accounts or channel
       tags:
-        - integrations
+        - Integrations
       security:
         - OAuth2:
             - channels
@@ -10847,7 +10846,7 @@ paths:
     patch:
       summary: update createdBy in entities
       tags:
-        - createdBy
+        - Createdby
       security:
         - OAuth2:
             - channels
@@ -10875,7 +10874,7 @@ paths:
     post:
       summary: update createdBy in entities
       tags:
-        - channels
+        - Channels
       security:
         - OAuth2:
             - messages
@@ -10900,7 +10899,7 @@ paths:
     post:
       summary: Create a new broadcast
       tags:
-        - broadcasts
+        - Broadcasts
       security:
         - OAuth2:
             - channels
@@ -10920,7 +10919,7 @@ paths:
     get:
       summary: Get list of broadcast
       tags:
-        - broadcasts
+        - Broadcasts
       security:
         - OAuth2:
             - channels
@@ -10968,7 +10967,7 @@ paths:
     post:
       summary: Create a new broadcast
       tags:
-        - campaigns
+        - Campaigns
       security:
         - OAuth2:
             - channels
@@ -10989,7 +10988,7 @@ paths:
     get:
       summary: Get a broadcast
       tags:
-        - broadcasts
+        - Broadcasts
       security:
         - OAuth2:
             - channels
@@ -11007,7 +11006,7 @@ paths:
     delete:
       summary: DELETE a broadcast
       tags:
-        - broadcasts
+        - Broadcasts
       security:
         - OAuth2:
             - channels
@@ -11026,7 +11025,7 @@ paths:
     get:
       summary: Get broadcast metrics
       tags:
-        - broadcasts
+        - Broadcasts
       security:
         - OAuth2:
             - channels
@@ -11045,7 +11044,7 @@ paths:
     get:
       summary: Get broadcast receivers
       tags:
-        - broadcasts
+        - Broadcasts
       security:
         - OAuth2:
             - channels
@@ -11081,7 +11080,7 @@ paths:
     get:
       summary: Get broadcast metrics
       tags:
-        - broadcasts
+        - Broadcasts
       security:
         - OAuth2:
             - channels
@@ -11106,7 +11105,7 @@ paths:
     patch:
       summary: update organization createdBy
       tags:
-        - organizations
+        - Organizations
       security:
         - OAuth2:
             - organizations
@@ -11134,7 +11133,7 @@ paths:
     post:
       summary: Get detailed information of a message
       tags:
-        - migration
+        - Migration
       security:
         - OAuth2:
             - messages
@@ -11159,7 +11158,7 @@ paths:
     get:
       summary: Get list of available integrations to add as bot
       tags:
-        - botServices
+        - Botservices
       security:
         - OAuth2:
             - bots
@@ -11178,7 +11177,7 @@ paths:
     get:
       summary: Get detailed information     of a specific bot Integration
       tags:
-        - botServices
+        - Botservices
       security:
         - OAuth2:
             - bots
@@ -11197,7 +11196,7 @@ paths:
     post:
       summary: Compute config params with parent params
       tags:
-        - botServices
+        - Botservices
       security:
         - OAuth2:
             - bots
@@ -11222,7 +11221,7 @@ paths:
     post:
       summary: Compute config params with parent params
       tags:
-        - bots
+        - Bots
       security:
         - OAuth2:
             - bots
@@ -11247,7 +11246,7 @@ paths:
     get:
       summary: Get existing bots
       tags:
-        - bots
+        - Bots
       security:
         - OAuth2:
             - bots
@@ -11305,7 +11304,7 @@ paths:
     post:
       summary: Create a new bot
       tags:
-        - bots
+        - Bots
       security:
         - OAuth2:
             - bots
@@ -11336,7 +11335,7 @@ paths:
     patch:
       summary: To update name and external Id of the bot of a bot
       tags:
-        - bots
+        - Bots
       security:
         - OAuth2:
             - bots
@@ -11363,7 +11362,7 @@ paths:
     get:
       summary: Get detailed information of a bot
       tags:
-        - bots
+        - Bots
       security:
         - OAuth2:
             - bots
@@ -11384,7 +11383,7 @@ paths:
     delete:
       summary: Delete a bot
       tags:
-        - bots
+        - Bots
       security:
         - OAuth2:
             - bots
@@ -11406,7 +11405,7 @@ paths:
     patch:
       summary: Activate a bot
       tags:
-        - bots
+        - Bots
       security:
         - OAuth2:
             - bots
@@ -11424,7 +11423,7 @@ paths:
     delete:
       summary: De-Activate a bot
       tags:
-        - bots
+        - Bots
       security:
         - OAuth2:
             - bots
@@ -11443,7 +11442,7 @@ paths:
     patch:
       summary: Associate bot with Channels
       tags:
-        - bots
+        - Bots
       security:
         - OAuth2:
             - bots
@@ -11468,7 +11467,7 @@ paths:
     patch:
       summary: dissocaite bot from channels
       tags:
-        - bots
+        - Bots
       security:
         - OAuth2:
             - bots
@@ -11493,7 +11492,7 @@ paths:
     get:
       summary: get bot preferences
       tags:
-        - bots
+        - Bots
       security:
         - OAuth2:
             - bots
@@ -11514,7 +11513,7 @@ paths:
     patch:
       summary: save preferences of a bot
       tags:
-        - bots
+        - Bots
       security:
         - OAuth2:
             - bots
@@ -11542,7 +11541,7 @@ paths:
     get:
       summary: Get config param details of a bot
       tags:
-        - bots
+        - Bots
       security:
         - OAuth2:
             - bots
@@ -11566,7 +11565,7 @@ paths:
     patch:
       summary: Update config param values of a bot
       tags:
-        - bots
+        - Bots
       security:
         - OAuth2:
             - bots
@@ -11594,7 +11593,7 @@ paths:
     get:
       summary: Get single config param detail
       tags:
-        - bots
+        - Bots
       security:
         - OAuth2:
             - bots
@@ -11619,7 +11618,7 @@ paths:
     get:
       summary: Get all users
       tags:
-        - users
+        - Users
       security:
         - OAuth2:
             - users
@@ -11660,7 +11659,7 @@ paths:
     post:
       summary: Add a new User
       tags:
-        - users
+        - Users
       security:
         - OAuth2:
             - users
@@ -11691,7 +11690,7 @@ paths:
     get:
       summary: Get a User
       tags:
-        - users
+        - Users
       security:
         - OAuth2:
             - users
@@ -11715,7 +11714,7 @@ paths:
     patch:
       summary: Update a User
       tags:
-        - users
+        - Users
       security:
         - OAuth2:
             - users
@@ -11745,7 +11744,7 @@ paths:
     delete:
       summary: Add a new User
       tags:
-        - users
+        - Users
       security:
         - OAuth2:
             - users
