@@ -53,9 +53,12 @@ def extract_template_definitions(root, regex_map):
                 "description": key.get('description', '')
             }
             required = []
-            if key.get('max-len'):
+            max_len_value = key.get('max-len')
+            if max_len_value is not None and type=="string":
                 prop["maxLength"] = int(key.get('max-len'))
-            if key.get('min-len'):
+            
+            min_len_value = key.get('min-len')
+            if min_len_value is not None and type=="string":
                 prop["minLength"] = int(key.get('min-len'))
             if key.get('regex'):
                 pattern_key = key.get('regex')
@@ -93,7 +96,45 @@ def create_openapi_spec(xml_file):
         "info": {
             "title": root.get('name'),
             "version": "1.0.0",
-            "description": "API specification for " + root.get('name')
+            "description": """ ZohoIM abstracts the difficulties in integrating various Instant Messaging Channels by Providing an Unified API.
+                ### Communicate with your customers through any Instant Messaging Channel
+                <img src="https://content.pstmn.io/001c6190-9c45-4b0f-87cb-6c1043f209cd/aW1hZ2UucG5n" /> <br><br><br>
+                
+                **Why Zoho IM?**
+                Most of the support channels often bring layers of complexities - IM manages all these interactions into a single connected system.
+                Our focus was on improving agent productivity with an intuitive approach and compatible interface.
+                Our seamless integration with customers' best-loved platforms such as WhatsApp, Telegram, LINE, WeChat and Facebook Messenger.
+                <br><br>
+                **Getting Started** <br>
+                - All Zoho IM APIs require these two mandatory fields in the header. <br>
+                - Authorization - Authentication request token <br>
+                - orgId -ID of the organization to access. All API endpoints except /organizations mandatorily require the orgId. <br>
+
+                
+                <img src="https://content.pstmn.io/7ba8a04d-b133-46e2-8d4c-633a5bc57378/ZXpnaWYuY29tLXZpZGVvLXRvLWdpZiAoMSkuZ2lm" /> <br><br>
+                For detailed flow of Authorization [visit](https://www.zoho.com/accounts/protocol/oauth/self-client/authorization-code-flow.html)
+                <br><br>
+                **Steps (refer the above gif):** <br>
+                - Sign into https://www.accounts.zoho.com <br>
+                - Go to [Zoho Developer Console](https://api-console.zoho.com/) -> Add Client <br>
+                - Choose Self Client  <br>
+                - Note down Client ID and Client Secret under Client Secret Tab <br>
+                - Under Generate Code - Provide scopes, time duration and desciption  <br>
+                - Choose create which will provide a code.  <br>
+                <br><br>
+                **Scopes:** <br>
+                - ZohoIM.organizations.ALL <br>
+                - ZohoIM.channels.ALL <br>
+                - ZohoIM.conversations.ALL  <br>
+                - ZohoIM.messages.ALL <br>
+                - ZohoIM.bots.ALL <br>
+                - ZohoIM.users.ALL  <br>
+                - ZohoIM.contacts.ALL <br>
+                - ZohoIM.search.READ  <br>
+                <br><br>
+                **Note:**
+                - Access token should be prefixed with the prefix "Zoho-oauthtoken" <br>
+                    Example token, **Zoho-oauthtoken 1000.dfe95e72e98e1657****  """
         },
         "servers": [
             {
@@ -108,6 +149,33 @@ def create_openapi_spec(xml_file):
         "paths": {},
         "components": {
             "schemas": json_templates,
+            "parameters":{
+                "orgId":{
+                    "in": "header",
+                    "name": "orgId",
+                    "schema":{
+                        "type": "string"
+                    },
+                    "example": "85273209",
+                    "required": True
+                },
+                "service":{
+                    "in": "header",
+                    "name": "service",
+                    "schema":{
+                        "type": "string",
+                    },
+                    "example": "ZOHO_DESK"
+                },
+                "serviceOrgId":{
+                    "in": "header",
+                    "name": "serviceOrgId",
+                    "schema":{
+                        "type": "string",
+                    },
+                    "example": "71923149"
+                }
+            },
             "securitySchemes": {
                 "OAuth2": {
                     "type": "oauth2",
@@ -115,12 +183,12 @@ def create_openapi_spec(xml_file):
                         "implicit": {
                             "authorizationUrl": "https://example.com/oauth/authorize",
                             "scopes": {
-                                "messages": "Access to messages",
-                                "organizations": "Access to organization data",
-                                "channels":"Access to organization data",
-                                "contacts":"Access to Contacts data",
-                                "conversations":"Access to Conversation data",
-                                "users":"Access to Users data"   
+                                "ZohoIM.messages.ALL": "Access to messages",
+                                "ZohoIM.organizations.ALL": "Access to organization data",
+                                "ZohoIM.channels.ALL":"Access to organization data",
+                                "ZohoIM.contacts.ALL":"Access to Contacts data",
+                                "ZohoIM.conversations.ALL":"Access to Conversation data",
+                                "ZohoIM.users.ALL":"Access to Users data"   
                             }
                         }
                     }
@@ -146,12 +214,11 @@ def create_openapi_spec(xml_file):
         
         if oauthscope_raw:
             scopes_list = [s.strip() for s in oauthscope_raw.split(',') if s.strip()]
-            if scopes_list:
-                scope = scopes_list[0]
+            scopes = [f"ZohoIM.{scope}.ALL" for scope in scopes_list]
         operation = {
             "summary": url.get('description', ''),
             "tags": [tag],
-            "security": [{"OAuth2": [scope]}] if oauthscope_raw else [],
+            "security": [{"OAuth2": scopes}] if oauthscope_raw else [],
             "responses": {
                 "200": {
                     "description": "Successful operation",
@@ -164,22 +231,10 @@ def create_openapi_spec(xml_file):
             }
         }
 
-        apipath = WIREMOCK_URL + path
-        response = requests.request(method, apipath)
-        schema = "object"
-        if response.status_code == 200:
-            response_json = response.json()
-            schema = generate_json_schema(response_json)
-            operation["responses"]["200"]["content"]["application/json"]["schema"] = schema
-            operation["responses"]["200"]["content"]["application/json"]["example"] = response_json
-        if path not in openapi_spec["paths"]:
-            openapi_spec["paths"][path] = {}
-
-        throttling = extract_throttling(url)
-        if throttling:
-            operation["x-throttling"] = throttling
-
         parameters = []
+        parameters.append({"$ref": "#/components/parameters/service"})
+        parameters.append({"$ref": "#/components/parameters/serviceOrgId"})
+        parameters.append({"$ref": "#/components/parameters/orgId"})
         for param in url.findall('param'):
             param_type = param.get('type', 'string').lower()
             if(param_type=="int"):
@@ -204,10 +259,24 @@ def create_openapi_spec(xml_file):
             if(param.get('min-occurrences') == "1"):
               parameters.append({
                 "required": param.get('min-occurrences') == "1"
-            })  
-
+            })
         if parameters:
             operation["parameters"] = parameters
+        
+        apipath = WIREMOCK_URL + path
+        response = requests.request(method, apipath)
+        schema = "object"
+        if response.status_code == 200:
+            response_json = response.json()
+            schema = generate_json_schema(response_json)
+            operation["responses"]["200"]["content"]["application/json"]["schema"] = schema
+            operation["responses"]["200"]["content"]["application/json"]["example"] = response_json
+        if path not in openapi_spec["paths"]:
+            openapi_spec["paths"][path] = {}
+        
+        throttling = extract_throttling(url)
+        if throttling:
+            operation["x-throttling"] = throttling
 
         if method in ['post', 'put', 'patch', 'delete']:
             inputstream = url.find('inputstream')
