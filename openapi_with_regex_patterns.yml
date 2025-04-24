@@ -14071,11 +14071,23 @@ components:
         type: string
       example: '71923149'
   securitySchemes:
-    OAuth2:
+    oauth2_local:
       type: oauth2
       flows:
         implicit:
-          authorizationUrl: https://example.com/oauth/authorize
+          authorizationUrl: https://accounts.localzoho.com/oauth/v2/auth
+          scopes:
+            ZohoIM.messages.ALL: Access to messages
+            ZohoIM.organizations.ALL: Access to organization data
+            ZohoIM.channels.ALL: Access to organization data
+            ZohoIM.contacts.ALL: Access to Contacts data
+            ZohoIM.conversations.ALL: Access to Conversation data
+            ZohoIM.users.ALL: Access to Users data
+    oauth2_IDC:
+      type: oauth2
+      flows:
+        implicit:
+          authorizationUrl: https://accounts.zoho.com/oauth/v2/auth
           scopes:
             ZohoIM.messages.ALL: Access to messages
             ZohoIM.organizations.ALL: Access to organization data
